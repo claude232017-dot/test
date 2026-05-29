@@ -2,30 +2,28 @@
 
 import { useEffect, useState } from "react"
 import { createClient, getCurrentUserId } from "@/lib/supabase/client"
+import { useDataStore } from "@/stores/useDataStore"
 import { ActivityLog } from "@/types"
 import { toast } from "sonner"
 import { format } from "date-fns"
 
+const EMPTY: ActivityLog[] = []
+
 export function useActivityLogs(date: Date) {
-  const [logs, setLogs] = useState<ActivityLog[]>([])
-  const [loading, setLoading] = useState(true)
   const supabase = createClient()
   const dateStr = format(date, "yyyy-MM-dd")
 
-  useEffect(() => {
-    fetchLogs()
-  }, [dateStr])
+  const logs = useDataStore(s => s.activityByDate[dateStr] ?? EMPTY)
+  const hydrated = useDataStore(s => !!s.activityHydrated[dateStr])
+  const setActivity = useDataStore(s => s.setActivity)
+  const loadActivity = useDataStore(s => s.loadActivity)
 
-  async function fetchLogs() {
-    setLoading(true)
-    const { data, error } = await supabase
-      .from("activity_logs")
-      .select("id,user_id,category,duration_minutes,date,created_at")
-      .eq("date", dateStr)
-      .order("created_at", { ascending: false })
-    if (!error && data) setLogs(data)
-    setLoading(false)
-  }
+  const [loading, setLoading] = useState(!hydrated)
+
+  useEffect(() => {
+    setLoading(!useDataStore.getState().activityHydrated[dateStr])
+    loadActivity(dateStr).finally(() => setLoading(false))
+  }, [dateStr])
 
   async function createLog(fields: { category: string; duration_minutes: number }) {
     const userId = await getCurrentUserId()
@@ -36,13 +34,13 @@ export function useActivityLogs(date: Date) {
       .select()
       .single()
     if (error) { toast.error("Failed to log activity"); return }
-    setLogs(prev => [data, ...prev])
+    setActivity(dateStr, prev => [data, ...prev])
   }
 
   async function deleteLog(id: string) {
-    setLogs(prev => prev.filter(l => l.id !== id))
+    setActivity(dateStr, prev => prev.filter(l => l.id !== id))
     const { error } = await supabase.from("activity_logs").delete().eq("id", id)
-    if (error) { toast.error("Failed to delete log"); await fetchLogs() }
+    if (error) { toast.error("Failed to delete log"); loadActivity(dateStr) }
   }
 
   const totalMinutes = logs.reduce((sum, l) => sum + l.duration_minutes, 0)

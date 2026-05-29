@@ -1,26 +1,20 @@
 "use client"
 
-import { useEffect, useState } from "react"
+import { useEffect } from "react"
 import { createClient, getCurrentUserId } from "@/lib/supabase/client"
+import { useDataStore } from "@/stores/useDataStore"
 import { toast } from "sonner"
 import { format } from "date-fns"
 
 export function usePomodoroSessions() {
-  const [todayCount, setTodayCount] = useState(0)
   const supabase = createClient()
   const today = format(new Date(), "yyyy-MM-dd")
 
-  useEffect(() => { fetchToday() }, [])
+  const todayCount = useDataStore(s => s.pomodoroToday)
+  const setPomodoroToday = useDataStore(s => s.setPomodoroToday)
+  const loadPomodoroToday = useDataStore(s => s.loadPomodoroToday)
 
-  async function fetchToday() {
-    const { count } = await supabase
-      .from("pomodoro_sessions")
-      .select("id", { count: "exact", head: true })
-      .eq("completed", true)
-      .gte("created_at", today + "T00:00:00")
-      .lte("created_at", today + "T23:59:59")
-    setTodayCount(count ?? 0)
-  }
+  useEffect(() => { loadPomodoroToday() }, [])
 
   async function logSession(durationMinutes: number) {
     const userId = await getCurrentUserId()
@@ -29,12 +23,16 @@ export function usePomodoroSessions() {
       .from("pomodoro_sessions")
       .insert({ duration_minutes: durationMinutes, completed: true, user_id: userId })
     if (error) { toast.error("Failed to log session"); return }
-    setTodayCount(prev => prev + 1)
+    setPomodoroToday(prev => prev + 1)
 
-    // Cross-widget: auto-log activity
+    // Cross-widget: auto-log activity, then refresh dependent caches.
     await supabase
       .from("activity_logs")
       .insert({ category: "Work", duration_minutes: durationMinutes, date: today, user_id: userId })
+
+    const store = useDataStore.getState()
+    store.loadActivity(today)
+    store.loadAnalytics()
   }
 
   return { todayCount, logSession }

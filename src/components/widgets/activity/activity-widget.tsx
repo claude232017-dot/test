@@ -5,17 +5,12 @@ import { motion, AnimatePresence } from "framer-motion"
 import { Trash2, Plus, Activity } from "lucide-react"
 import { useActivityLogs } from "@/hooks/useActivityLogs"
 import { useDashboardStore } from "@/stores/useDashboardStore"
+import { ACTIVITY_CATEGORIES } from "@/lib/activity-categories"
 import { Button } from "@/components/ui/button"
 import { cn } from "@/lib/utils"
 
-export const ACTIVITY_CATEGORIES = [
-  { name: "Work", color: "#7c3aed", bg: "bg-purple-500/20 text-purple-300" },
-  { name: "Study", color: "#2563eb", bg: "bg-blue-500/20 text-blue-300" },
-  { name: "Exercise", color: "#16a34a", bg: "bg-green-500/20 text-green-300" },
-  { name: "Reading", color: "#06b6d4", bg: "bg-cyan-500/20 text-cyan-300" },
-  { name: "Leisure", color: "#d97706", bg: "bg-yellow-500/20 text-yellow-300" },
-  { name: "Sleep", color: "#6366f1", bg: "bg-indigo-500/20 text-indigo-300" },
-]
+// Re-exported for existing importers (analytics charts).
+export { ACTIVITY_CATEGORIES }
 
 function formatDuration(minutes: number) {
   const h = Math.floor(minutes / 60)

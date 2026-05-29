@@ -2,33 +2,22 @@
 
 import { useEffect, useState } from "react"
 import { createClient, getCurrentUserId } from "@/lib/supabase/client"
+import { useDataStore } from "@/stores/useDataStore"
 import { Todo } from "@/types"
 import { toast } from "sonner"
 
 export function useTodos() {
-  const [todos, setTodos] = useState<Todo[]>([])
-  const [loading, setLoading] = useState(true)
   const supabase = createClient()
+  const todos = useDataStore(s => s.todos)
+  const hydrated = useDataStore(s => s.todosHydrated)
+  const setTodos = useDataStore(s => s.setTodos)
+  const loadTodos = useDataStore(s => s.loadTodos)
+
+  const [loading, setLoading] = useState(!hydrated)
 
   useEffect(() => {
-    fetchTodos()
-
-    const channel = supabase
-      .channel("todos")
-      .on("postgres_changes", { event: "*", schema: "public", table: "todos" }, fetchTodos)
-      .subscribe()
-
-    return () => { supabase.removeChannel(channel) }
+    loadTodos().finally(() => setLoading(false))
   }, [])
-
-  async function fetchTodos() {
-    const { data, error } = await supabase
-      .from("todos")
-      .select("id,user_id,title,completed,priority,due_date,created_at")
-      .order("created_at", { ascending: false })
-    if (!error && data) setTodos(data)
-    setLoading(false)
-  }
 
   async function createTodo(fields: { title: string; priority: Todo["priority"]; due_date?: string }) {
     const userId = await getCurrentUserId()
@@ -69,7 +58,7 @@ export function useTodos() {
   async function deleteTodo(id: string) {
     setTodos(prev => prev.filter(t => t.id !== id))
     const { error } = await supabase.from("todos").delete().eq("id", id)
-    if (error) { toast.error("Failed to delete todo"); await fetchTodos() }
+    if (error) { toast.error("Failed to delete todo"); loadTodos() }
   }
 
   return { todos, loading, createTodo, toggleTodo, deleteTodo }

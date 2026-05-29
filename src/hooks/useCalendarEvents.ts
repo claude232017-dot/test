@@ -2,31 +2,28 @@
 
 import { useEffect, useState } from "react"
 import { createClient, getCurrentUserId } from "@/lib/supabase/client"
+import { useDataStore } from "@/stores/useDataStore"
 import { CalendarEvent } from "@/types"
 import { toast } from "sonner"
-import { startOfMonth, endOfMonth, format } from "date-fns"
+import { format } from "date-fns"
+
+const EMPTY: CalendarEvent[] = []
 
 export function useCalendarEvents(month: Date) {
-  const [events, setEvents] = useState<CalendarEvent[]>([])
-  const [loading, setLoading] = useState(true)
   const supabase = createClient()
+  const monthKey = format(month, "yyyy-MM")
 
-  const monthStart = format(startOfMonth(month), "yyyy-MM-dd")
-  const monthEnd = format(endOfMonth(month), "yyyy-MM-dd")
+  const events = useDataStore(s => s.calendarByMonth[monthKey] ?? EMPTY)
+  const hydrated = useDataStore(s => !!s.calendarHydrated[monthKey])
+  const setCalendar = useDataStore(s => s.setCalendar)
+  const loadCalendar = useDataStore(s => s.loadCalendar)
 
-  useEffect(() => { fetchEvents() }, [monthStart])
+  const [loading, setLoading] = useState(!hydrated)
 
-  async function fetchEvents() {
-    setLoading(true)
-    const { data, error } = await supabase
-      .from("calendar_events")
-      .select("id,user_id,title,description,start_date,end_date,color,created_at")
-      .gte("start_date", monthStart)
-      .lte("start_date", monthEnd + "T23:59:59")
-      .order("start_date", { ascending: true })
-    if (!error && data) setEvents(data)
-    setLoading(false)
-  }
+  useEffect(() => {
+    setLoading(!useDataStore.getState().calendarHydrated[monthKey])
+    loadCalendar(month).finally(() => setLoading(false))
+  }, [monthKey])
 
   async function createEvent(fields: {
     title: string
@@ -42,13 +39,14 @@ export function useCalendarEvents(month: Date) {
       .select()
       .single()
     if (error) { toast.error("Failed to create event"); return }
-    setEvents(prev => [...prev, data].sort((a, b) => a.start_date.localeCompare(b.start_date)))
+    const key = data.start_date.slice(0, 7) // "yyyy-MM"
+    setCalendar(key, prev => [...prev, data].sort((a, b) => a.start_date.localeCompare(b.start_date)))
   }
 
   async function deleteEvent(id: string) {
-    setEvents(prev => prev.filter(e => e.id !== id))
+    setCalendar(monthKey, prev => prev.filter(e => e.id !== id))
     const { error } = await supabase.from("calendar_events").delete().eq("id", id)
-    if (error) { toast.error("Failed to delete event"); await fetchEvents() }
+    if (error) { toast.error("Failed to delete event"); loadCalendar(month) }
   }
 
   function eventsForDate(date: string) {

@@ -1,34 +1,25 @@
 "use client"
 
-import { useEffect, useState, useCallback, useRef } from "react"
+import { useEffect, useState } from "react"
 import { createClient, getCurrentUserId } from "@/lib/supabase/client"
+import { useDataStore } from "@/stores/useDataStore"
 import { Note } from "@/types"
 import { toast } from "sonner"
 
 export function useNotes() {
-  const [notes, setNotes] = useState<Note[]>([])
-  const [loading, setLoading] = useState(true)
   const supabase = createClient()
+  const notes = useDataStore(s => s.notes)
+  const hydrated = useDataStore(s => s.notesHydrated)
+  const setNotes = useDataStore(s => s.setNotes)
+  const loadNotes = useDataStore(s => s.loadNotes)
+
+  // Show a skeleton only on the very first load; afterwards cached data is
+  // rendered instantly and refreshed in the background.
+  const [loading, setLoading] = useState(!hydrated)
 
   useEffect(() => {
-    fetchNotes()
-
-    const channel = supabase
-      .channel("notes")
-      .on("postgres_changes", { event: "*", schema: "public", table: "notes" }, fetchNotes)
-      .subscribe()
-
-    return () => { supabase.removeChannel(channel) }
+    loadNotes().finally(() => setLoading(false))
   }, [])
-
-  async function fetchNotes() {
-    const { data, error } = await supabase
-      .from("notes")
-      .select("id,user_id,title,content,created_at,updated_at")
-      .order("updated_at", { ascending: false })
-    if (!error && data) setNotes(data)
-    setLoading(false)
-  }
 
   async function createNote() {
     const userId = await getCurrentUserId()
@@ -53,7 +44,7 @@ export function useNotes() {
   async function deleteNote(id: string) {
     setNotes(prev => prev.filter(n => n.id !== id))
     const { error } = await supabase.from("notes").delete().eq("id", id)
-    if (error) { toast.error("Failed to delete note"); await fetchNotes() }
+    if (error) { toast.error("Failed to delete note"); loadNotes() }
   }
 
   return { notes, loading, createNote, updateNote, deleteNote }

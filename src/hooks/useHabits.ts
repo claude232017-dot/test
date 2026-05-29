@@ -2,13 +2,12 @@
 
 import { useEffect, useState } from "react"
 import { createClient, getCurrentUserId } from "@/lib/supabase/client"
-import { Habit, HabitLog } from "@/types"
+import { useDataStore } from "@/stores/useDataStore"
 import { toast } from "sonner"
-import { format, subDays } from "date-fns"
+import { format } from "date-fns"
+import type { HabitWithLogs } from "@/lib/store/types"
 
-export interface HabitWithLogs extends Habit {
-  logs: string[] // completed_date strings for last 30 days
-}
+export type { HabitWithLogs }
 
 export function calculateStreak(logs: string[], today: string): number {
   let streak = 0
@@ -23,33 +22,18 @@ export function calculateStreak(logs: string[], today: string): number {
 }
 
 export function useHabits() {
-  const [habits, setHabits] = useState<HabitWithLogs[]>([])
-  const [loading, setLoading] = useState(true)
   const supabase = createClient()
+  const habits = useDataStore(s => s.habits)
+  const hydrated = useDataStore(s => s.habitsHydrated)
+  const setHabits = useDataStore(s => s.setHabits)
+  const loadHabits = useDataStore(s => s.loadHabits)
+
+  const [loading, setLoading] = useState(!hydrated)
   const today = format(new Date(), "yyyy-MM-dd")
-  const since = format(subDays(new Date(), 30), "yyyy-MM-dd")
 
-  useEffect(() => { fetchAll() }, [])
-
-  async function fetchAll() {
-    const { data: habitData } = await supabase
-      .from("habits")
-      .select("id,user_id,name,color,created_at")
-      .order("created_at", { ascending: true })
-
-    const { data: logData } = await supabase
-      .from("habit_logs")
-      .select("habit_id,completed_date")
-      .gte("completed_date", since)
-
-    if (habitData) {
-      setHabits(habitData.map(h => ({
-        ...h,
-        logs: (logData ?? []).filter(l => l.habit_id === h.id).map(l => l.completed_date),
-      })))
-    }
-    setLoading(false)
-  }
+  useEffect(() => {
+    loadHabits().finally(() => setLoading(false))
+  }, [])
 
   async function createHabit(name: string, color: string) {
     const userId = await getCurrentUserId()
@@ -81,21 +65,21 @@ export function useHabits() {
         .delete()
         .eq("habit_id", habitId)
         .eq("completed_date", date)
-      if (error) { toast.error("Failed to update habit"); await fetchAll() }
+      if (error) { toast.error("Failed to update habit"); loadHabits() }
     } else {
       const userId = await getCurrentUserId()
-      if (!userId) { toast.error("Failed to update habit"); await fetchAll(); return }
+      if (!userId) { toast.error("Failed to update habit"); loadHabits(); return }
       const { error } = await supabase
         .from("habit_logs")
         .insert({ habit_id: habitId, completed_date: date, user_id: userId })
-      if (error) { toast.error("Failed to update habit"); await fetchAll() }
+      if (error) { toast.error("Failed to update habit"); loadHabits() }
     }
   }
 
   async function deleteHabit(id: string) {
     setHabits(prev => prev.filter(h => h.id !== id))
     const { error } = await supabase.from("habits").delete().eq("id", id)
-    if (error) { toast.error("Failed to delete habit"); await fetchAll() }
+    if (error) { toast.error("Failed to delete habit"); loadHabits() }
   }
 
   return { habits, loading, today, createHabit, toggleHabitLog, deleteHabit }
