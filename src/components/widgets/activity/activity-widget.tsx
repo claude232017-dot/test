@@ -66,17 +66,17 @@ export function ActivityWidget() {
     <div className="flex flex-col md:flex-row gap-5 h-full min-h-[350px]">
 
       {/* Left: always-visible form */}
-      <div className="md:w-64 shrink-0 flex flex-col gap-5 md:border-r md:border-white/5 md:pr-5">
+      <div className="md:w-80 shrink-0 flex flex-col gap-5 md:border-r md:border-white/5 md:pr-5">
         {/* Category */}
         <div className="space-y-2.5">
           <p className="text-[10px] uppercase tracking-widest font-medium text-muted-foreground/60">Category</p>
-          <div className="flex flex-wrap gap-2">
+          <div className="flex flex-wrap gap-1.5">
             {ACTIVITY_CATEGORIES.map(cat => (
               <button
                 key={cat.name}
                 onClick={() => setCategory(cat.name)}
                 className={cn(
-                  "px-3 py-1.5 rounded-xl text-xs font-medium border transition-all cursor-pointer",
+                  "px-2.5 py-1.5 rounded-lg text-xs font-medium border transition-all cursor-pointer",
                   category === cat.name
                     ? cat.bg + " border-current/30"
                     : "border-white/10 text-muted-foreground hover:bg-white/5"
@@ -115,7 +115,7 @@ export function ActivityWidget() {
 
         {/* Color legend */}
         <div className="mt-auto pt-4 border-t border-white/5">
-          <div className="flex flex-wrap gap-x-3 gap-y-1.5">
+          <div className="flex flex-wrap gap-x-2.5 gap-y-1.5">
             {ACTIVITY_CATEGORIES.map(cat => (
               <div key={cat.name} className="flex items-center gap-1.5">
                 <div className="w-2 h-2 rounded-full shrink-0" style={{ backgroundColor: cat.color }} />
