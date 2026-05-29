@@ -72,7 +72,7 @@ export function NoteEditor({ note, onUpdate, onDelete }: NoteEditorProps) {
         value={title}
         onChange={e => setTitle(e.target.value)}
         placeholder="Untitled"
-        className="w-full mt-4 mb-2 text-xl font-semibold text-foreground placeholder:text-muted-foreground/40 bg-transparent border-none outline-none"
+        className="w-full mt-5 mb-4 px-0 py-0 text-xl font-semibold text-foreground placeholder:text-muted-foreground/30 bg-transparent border-none outline-none"
       />
 
       {/* Content */}
@@ -80,7 +80,7 @@ export function NoteEditor({ note, onUpdate, onDelete }: NoteEditorProps) {
         value={content}
         onChange={e => setContent(e.target.value)}
         placeholder="Start writing…"
-        className="flex-1 bg-transparent border-transparent focus-visible:border-transparent resize-none text-sm leading-relaxed px-0 py-0 min-h-0 shadow-none"
+        className="flex-1 bg-transparent border-transparent focus-visible:border-transparent resize-none text-sm leading-relaxed px-0 py-0 min-h-0 shadow-none placeholder:text-muted-foreground/30"
       />
     </div>
   )

@@ -32,6 +32,8 @@ export function NotesWidget() {
     if (selectedId === id) setSelectedId(notes.find(n => n.id !== id)?.id ?? null)
   }
 
+  const hasNotes = notes.length > 0
+
   return (
     <div className="flex flex-col md:flex-row gap-4 h-full min-h-[400px] md:min-h-[500px]">
       {/* Sidebar — full-width on mobile when no note selected, hidden when editing */}
@@ -84,44 +86,35 @@ export function NotesWidget() {
         </div>
       </div>
 
-      {/* Divider — desktop only */}
-      <div className="hidden md:block w-px bg-white/5 shrink-0" />
-
-      {/* Editor — full-width on mobile when note selected, hidden when showing list */}
-      <div className={cn("flex-1 overflow-hidden flex flex-col", !selectedId ? "hidden md:flex" : "flex")}>
-        {selectedNote ? (
-          <>
-            <button
-              onClick={() => setSelectedId(null)}
-              className="md:hidden flex items-center gap-1 text-xs text-muted-foreground hover:text-foreground mb-3 cursor-pointer transition-colors w-fit"
-            >
-              <ChevronLeft className="w-3.5 h-3.5" />
-              All notes
-            </button>
-            <NoteEditor
-              key={selectedNote.id}
-              note={selectedNote}
-              onUpdate={updateNote}
-              onDelete={handleDelete}
-            />
-          </>
-        ) : (
-          <div className="flex flex-col items-center justify-center h-full text-center px-6">
-            <StickyNote className="w-10 h-10 text-muted-foreground/20 mb-3" />
-            {notes.length === 0 ? (
-              <p className="text-sm text-muted-foreground">
-                No notes yet — tap{" "}
-                <span className="inline-flex items-center justify-center w-5 h-5 rounded-md bg-purple-500/20 text-purple-300 align-middle mx-0.5">
-                  <Plus className="w-3 h-3" />
-                </span>{" "}
-                to create your first one
-              </p>
+      {/* Divider + editor panel — only rendered when there are notes to show */}
+      {hasNotes && (
+        <>
+          <div className="hidden md:block w-px bg-white/5 shrink-0" />
+          <div className={cn("flex-1 overflow-hidden flex flex-col", !selectedId ? "hidden md:flex" : "flex")}>
+            {selectedNote ? (
+              <>
+                <button
+                  onClick={() => setSelectedId(null)}
+                  className="md:hidden flex items-center gap-1 text-xs text-muted-foreground hover:text-foreground mb-3 cursor-pointer transition-colors w-fit"
+                >
+                  <ChevronLeft className="w-3.5 h-3.5" />
+                  All notes
+                </button>
+                <NoteEditor
+                  key={selectedNote.id}
+                  note={selectedNote}
+                  onUpdate={updateNote}
+                  onDelete={handleDelete}
+                />
+              </>
             ) : (
-              <p className="text-sm text-muted-foreground">Select a note to open it</p>
+              <div className="flex flex-col items-center justify-center h-full text-center">
+                <p className="text-sm text-muted-foreground">Select a note</p>
+              </div>
             )}
           </div>
-        )}
-      </div>
+        </>
+      )}
     </div>
   )
 
