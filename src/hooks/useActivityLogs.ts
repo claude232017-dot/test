@@ -1,7 +1,7 @@
 "use client"
 
 import { useEffect, useState } from "react"
-import { createClient } from "@/lib/supabase/client"
+import { createClient, getCurrentUserId } from "@/lib/supabase/client"
 import { ActivityLog } from "@/types"
 import { toast } from "sonner"
 import { format } from "date-fns"
@@ -28,9 +28,11 @@ export function useActivityLogs(date: Date) {
   }
 
   async function createLog(fields: { category: string; duration_minutes: number }) {
+    const userId = await getCurrentUserId()
+    if (!userId) { toast.error("You must be signed in to log activity"); return }
     const { data, error } = await supabase
       .from("activity_logs")
-      .insert({ ...fields, date: dateStr })
+      .insert({ ...fields, date: dateStr, user_id: userId })
       .select()
       .single()
     if (error) { toast.error("Failed to log activity"); return }

@@ -18,3 +18,16 @@ export function createClient() {
   if (!client) client = makeClient()
   return client
 }
+
+// Cached id of the signed-in user. Every table's `user_id` column is
+// `not null` and guarded by an RLS policy (`auth.uid() = user_id`), so every
+// insert must carry the user's id. We resolve it once and reuse it; a stale or
+// forged value can never get past RLS, which validates server-side.
+let cachedUserId: string | null = null
+
+export async function getCurrentUserId(): Promise<string | null> {
+  if (cachedUserId) return cachedUserId
+  const { data: { user } } = await createClient().auth.getUser()
+  cachedUserId = user?.id ?? null
+  return cachedUserId
+}

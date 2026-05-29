@@ -1,7 +1,7 @@
 "use client"
 
 import { useEffect, useState } from "react"
-import { createClient } from "@/lib/supabase/client"
+import { createClient, getCurrentUserId } from "@/lib/supabase/client"
 import { Habit, HabitLog } from "@/types"
 import { toast } from "sonner"
 import { format, subDays } from "date-fns"
@@ -52,9 +52,11 @@ export function useHabits() {
   }
 
   async function createHabit(name: string, color: string) {
+    const userId = await getCurrentUserId()
+    if (!userId) { toast.error("You must be signed in to create a habit"); return }
     const { data, error } = await supabase
       .from("habits")
-      .insert({ name, color })
+      .insert({ name, color, user_id: userId })
       .select()
       .single()
     if (error) { toast.error("Failed to create habit"); return }
@@ -81,9 +83,11 @@ export function useHabits() {
         .eq("completed_date", date)
       if (error) { toast.error("Failed to update habit"); await fetchAll() }
     } else {
+      const userId = await getCurrentUserId()
+      if (!userId) { toast.error("Failed to update habit"); await fetchAll(); return }
       const { error } = await supabase
         .from("habit_logs")
-        .insert({ habit_id: habitId, completed_date: date })
+        .insert({ habit_id: habitId, completed_date: date, user_id: userId })
       if (error) { toast.error("Failed to update habit"); await fetchAll() }
     }
   }

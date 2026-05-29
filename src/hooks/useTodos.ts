@@ -1,7 +1,7 @@
 "use client"
 
 import { useEffect, useState } from "react"
-import { createClient } from "@/lib/supabase/client"
+import { createClient, getCurrentUserId } from "@/lib/supabase/client"
 import { Todo } from "@/types"
 import { toast } from "sonner"
 
@@ -31,9 +31,12 @@ export function useTodos() {
   }
 
   async function createTodo(fields: { title: string; priority: Todo["priority"]; due_date?: string }) {
+    const userId = await getCurrentUserId()
+    if (!userId) { toast.error("You must be signed in to add a task"); return }
+
     const optimistic: Todo = {
       id: crypto.randomUUID(),
-      user_id: "",
+      user_id: userId,
       title: fields.title,
       completed: false,
       priority: fields.priority,
@@ -42,7 +45,7 @@ export function useTodos() {
     }
     setTodos(prev => [optimistic, ...prev])
 
-    const { data, error } = await supabase.from("todos").insert(fields).select().single()
+    const { data, error } = await supabase.from("todos").insert({ ...fields, user_id: userId }).select().single()
     if (error) {
       toast.error("Failed to create todo")
       setTodos(prev => prev.filter(t => t.id !== optimistic.id))

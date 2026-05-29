@@ -1,7 +1,7 @@
 "use client"
 
 import { useEffect, useState, useCallback, useRef } from "react"
-import { createClient } from "@/lib/supabase/client"
+import { createClient, getCurrentUserId } from "@/lib/supabase/client"
 import { Note } from "@/types"
 import { toast } from "sonner"
 
@@ -31,9 +31,11 @@ export function useNotes() {
   }
 
   async function createNote() {
+    const userId = await getCurrentUserId()
+    if (!userId) { toast.error("You must be signed in to create a note"); return null }
     const { data, error } = await supabase
       .from("notes")
-      .insert({ title: "", content: "" })
+      .insert({ title: "", content: "", user_id: userId })
       .select()
       .single()
     if (error) { toast.error("Failed to create note"); return null }

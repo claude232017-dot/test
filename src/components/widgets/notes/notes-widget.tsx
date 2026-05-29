@@ -106,12 +106,19 @@ export function NotesWidget() {
             />
           </>
         ) : (
-          <div className="flex flex-col items-center justify-center h-full text-center">
-            <StickyNote className="w-10 h-10 text-muted-foreground/30 mb-3" />
-            <p className="text-sm text-muted-foreground">Select a note or create a new one</p>
-            <Button variant="outline" size="sm" className="mt-4" onClick={handleCreate}>
-              <Plus className="w-4 h-4 mr-1" /> New note
-            </Button>
+          <div className="flex flex-col items-center justify-center h-full text-center px-6">
+            <StickyNote className="w-10 h-10 text-muted-foreground/20 mb-3" />
+            {notes.length === 0 ? (
+              <p className="text-sm text-muted-foreground">
+                No notes yet — tap{" "}
+                <span className="inline-flex items-center justify-center w-5 h-5 rounded-md bg-purple-500/20 text-purple-300 align-middle mx-0.5">
+                  <Plus className="w-3 h-3" />
+                </span>{" "}
+                to create your first one
+              </p>
+            ) : (
+              <p className="text-sm text-muted-foreground">Select a note to open it</p>
+            )}
           </div>
         )}
       </div>

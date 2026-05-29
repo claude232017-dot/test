@@ -1,7 +1,7 @@
 "use client"
 
 import { useEffect, useState } from "react"
-import { createClient } from "@/lib/supabase/client"
+import { createClient, getCurrentUserId } from "@/lib/supabase/client"
 import { CalendarEvent } from "@/types"
 import { toast } from "sonner"
 import { startOfMonth, endOfMonth, format } from "date-fns"
@@ -34,9 +34,11 @@ export function useCalendarEvents(month: Date) {
     description?: string
     color?: string
   }) {
+    const userId = await getCurrentUserId()
+    if (!userId) { toast.error("You must be signed in to create an event"); return }
     const { data, error } = await supabase
       .from("calendar_events")
-      .insert({ ...fields, color: fields.color ?? "#7c3aed" })
+      .insert({ ...fields, color: fields.color ?? "#7c3aed", user_id: userId })
       .select()
       .single()
     if (error) { toast.error("Failed to create event"); return }

@@ -1,7 +1,7 @@
 "use client"
 
 import { useEffect, useState } from "react"
-import { createClient } from "@/lib/supabase/client"
+import { createClient, getCurrentUserId } from "@/lib/supabase/client"
 import { toast } from "sonner"
 import { format } from "date-fns"
 
@@ -23,16 +23,18 @@ export function usePomodoroSessions() {
   }
 
   async function logSession(durationMinutes: number) {
+    const userId = await getCurrentUserId()
+    if (!userId) { toast.error("Failed to log session"); return }
     const { error } = await supabase
       .from("pomodoro_sessions")
-      .insert({ duration_minutes: durationMinutes, completed: true })
+      .insert({ duration_minutes: durationMinutes, completed: true, user_id: userId })
     if (error) { toast.error("Failed to log session"); return }
     setTodayCount(prev => prev + 1)
 
     // Cross-widget: auto-log activity
     await supabase
       .from("activity_logs")
-      .insert({ category: "Work", duration_minutes: durationMinutes, date: today })
+      .insert({ category: "Work", duration_minutes: durationMinutes, date: today, user_id: userId })
   }
 
   return { todayCount, logSession }
