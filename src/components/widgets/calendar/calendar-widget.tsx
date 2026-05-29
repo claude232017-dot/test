@@ -138,7 +138,7 @@ export function CalendarWidget() {
       </div>
 
       {/* Side panel */}
-      <div className="md:w-44 shrink-0 border-t md:border-t-0 md:border-l border-white/5 pt-4 md:pt-0 md:pl-4 flex flex-col gap-3">
+      <div className="md:w-56 shrink-0 border-t md:border-t-0 md:border-l border-white/5 pt-4 md:pt-0 md:pl-5 flex flex-col gap-4">
         {selectedDate ? (
           <>
             <div className="flex items-center justify-between">
@@ -159,33 +159,35 @@ export function CalendarWidget() {
                   animate={{ opacity: 1, height: "auto" }}
                   exit={{ opacity: 0, height: 0 }}
                   onSubmit={handleCreateEvent}
-                  className="overflow-hidden space-y-2"
+                  className="overflow-hidden"
                 >
-                  <Input
-                    value={eventTitle}
-                    onChange={e => setEventTitle(e.target.value)}
-                    placeholder="Event title…"
-                    className="h-7 text-xs"
-                    autoFocus
-                  />
-                  <Input
-                    value={eventDesc}
-                    onChange={e => setEventDesc(e.target.value)}
-                    placeholder="Description (opt)"
-                    className="h-7 text-xs"
-                  />
-                  <div className="flex gap-1 flex-wrap">
-                    {EVENT_COLORS.map(c => (
-                      <button
-                        key={c} type="button" onClick={() => setEventColor(c)}
-                        className={cn("w-4 h-4 rounded-full cursor-pointer transition-all", eventColor === c ? "ring-2 ring-white/50 scale-110" : "opacity-60 hover:opacity-100")}
-                        style={{ backgroundColor: c }}
-                      />
-                    ))}
+                  <div className="rounded-xl border border-white/[0.08] bg-white/[0.03] p-3 space-y-3">
+                    <Input
+                      value={eventTitle}
+                      onChange={e => setEventTitle(e.target.value)}
+                      placeholder="Event title…"
+                      className="h-8 text-xs"
+                      autoFocus
+                    />
+                    <Input
+                      value={eventDesc}
+                      onChange={e => setEventDesc(e.target.value)}
+                      placeholder="Description (opt)"
+                      className="h-8 text-xs"
+                    />
+                    <div className="flex gap-1.5 flex-wrap">
+                      {EVENT_COLORS.map(c => (
+                        <button
+                          key={c} type="button" onClick={() => setEventColor(c)}
+                          className={cn("w-5 h-5 rounded-full cursor-pointer transition-all", eventColor === c ? "ring-2 ring-white/60" : "opacity-60 hover:opacity-100")}
+                          style={{ backgroundColor: c }}
+                        />
+                      ))}
+                    </div>
+                    <Button type="submit" size="sm" className="w-full h-8 text-xs" disabled={!eventTitle.trim()}>
+                      Add
+                    </Button>
                   </div>
-                  <Button type="submit" size="sm" className="w-full h-7 text-xs" disabled={!eventTitle.trim()}>
-                    Add
-                  </Button>
                 </motion.form>
               )}
             </AnimatePresence>
