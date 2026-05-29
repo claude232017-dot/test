@@ -8,7 +8,7 @@ export default function DashboardLoading() {
           <div className="h-3 w-48 bg-white/[0.04] rounded animate-pulse" />
         </div>
       </div>
-      <div className="glass rounded-2xl flex-1 animate-pulse" />
+      <div className="glass-strong rounded-2xl flex-1 animate-pulse" />
     </div>
   )
 }
