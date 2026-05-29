@@ -2,14 +2,13 @@
 
 import { useState } from "react"
 import { motion, AnimatePresence } from "framer-motion"
-import { Trash2, Plus, Activity } from "lucide-react"
+import { Trash2, Plus, Minus, Activity } from "lucide-react"
 import { useActivityLogs } from "@/hooks/useActivityLogs"
 import { useDashboardStore } from "@/stores/useDashboardStore"
 import { ACTIVITY_CATEGORIES } from "@/lib/activity-categories"
 import { Button } from "@/components/ui/button"
 import { cn } from "@/lib/utils"
 
-// Re-exported for existing importers (analytics charts).
 export { ACTIVITY_CATEGORIES }
 
 function formatDuration(minutes: number) {
@@ -20,21 +19,49 @@ function formatDuration(minutes: number) {
   return `${h}h ${m}m`
 }
 
+function Stepper({ value, onChange, max }: { value: number; onChange: (v: number) => void; max: number }) {
+  return (
+    <div className="flex items-center gap-1.5">
+      <button
+        type="button"
+        onClick={() => onChange(Math.max(0, value - 1))}
+        className="w-7 h-7 rounded-lg bg-white/5 hover:bg-white/10 border border-white/10 flex items-center justify-center transition-colors cursor-pointer"
+      >
+        <Minus className="w-3 h-3 text-muted-foreground" />
+      </button>
+      <span className="w-8 text-center text-sm font-medium text-foreground tabular-nums select-none">{value}</span>
+      <button
+        type="button"
+        onClick={() => onChange(Math.min(max, value + 1))}
+        className="w-7 h-7 rounded-lg bg-white/5 hover:bg-white/10 border border-white/10 flex items-center justify-center transition-colors cursor-pointer"
+      >
+        <Plus className="w-3 h-3 text-muted-foreground" />
+      </button>
+    </div>
+  )
+}
+
 export function ActivityWidget() {
   const { selectedDate } = useDashboardStore()
   const { logs, loading, createLog, deleteLog, totalMinutes } = useActivityLogs(selectedDate)
   const [showForm, setShowForm] = useState(false)
   const [category, setCategory] = useState("Work")
-  const [hours, setHours] = useState("")
-  const [minutes, setMinutes] = useState("")
+  const [hours, setHours] = useState(0)
+  const [mins, setMins] = useState(0)
 
   async function handleAdd() {
-    const total = (parseInt(hours || "0") * 60) + parseInt(minutes || "0")
+    const total = hours * 60 + mins
     if (total <= 0) return
     await createLog({ category, duration_minutes: total })
-    setHours("")
-    setMinutes("")
+    setHours(0)
+    setMins(0)
     setShowForm(false)
+  }
+
+  function handleOpen() {
+    setHours(0)
+    setMins(0)
+    setShowForm(true)
   }
 
   const categoryTotals = ACTIVITY_CATEGORIES.map(cat => ({
@@ -44,6 +71,7 @@ export function ActivityWidget() {
 
   return (
     <div className="flex flex-col gap-4 h-full min-h-[350px]">
+
       {/* Summary bar */}
       {totalMinutes > 0 && (
         <div className="space-y-2">
@@ -70,7 +98,7 @@ export function ActivityWidget() {
         </div>
       )}
 
-      {/* Log form */}
+      {/* Log form — flush, no card-within-card */}
       <AnimatePresence>
         {showForm && (
           <motion.div
@@ -79,57 +107,67 @@ export function ActivityWidget() {
             exit={{ opacity: 0, height: 0 }}
             className="overflow-hidden"
           >
-            <div className="glass rounded-xl p-3 space-y-3">
-              <div className="flex flex-wrap gap-1.5">
-                {ACTIVITY_CATEGORIES.map(cat => (
-                  <button
-                    key={cat.name}
-                    onClick={() => setCategory(cat.name)}
-                    className={cn(
-                      "px-2.5 py-1 rounded-lg text-xs font-medium border transition-all cursor-pointer",
-                      category === cat.name ? cat.bg + " border-current/30" : "border-white/10 text-muted-foreground hover:bg-white/5"
-                    )}
-                  >
-                    {cat.name}
-                  </button>
-                ))}
+            <div className="pb-4 border-b border-white/5 space-y-4">
+              <div className="space-y-2">
+                <p className="text-[10px] uppercase tracking-widest font-medium text-muted-foreground/60">Category</p>
+                <div className="flex flex-wrap gap-1.5">
+                  {ACTIVITY_CATEGORIES.map(cat => (
+                    <button
+                      key={cat.name}
+                      onClick={() => setCategory(cat.name)}
+                      className={cn(
+                        "px-2.5 py-1 rounded-lg text-xs font-medium border transition-all cursor-pointer",
+                        category === cat.name
+                          ? cat.bg + " border-current/30"
+                          : "border-white/10 text-muted-foreground hover:bg-white/5"
+                      )}
+                    >
+                      {cat.name}
+                    </button>
+                  ))}
+                </div>
               </div>
-              <div className="flex items-center gap-2">
-                <div className="flex items-center gap-1">
-                  <input
-                    type="number" min="0" max="23" value={hours}
-                    onChange={e => setHours(e.target.value)}
-                    placeholder="0"
-                    className="w-14 h-8 text-center text-sm bg-white/5 border border-white/10 rounded-lg focus:outline-none focus:ring-1 focus:ring-purple-500/50 text-foreground"
-                  />
-                  <span className="text-xs text-muted-foreground">h</span>
+
+              <div className="space-y-2">
+                <p className="text-[10px] uppercase tracking-widest font-medium text-muted-foreground/60">Duration</p>
+                <div className="flex items-center gap-4">
+                  <div className="flex items-center gap-2">
+                    <Stepper value={hours} onChange={setHours} max={23} />
+                    <span className="text-xs text-muted-foreground">h</span>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <Stepper value={mins} onChange={setMins} max={59} />
+                    <span className="text-xs text-muted-foreground">m</span>
+                  </div>
+                  <Button
+                    size="sm"
+                    className="ml-auto h-8"
+                    onClick={handleAdd}
+                    disabled={hours * 60 + mins <= 0}
+                  >
+                    Log
+                  </Button>
                 </div>
-                <div className="flex items-center gap-1">
-                  <input
-                    type="number" min="0" max="59" value={minutes}
-                    onChange={e => setMinutes(e.target.value)}
-                    placeholder="0"
-                    className="w-14 h-8 text-center text-sm bg-white/5 border border-white/10 rounded-lg focus:outline-none focus:ring-1 focus:ring-purple-500/50 text-foreground"
-                  />
-                  <span className="text-xs text-muted-foreground">m</span>
-                </div>
-                <Button size="sm" className="ml-auto h-8" onClick={handleAdd}>Log</Button>
               </div>
             </div>
           </motion.div>
         )}
       </AnimatePresence>
 
-      {/* Add button */}
-      <Button
-        variant="outline"
-        size="sm"
-        className="w-full"
-        onClick={() => setShowForm(v => !v)}
-      >
-        <Plus className="w-4 h-4 mr-1" />
-        {showForm ? "Cancel" : "Log activity"}
-      </Button>
+      {/* Add / Cancel */}
+      {!showForm ? (
+        <Button variant="outline" size="sm" className="w-full" onClick={handleOpen}>
+          <Plus className="w-4 h-4 mr-1" />
+          Log activity
+        </Button>
+      ) : (
+        <button
+          onClick={() => setShowForm(false)}
+          className="text-xs text-muted-foreground hover:text-foreground transition-colors cursor-pointer w-fit"
+        >
+          Cancel
+        </button>
+      )}
 
       {/* Logs list */}
       <div className="flex-1 overflow-y-auto space-y-1.5">
@@ -169,6 +207,19 @@ export function ActivityWidget() {
           </AnimatePresence>
         )}
       </div>
+
+      {/* Color legend */}
+      <div className="pt-3 border-t border-white/5">
+        <div className="flex flex-wrap gap-x-4 gap-y-1.5">
+          {ACTIVITY_CATEGORIES.map(cat => (
+            <div key={cat.name} className="flex items-center gap-1.5">
+              <div className="w-2 h-2 rounded-full shrink-0" style={{ backgroundColor: cat.color }} />
+              <span className="text-[10px] text-muted-foreground">{cat.name}</span>
+            </div>
+          ))}
+        </div>
+      </div>
+
     </div>
   )
 }
