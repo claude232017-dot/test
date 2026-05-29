@@ -101,9 +101,9 @@ export function HabitsWidget() {
               animate={{ opacity: 1, height: "auto" }}
               exit={{ opacity: 0, height: 0 }}
               onSubmit={handleAdd}
-              className="overflow-hidden mb-2"
+              className="overflow-hidden"
             >
-              <div className="glass rounded-xl p-3 space-y-3">
+              <div className="pb-4 border-b border-white/5 mb-4 space-y-3">
                 <Input
                   value={name}
                   onChange={e => setName(e.target.value)}
@@ -111,9 +111,9 @@ export function HabitsWidget() {
                   className="h-9 text-sm"
                   autoFocus
                 />
-                <div className="flex items-center gap-2">
-                  <span className="text-xs text-muted-foreground shrink-0">Color:</span>
-                  <div className="flex gap-1.5 flex-1">
+                <div className="flex items-center gap-3">
+                  <span className="text-xs text-muted-foreground shrink-0">Color</span>
+                  <div className="flex gap-2 flex-1">
                     {COLORS.map(c => (
                       <button
                         key={c}
@@ -121,25 +121,36 @@ export function HabitsWidget() {
                         onClick={() => setColor(c)}
                         className={cn(
                           "w-5 h-5 rounded-full transition-all cursor-pointer shrink-0",
-                          color === c ? "ring-2 ring-white/50 scale-110" : "opacity-60 hover:opacity-100"
+                          color === c ? "ring-2 ring-white/60" : "opacity-60 hover:opacity-100"
                         )}
                         style={{ backgroundColor: c }}
                       />
                     ))}
                   </div>
-                  <Button type="submit" size="sm" className="h-7 shrink-0" disabled={!name.trim()}>
-                    Add
-                  </Button>
+                  <div className="flex items-center gap-2 shrink-0">
+                    <button
+                      type="button"
+                      onClick={() => setShowForm(false)}
+                      className="text-xs text-muted-foreground hover:text-foreground transition-colors cursor-pointer"
+                    >
+                      Cancel
+                    </button>
+                    <Button type="submit" size="sm" className="h-8" disabled={!name.trim()}>
+                      Add
+                    </Button>
+                  </div>
                 </div>
               </div>
             </motion.form>
           )}
         </AnimatePresence>
 
-        <Button variant="outline" size="sm" className="w-full" onClick={() => setShowForm(v => !v)}>
-          <Plus className="w-4 h-4 mr-1" />
-          {showForm ? "Cancel" : "New habit"}
-        </Button>
+        {!showForm && (
+          <Button variant="outline" size="sm" className="w-full" onClick={() => setShowForm(true)}>
+            <Plus className="w-4 h-4 mr-1" />
+            New habit
+          </Button>
+        )}
       </div>
     </div>
   )
