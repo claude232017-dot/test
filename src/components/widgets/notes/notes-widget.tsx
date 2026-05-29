@@ -90,7 +90,7 @@ export function NotesWidget() {
       {hasNotes && (
         <>
           <div className="hidden md:block w-px bg-white/5 shrink-0" />
-          <div className={cn("flex-1 overflow-hidden flex flex-col", !selectedId ? "hidden md:flex" : "flex")}>
+          <div className={cn("flex-1 overflow-y-auto flex flex-col", !selectedId ? "hidden md:flex" : "flex")}>
             {selectedNote ? (
               <>
                 <button
