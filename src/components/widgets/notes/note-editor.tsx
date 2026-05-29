@@ -6,7 +6,6 @@ import { Trash2, Check, Loader2 } from "lucide-react"
 import { Note } from "@/types"
 import { useDebounce } from "@/hooks/useNotes"
 import { Button } from "@/components/ui/button"
-import { Textarea } from "@/components/ui/textarea"
 
 interface NoteEditorProps {
   note: Note
@@ -38,7 +37,7 @@ export function NoteEditor({ note, onUpdate, onDelete }: NoteEditorProps) {
   }, [debouncedTitle, debouncedContent])
 
   return (
-    <div className="flex flex-col h-full gap-0">
+    <div className="flex flex-col h-full gap-0 px-4">
       {/* Toolbar */}
       <div className="flex items-center justify-between pb-3 border-b border-white/5">
         <AnimatePresence mode="wait">
@@ -72,15 +71,16 @@ export function NoteEditor({ note, onUpdate, onDelete }: NoteEditorProps) {
         value={title}
         onChange={e => setTitle(e.target.value)}
         placeholder="Untitled"
-        className="w-full mt-5 mb-4 px-0 py-0 text-xl font-semibold text-foreground placeholder:text-muted-foreground/30 bg-transparent border-none outline-none"
+        className="w-full mt-5 mb-4 py-0 text-xl font-semibold text-foreground placeholder:text-muted-foreground/30 bg-transparent border-0 outline-none ring-0 focus:outline-none focus:ring-0"
       />
 
       {/* Content */}
-      <Textarea
+      <textarea
         value={content}
         onChange={e => setContent(e.target.value)}
         placeholder="Start writing…"
-        className="flex-1 bg-transparent border-transparent focus-visible:border-transparent resize-none text-sm leading-relaxed px-0 py-0 min-h-0 shadow-none placeholder:text-muted-foreground/30"
+        className="flex-1 bg-transparent resize-none text-sm leading-relaxed p-3 min-h-0 text-foreground placeholder:text-muted-foreground/30 rounded-xl border border-white/[0.06] focus:border-purple-500/40 transition-colors"
+        style={{ outline: 'none', boxShadow: 'none' }}
       />
     </div>
   )
