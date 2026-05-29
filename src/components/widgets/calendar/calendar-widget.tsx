@@ -179,7 +179,7 @@ export function CalendarWidget() {
                       {EVENT_COLORS.map(c => (
                         <button
                           key={c} type="button" onClick={() => setEventColor(c)}
-                          className={cn("w-5 h-5 rounded-full cursor-pointer transition-all", eventColor === c ? "ring-2 ring-white/50 scale-110" : "opacity-60 hover:opacity-100")}
+                          className={cn("w-5 h-5 rounded-full cursor-pointer transition-all", eventColor === c ? "ring-2 ring-white/60" : "opacity-60 hover:opacity-100")}
                           style={{ backgroundColor: c }}
                         />
                       ))}
