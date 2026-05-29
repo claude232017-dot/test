@@ -3,6 +3,7 @@
 import { useEffect, useRef, useState } from "react"
 import { motion, AnimatePresence } from "framer-motion"
 import { Play, Pause, RotateCcw, Timer } from "lucide-react"
+import { toast } from "sonner"
 import { usePomodoroSessions } from "@/hooks/usePomodoroSessions"
 import { cn } from "@/lib/utils"
 
@@ -71,14 +72,14 @@ export function PomodoroWidget() {
       await logSession(currentMode.minutes)
       const newCount = sessionCount + 1
       setSessionCount(newCount)
-      // Browser notification
+      toast.success(`Focus session complete! Time for a ${newCount % 4 === 0 ? "long" : "short"} break.`, { duration: 4000 })
       if (Notification.permission === "granted") {
         new Notification("Focus session complete! 🎉", { body: "Time for a break." })
       }
-      // Auto-switch to break
       const nextMode = newCount % 4 === 0 ? "long" : "short"
       switchMode(nextMode)
     } else {
+      toast("Break over — time to focus!", { duration: 3000 })
       switchMode("work")
     }
   }
@@ -118,6 +119,11 @@ export function PomodoroWidget() {
           </button>
         ))}
       </div>
+
+      {/* Screen reader live region */}
+      <span aria-live="polite" aria-atomic="true" className="sr-only">
+        {running ? `${timeStr} remaining in ${currentMode.label} session` : `${currentMode.label} timer paused at ${timeStr}`}
+      </span>
 
       {/* Circular timer */}
       <div className="relative" onClick={requestNotificationPermission}>

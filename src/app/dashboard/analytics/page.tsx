@@ -6,6 +6,7 @@ import { ActivityBarChart } from "@/components/analytics/activity-bar-chart"
 import { ProductivityTrendChart } from "@/components/analytics/productivity-trend-chart"
 import { PomodoroBarChart } from "@/components/analytics/pomodoro-bar-chart"
 import { HabitRadialChart } from "@/components/analytics/habit-radial-chart"
+import { ErrorBoundary } from "@/components/ui/error-boundary"
 import { Clock, Target, CheckSquare, Timer } from "lucide-react"
 
 function fmtMinutes(m: number) {
@@ -23,7 +24,9 @@ function ChartCard({ title, subtitle, children, className }: { title: string; su
         <h3 className="text-sm font-semibold text-foreground">{title}</h3>
         {subtitle && <p className="text-xs text-muted-foreground mt-0.5">{subtitle}</p>}
       </div>
-      {children}
+      <ErrorBoundary>
+        {children}
+      </ErrorBoundary>
     </div>
   )
 }
@@ -72,6 +75,7 @@ export default function AnalyticsPage() {
         <StatCard
           label="Focus Time"
           value={fmtMinutes(stats.focusMinutesThisWeek)}
+          numericValue={stats.focusMinutesThisWeek}
           icon={Clock}
           sub="this week"
           accent="purple"
@@ -81,6 +85,7 @@ export default function AnalyticsPage() {
         <StatCard
           label="Habits Today"
           value={`${stats.habitsDoneToday}/${stats.totalHabits}`}
+          numericValue={stats.habitsDoneToday}
           icon={Target}
           sub={stats.totalHabits > 0 ? `${Math.round((stats.habitsDoneToday / stats.totalHabits) * 100)}% complete` : "No habits yet"}
           accent="green"
@@ -88,6 +93,7 @@ export default function AnalyticsPage() {
         <StatCard
           label="Todos Done"
           value={String(stats.todosCompleted)}
+          numericValue={stats.todosCompleted}
           icon={CheckSquare}
           sub="total completed"
           accent="blue"
@@ -95,6 +101,7 @@ export default function AnalyticsPage() {
         <StatCard
           label="Pomodoros"
           value={String(stats.pomodorosToday)}
+          numericValue={stats.pomodorosToday}
           icon={Timer}
           sub="today"
           accent="cyan"

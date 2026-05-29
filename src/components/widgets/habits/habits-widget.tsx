@@ -3,7 +3,8 @@
 import { useState } from "react"
 import { AnimatePresence, motion } from "framer-motion"
 import { Plus, Target } from "lucide-react"
-import { useHabits } from "@/hooks/useHabits"
+import { toast } from "sonner"
+import { useHabits, calculateStreak } from "@/hooks/useHabits"
 import { HabitItem } from "./habit-item"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
@@ -24,6 +25,18 @@ export function HabitsWidget() {
     setName("")
     setColor(COLORS[0])
     setShowForm(false)
+  }
+
+  async function handleToggle(habitId: string, date: string) {
+    const habit = habits.find(h => h.id === habitId)
+    if (!habit) return
+    const wasDone = habit.logs.includes(date)
+    await toggleHabitLog(habitId, date)
+    if (!wasDone) {
+      const newStreak = calculateStreak([...habit.logs, date], date)
+      if (newStreak === 7) toast.success(`🔥 7-day streak on "${habit.name}"! Keep it up!`)
+      else if (newStreak === 30) toast.success(`🏆 30-day streak on "${habit.name}"! Incredible!`)
+    }
   }
 
   const doneToday = habits.filter(h => h.logs.includes(today)).length
@@ -109,7 +122,7 @@ export function HabitsWidget() {
                 key={habit.id}
                 habit={habit}
                 today={today}
-                onToggle={toggleHabitLog}
+                onToggle={handleToggle}
                 onDelete={deleteHabit}
               />
             ))}
