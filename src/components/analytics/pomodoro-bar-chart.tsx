@@ -1,0 +1,45 @@
+"use client"
+
+import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Cell } from "recharts"
+import { PomodoroPoint } from "@/hooks/useAnalytics"
+
+const CustomTooltip = ({ active, payload, label }: any) => {
+  if (!active || !payload?.length) return null
+  const count = payload[0]?.value ?? 0
+  return (
+    <div className="glass rounded-xl p-3 text-xs shadow-xl">
+      <p className="font-semibold text-foreground mb-1">{label}</p>
+      <div className="flex items-center gap-2">
+        <div className="w-2 h-2 rounded-full bg-cyan-400" />
+        <span className="text-muted-foreground">Sessions:</span>
+        <span className="text-foreground font-medium">{count}</span>
+      </div>
+    </div>
+  )
+}
+
+interface Props {
+  data: PomodoroPoint[]
+}
+
+export function PomodoroBarChart({ data }: Props) {
+  return (
+    <ResponsiveContainer width="100%" height={180}>
+      <BarChart data={data} barSize={18} margin={{ top: 4, right: 4, left: -20, bottom: 0 }}>
+        <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.04)" vertical={false} />
+        <XAxis dataKey="day" tick={{ fill: "#64748b", fontSize: 10 }} axisLine={false} tickLine={false} interval={1} />
+        <YAxis tick={{ fill: "#64748b", fontSize: 10 }} axisLine={false} tickLine={false} allowDecimals={false} />
+        <Tooltip content={<CustomTooltip />} cursor={{ fill: "rgba(255,255,255,0.03)" }} />
+        <Bar dataKey="sessions" radius={[4, 4, 0, 0]}>
+          {data.map((entry, i) => (
+            <Cell
+              key={i}
+              fill={entry.isToday ? "#06b6d4" : "rgba(6,182,212,0.4)"}
+              style={{ filter: entry.isToday ? "drop-shadow(0 0 6px rgba(6,182,212,0.5))" : "none" }}
+            />
+          ))}
+        </Bar>
+      </BarChart>
+    </ResponsiveContainer>
+  )
+}
