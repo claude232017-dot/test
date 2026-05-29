@@ -2,7 +2,6 @@ export const dynamic = "force-dynamic"
 
 import { Sidebar } from "@/components/dashboard/sidebar"
 import { Topbar } from "@/components/dashboard/topbar"
-import { MobileNav } from "@/components/layout/mobile-nav"
 
 export default function DashboardLayout({ children }: { children: React.ReactNode }) {
   return (
@@ -10,11 +9,12 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
       <Sidebar />
       <div className="flex-1 flex flex-col overflow-hidden">
         <Topbar />
-        <main className="flex-1 overflow-y-auto p-4 md:p-6 pb-24 md:pb-6">
-          {children}
+        <main className="flex-1 overflow-y-auto px-4 md:px-6 py-5 md:py-6">
+          <div className="mx-auto w-full max-w-7xl">
+            {children}
+          </div>
         </main>
       </div>
-      <MobileNav />
     </div>
   )
 }
