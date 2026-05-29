@@ -6,7 +6,6 @@ import { Trash2, Check, Loader2 } from "lucide-react"
 import { Note } from "@/types"
 import { useDebounce } from "@/hooks/useNotes"
 import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
 import { Textarea } from "@/components/ui/textarea"
 
 interface NoteEditorProps {
@@ -23,14 +22,12 @@ export function NoteEditor({ note, onUpdate, onDelete }: NoteEditorProps) {
   const debouncedTitle = useDebounce(title, 500)
   const debouncedContent = useDebounce(content, 500)
 
-  // Sync when a different note is selected
   useEffect(() => {
     setTitle(note.title)
     setContent(note.content)
     setSaveState("idle")
   }, [note.id])
 
-  // Auto-save on debounced changes
   useEffect(() => {
     if (debouncedTitle === note.title && debouncedContent === note.content) return
     setSaveState("saving")
@@ -41,13 +38,14 @@ export function NoteEditor({ note, onUpdate, onDelete }: NoteEditorProps) {
   }, [debouncedTitle, debouncedContent])
 
   return (
-    <div className="flex flex-col h-full">
-      <div className="flex items-center justify-between mb-3">
+    <div className="flex flex-col h-full gap-0">
+      {/* Toolbar */}
+      <div className="flex items-center justify-between pb-3 border-b border-white/5">
         <AnimatePresence mode="wait">
           {saveState !== "idle" && (
             <motion.span
               key={saveState}
-              initial={{ opacity: 0, x: 10 }}
+              initial={{ opacity: 0, x: 6 }}
               animate={{ opacity: 1, x: 0 }}
               exit={{ opacity: 0 }}
               className="flex items-center gap-1 text-xs text-muted-foreground"
@@ -62,24 +60,27 @@ export function NoteEditor({ note, onUpdate, onDelete }: NoteEditorProps) {
         <Button
           variant="ghost"
           size="icon"
-          className="ml-auto text-muted-foreground hover:text-red-400"
+          className="ml-auto h-7 w-7 text-muted-foreground hover:text-red-400"
           onClick={() => onDelete(note.id)}
         >
-          <Trash2 className="w-4 h-4" />
+          <Trash2 className="w-3.5 h-3.5" />
         </Button>
       </div>
 
-      <Input
+      {/* Title */}
+      <input
         value={title}
         onChange={e => setTitle(e.target.value)}
-        placeholder="Note title…"
-        className="mb-3 bg-transparent border-transparent focus-visible:border-purple-500/50 text-base font-medium px-0"
+        placeholder="Untitled"
+        className="w-full mt-4 mb-2 text-xl font-semibold text-foreground placeholder:text-muted-foreground/40 bg-transparent border-none outline-none"
       />
+
+      {/* Content */}
       <Textarea
         value={content}
         onChange={e => setContent(e.target.value)}
         placeholder="Start writing…"
-        className="flex-1 bg-transparent border-transparent focus-visible:border-purple-500/50 resize-none text-sm leading-relaxed px-0"
+        className="flex-1 bg-transparent border-transparent focus-visible:border-transparent resize-none text-sm leading-relaxed px-0 py-0 min-h-0 shadow-none"
       />
     </div>
   )

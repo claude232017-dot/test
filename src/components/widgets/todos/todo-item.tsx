@@ -12,6 +12,12 @@ const PRIORITY_STYLES: Record<Todo["priority"], string> = {
   low: "text-green-400 border-green-500/30 bg-green-500/10",
 }
 
+const PRIORITY_BAR: Record<Todo["priority"], string> = {
+  high: "bg-red-500",
+  medium: "bg-yellow-500",
+  low: "bg-green-500",
+}
+
 interface TodoItemProps {
   todo: Todo
   onToggle: (id: string) => void
@@ -27,13 +33,18 @@ export function TodoItem({ todo, onToggle, onDelete }: TodoItemProps) {
       initial={{ opacity: 0, y: -6 }}
       animate={{ opacity: 1, y: 0 }}
       exit={{ opacity: 0, scale: 0.97 }}
-      className="flex items-center gap-3 py-2 px-1 group rounded-lg hover:bg-white/[0.02] transition-colors"
+      className="flex items-center gap-3 py-2.5 px-3 group rounded-xl hover:bg-white/[0.03] transition-colors relative overflow-hidden"
     >
+      {/* Priority bar */}
+      {!todo.completed && (
+        <div className={cn("absolute left-0 top-2 bottom-2 w-0.5 rounded-full", PRIORITY_BAR[todo.priority])} />
+      )}
+
       {/* Checkbox */}
       <button
         onClick={() => onToggle(todo.id)}
         className={cn(
-          "w-5 h-5 rounded border-2 shrink-0 transition-all duration-200 cursor-pointer flex items-center justify-center",
+          "w-5 h-5 rounded-md border-2 shrink-0 transition-all duration-200 cursor-pointer flex items-center justify-center",
           todo.completed
             ? "bg-purple-500 border-purple-500"
             : "border-white/20 hover:border-purple-400"
@@ -49,33 +60,33 @@ export function TodoItem({ todo, onToggle, onDelete }: TodoItemProps) {
       {/* Title */}
       <span className={cn(
         "flex-1 text-sm transition-all",
-        todo.completed ? "line-through text-muted-foreground/50" : "text-foreground"
+        todo.completed ? "line-through text-muted-foreground/40" : "text-foreground"
       )}>
         {todo.title}
-      </span>
-
-      {/* Priority badge */}
-      <span className={cn(
-        "text-[10px] px-1.5 py-0.5 rounded border font-medium shrink-0 hidden sm:inline",
-        PRIORITY_STYLES[todo.priority]
-      )}>
-        {todo.priority}
       </span>
 
       {/* Due date */}
       {todo.due_date && (
         <span className={cn(
-          "text-[10px] shrink-0 hidden sm:inline",
-          isOverdue ? "text-red-400" : "text-muted-foreground"
+          "text-[10px] shrink-0",
+          isOverdue ? "text-red-400" : "text-muted-foreground/60"
         )}>
           {format(new Date(todo.due_date), "MMM d")}
         </span>
       )}
 
+      {/* Priority badge */}
+      <span className={cn(
+        "text-[10px] px-1.5 py-0.5 rounded-md border font-medium shrink-0",
+        todo.completed ? "opacity-30 text-muted-foreground border-white/10 bg-transparent" : PRIORITY_STYLES[todo.priority]
+      )}>
+        {todo.priority}
+      </span>
+
       {/* Delete */}
       <button
         onClick={() => onDelete(todo.id)}
-        className="opacity-40 group-hover:opacity-100 md:opacity-0 md:group-hover:opacity-100 text-muted-foreground hover:text-red-400 transition-all cursor-pointer p-1 -m-1"
+        className="opacity-0 group-hover:opacity-100 text-muted-foreground hover:text-red-400 transition-all cursor-pointer p-1 -m-1 shrink-0"
       >
         <Trash2 className="w-3.5 h-3.5" />
       </button>

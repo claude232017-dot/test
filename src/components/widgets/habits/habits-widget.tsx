@@ -40,80 +40,42 @@ export function HabitsWidget() {
   }
 
   const doneToday = habits.filter(h => h.logs.includes(today)).length
+  const pct = habits.length > 0 ? Math.round((doneToday / habits.length) * 100) : 0
 
   return (
     <div className="flex flex-col gap-4 min-h-[350px]">
-      {/* Summary */}
+      {/* Summary bar */}
       {habits.length > 0 && (
-        <div className="flex items-center justify-between text-xs text-muted-foreground">
-          <span>{doneToday}/{habits.length} habits done today</span>
-          <div className="w-24 h-1.5 bg-white/5 rounded-full overflow-hidden">
-            <div
-              className="h-full bg-purple-500 rounded-full transition-all duration-500"
-              style={{ width: `${(doneToday / habits.length) * 100}%` }}
+        <div className="space-y-1.5">
+          <div className="flex items-center justify-between text-xs">
+            <span className="text-muted-foreground">{doneToday}/{habits.length} habits done today</span>
+            <span className={cn(
+              "font-semibold tabular-nums",
+              pct === 100 ? "text-green-400" : pct >= 50 ? "text-purple-400" : "text-muted-foreground"
+            )}>{pct}%</span>
+          </div>
+          <div className="w-full h-1.5 bg-white/[0.05] rounded-full overflow-hidden">
+            <motion.div
+              className="h-full rounded-full"
+              style={{ background: pct === 100 ? "#22c55e" : "linear-gradient(90deg, #7c3aed, #06b6d4)" }}
+              initial={{ width: 0 }}
+              animate={{ width: `${pct}%` }}
+              transition={{ duration: 0.6, ease: "easeOut" }}
             />
           </div>
         </div>
       )}
 
-      {/* Add form */}
-      <AnimatePresence>
-        {showForm && (
-          <motion.form
-            initial={{ opacity: 0, height: 0 }}
-            animate={{ opacity: 1, height: "auto" }}
-            exit={{ opacity: 0, height: 0 }}
-            onSubmit={handleAdd}
-            className="overflow-hidden"
-          >
-            <div className="glass rounded-xl p-3 space-y-3">
-              <Input
-                value={name}
-                onChange={e => setName(e.target.value)}
-                placeholder="Habit name…"
-                className="h-8 text-sm"
-                autoFocus
-              />
-              <div className="flex items-center gap-2">
-                <span className="text-xs text-muted-foreground">Color:</span>
-                <div className="flex gap-1.5">
-                  {COLORS.map(c => (
-                    <button
-                      key={c}
-                      type="button"
-                      onClick={() => setColor(c)}
-                      className={cn(
-                        "w-5 h-5 rounded-full transition-all cursor-pointer",
-                        color === c ? "ring-2 ring-white/50 scale-110" : "opacity-60 hover:opacity-100"
-                      )}
-                      style={{ backgroundColor: c }}
-                    />
-                  ))}
-                </div>
-                <Button type="submit" size="sm" className="ml-auto h-7" disabled={!name.trim()}>
-                  Add
-                </Button>
-              </div>
-            </div>
-          </motion.form>
-        )}
-      </AnimatePresence>
-
-      <Button variant="outline" size="sm" className="w-full" onClick={() => setShowForm(v => !v)}>
-        <Plus className="w-4 h-4 mr-1" />
-        {showForm ? "Cancel" : "New habit"}
-      </Button>
-
       {/* Habits list */}
       <div className="flex-1 overflow-y-auto space-y-2">
         {loading ? (
           Array.from({ length: 3 }).map((_, i) => (
-            <div key={i} className="h-14 rounded-xl bg-white/5 animate-pulse" />
+            <div key={i} className="h-[68px] rounded-2xl bg-white/[0.03] animate-pulse" />
           ))
         ) : habits.length === 0 ? (
           <div className="flex flex-col items-center justify-center h-32">
-            <Target className="w-8 h-8 text-muted-foreground/30 mb-2" />
-            <p className="text-xs text-muted-foreground">No habits yet — add one above</p>
+            <Target className="w-8 h-8 text-muted-foreground/20 mb-2" />
+            <p className="text-xs text-muted-foreground">No habits yet — add one below</p>
           </div>
         ) : (
           <AnimatePresence initial={false}>
@@ -128,6 +90,56 @@ export function HabitsWidget() {
             ))}
           </AnimatePresence>
         )}
+      </div>
+
+      {/* Add form */}
+      <div className="shrink-0">
+        <AnimatePresence>
+          {showForm && (
+            <motion.form
+              initial={{ opacity: 0, height: 0 }}
+              animate={{ opacity: 1, height: "auto" }}
+              exit={{ opacity: 0, height: 0 }}
+              onSubmit={handleAdd}
+              className="overflow-hidden mb-2"
+            >
+              <div className="glass rounded-xl p-3 space-y-3">
+                <Input
+                  value={name}
+                  onChange={e => setName(e.target.value)}
+                  placeholder="Habit name…"
+                  className="h-9 text-sm"
+                  autoFocus
+                />
+                <div className="flex items-center gap-2">
+                  <span className="text-xs text-muted-foreground shrink-0">Color:</span>
+                  <div className="flex gap-1.5 flex-1">
+                    {COLORS.map(c => (
+                      <button
+                        key={c}
+                        type="button"
+                        onClick={() => setColor(c)}
+                        className={cn(
+                          "w-5 h-5 rounded-full transition-all cursor-pointer shrink-0",
+                          color === c ? "ring-2 ring-white/50 scale-110" : "opacity-60 hover:opacity-100"
+                        )}
+                        style={{ backgroundColor: c }}
+                      />
+                    ))}
+                  </div>
+                  <Button type="submit" size="sm" className="h-7 shrink-0" disabled={!name.trim()}>
+                    Add
+                  </Button>
+                </div>
+              </div>
+            </motion.form>
+          )}
+        </AnimatePresence>
+
+        <Button variant="outline" size="sm" className="w-full" onClick={() => setShowForm(v => !v)}>
+          <Plus className="w-4 h-4 mr-1" />
+          {showForm ? "Cancel" : "New habit"}
+        </Button>
       </div>
     </div>
   )

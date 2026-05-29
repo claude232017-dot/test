@@ -17,19 +17,19 @@ export function NoteCard({ note, isSelected, onClick }: NoteCardProps) {
       layout
       onClick={onClick}
       className={cn(
-        "w-full text-left p-3 rounded-lg border transition-all duration-150 cursor-pointer",
+        "w-full text-left px-3 py-2.5 rounded-xl border transition-all duration-150 cursor-pointer",
         isSelected
-          ? "border-purple-500/40 bg-purple-500/10"
-          : "border-white/5 bg-white/[0.02] hover:bg-white/5 hover:border-white/10"
+          ? "border-purple-500/40 bg-purple-500/10 shadow-[inset_2px_0_0_rgba(139,92,246,0.6)]"
+          : "border-white/5 bg-white/[0.02] hover:bg-white/[0.05] hover:border-white/10"
       )}
     >
-      <p className="text-sm font-medium text-foreground truncate">
+      <p className="text-sm font-medium text-foreground truncate leading-snug">
         {note.title || "Untitled"}
       </p>
-      <p className="text-xs text-muted-foreground truncate mt-0.5">
+      <p className="text-xs text-muted-foreground mt-0.5 line-clamp-2 leading-relaxed">
         {note.content || "No content"}
       </p>
-      <p className="text-[10px] text-muted-foreground/60 mt-1.5">
+      <p className="text-[10px] text-muted-foreground/50 mt-1.5">
         {formatDistanceToNow(new Date(note.updated_at), { addSuffix: true })}
       </p>
     </motion.button>

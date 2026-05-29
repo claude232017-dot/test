@@ -7,7 +7,7 @@ import { ProductivityTrendChart } from "@/components/analytics/productivity-tren
 import { PomodoroBarChart } from "@/components/analytics/pomodoro-bar-chart"
 import { HabitRadialChart } from "@/components/analytics/habit-radial-chart"
 import { ErrorBoundary } from "@/components/ui/error-boundary"
-import { Clock, Target, CheckSquare, Timer } from "lucide-react"
+import { BarChart2, Clock, Target, CheckSquare, Timer } from "lucide-react"
 
 function fmtMinutes(m: number) {
   const h = Math.floor(m / 60)
@@ -19,7 +19,7 @@ function fmtMinutes(m: number) {
 
 function ChartCard({ title, subtitle, children, className }: { title: string; subtitle?: string; children: React.ReactNode; className?: string }) {
   return (
-    <div className={`glass rounded-xl p-5 flex flex-col gap-3 ${className ?? ""}`}>
+    <div className={`glass-strong rounded-2xl p-5 flex flex-col gap-3 ${className ?? ""}`}>
       <div>
         <h3 className="text-sm font-semibold text-foreground">{title}</h3>
         {subtitle && <p className="text-xs text-muted-foreground mt-0.5">{subtitle}</p>}
@@ -45,18 +45,21 @@ export default function AnalyticsPage() {
   if (loading) {
     return (
       <div className="space-y-6">
-        <div>
-          <h1 className="text-2xl font-semibold text-foreground">Analytics</h1>
-          <p className="text-sm text-muted-foreground mt-1">Loading your productivity data…</p>
+        <div className="flex items-center gap-3">
+          <div className="w-9 h-9 rounded-xl bg-white/[0.04] animate-pulse" />
+          <div className="space-y-1.5">
+            <div className="h-6 w-28 bg-white/[0.06] rounded-lg animate-pulse" />
+            <div className="h-3 w-48 bg-white/[0.04] rounded animate-pulse" />
+          </div>
         </div>
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
           {Array.from({ length: 4 }).map((_, i) => (
-            <div key={i} className="glass rounded-xl h-28 animate-pulse" />
+            <div key={i} className="glass-strong rounded-2xl h-28 animate-pulse" />
           ))}
         </div>
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
           {Array.from({ length: 4 }).map((_, i) => (
-            <div key={i} className="glass rounded-xl h-64 animate-pulse" />
+            <div key={i} className="glass-strong rounded-2xl h-64 animate-pulse" />
           ))}
         </div>
       </div>
@@ -65,9 +68,14 @@ export default function AnalyticsPage() {
 
   return (
     <div className="space-y-6">
-      <div>
-        <h1 className="text-2xl font-semibold text-foreground">Analytics</h1>
-        <p className="text-sm text-muted-foreground mt-1">Insights into your productivity patterns</p>
+      <div className="flex items-center gap-3">
+        <div className="w-9 h-9 rounded-xl bg-purple-500/10 flex items-center justify-center shrink-0">
+          <BarChart2 className="w-[18px] h-[18px] text-purple-400" />
+        </div>
+        <div>
+          <h1 className="text-xl font-semibold text-foreground">Analytics</h1>
+          <p className="text-xs text-muted-foreground mt-0.5">Insights into your productivity patterns</p>
+        </div>
       </div>
 
       {/* Stat cards */}
