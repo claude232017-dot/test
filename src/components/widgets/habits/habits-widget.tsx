@@ -7,7 +7,6 @@ import { toast } from "sonner"
 import { useHabits, calculateStreak } from "@/hooks/useHabits"
 import { HabitItem } from "./habit-item"
 import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
 import { cn } from "@/lib/utils"
 
 const COLORS = ["#7c3aed", "#2563eb", "#06b6d4", "#16a34a", "#d97706", "#dc2626", "#db2777", "#6366f1"]
@@ -104,12 +103,13 @@ export function HabitsWidget() {
               className="overflow-hidden"
             >
               <div className="pb-4 border-b border-white/5 mb-4 space-y-3">
-                <Input
+                <input
                   value={name}
                   onChange={e => setName(e.target.value)}
                   placeholder="Habit name…"
-                  className="h-9 text-sm"
                   autoFocus
+                  className="w-full h-9 rounded-lg bg-white/5 px-3.5 text-sm text-foreground placeholder:text-muted-foreground/60 transition-colors"
+                  style={{ border: `1px solid ${color}70`, outline: 'none', boxShadow: 'none' }}
                 />
                 <div className="flex items-center gap-3">
                   <span className="text-xs text-muted-foreground shrink-0">Color</span>
