@@ -59,7 +59,7 @@ export function HabitItem({ habit, today, onToggle, onDelete }: HabitItemProps) 
       {/* Delete */}
       <button
         onClick={() => onDelete(habit.id)}
-        className="opacity-0 group-hover:opacity-100 text-muted-foreground hover:text-red-400 transition-all cursor-pointer"
+        className="opacity-40 group-hover:opacity-100 md:opacity-0 md:group-hover:opacity-100 text-muted-foreground hover:text-red-400 transition-all cursor-pointer p-1 -m-1"
       >
         <Trash2 className="w-3.5 h-3.5" />
       </button>

@@ -2,12 +2,13 @@
 
 import { useState } from "react"
 import { motion, AnimatePresence } from "framer-motion"
-import { Plus, Search, StickyNote } from "lucide-react"
+import { Plus, Search, StickyNote, ChevronLeft } from "lucide-react"
 import { useNotes } from "@/hooks/useNotes"
 import { NoteCard } from "./note-card"
 import { NoteEditor } from "./note-editor"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
+import { cn } from "@/lib/utils"
 
 export function NotesWidget() {
   const { notes, loading, createNote, updateNote, deleteNote } = useNotes()
@@ -32,9 +33,9 @@ export function NotesWidget() {
   }
 
   return (
-    <div className="flex gap-4 h-full min-h-[500px]">
-      {/* Sidebar */}
-      <div className="w-56 shrink-0 flex flex-col gap-2">
+    <div className="flex flex-col md:flex-row gap-4 h-full min-h-[400px] md:min-h-[500px]">
+      {/* Sidebar — full-width on mobile when no note selected, hidden when editing */}
+      <div className={cn("shrink-0 flex flex-col gap-2 md:w-56", selectedId ? "hidden md:flex" : "flex")}>
         <div className="flex items-center gap-2">
           <div className="relative flex-1">
             <Search className="absolute left-2.5 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-muted-foreground" />
@@ -83,18 +84,27 @@ export function NotesWidget() {
         </div>
       </div>
 
-      {/* Divider */}
-      <div className="w-px bg-white/5 shrink-0" />
+      {/* Divider — desktop only */}
+      <div className="hidden md:block w-px bg-white/5 shrink-0" />
 
-      {/* Editor */}
-      <div className="flex-1 overflow-hidden">
+      {/* Editor — full-width on mobile when note selected, hidden when showing list */}
+      <div className={cn("flex-1 overflow-hidden flex flex-col", !selectedId ? "hidden md:flex" : "flex")}>
         {selectedNote ? (
-          <NoteEditor
-            key={selectedNote.id}
-            note={selectedNote}
-            onUpdate={updateNote}
-            onDelete={handleDelete}
-          />
+          <>
+            <button
+              onClick={() => setSelectedId(null)}
+              className="md:hidden flex items-center gap-1 text-xs text-muted-foreground hover:text-foreground mb-3 cursor-pointer transition-colors w-fit"
+            >
+              <ChevronLeft className="w-3.5 h-3.5" />
+              All notes
+            </button>
+            <NoteEditor
+              key={selectedNote.id}
+              note={selectedNote}
+              onUpdate={updateNote}
+              onDelete={handleDelete}
+            />
+          </>
         ) : (
           <div className="flex flex-col items-center justify-center h-full text-center">
             <StickyNote className="w-10 h-10 text-muted-foreground/30 mb-3" />
@@ -107,4 +117,5 @@ export function NotesWidget() {
       </div>
     </div>
   )
+
 }

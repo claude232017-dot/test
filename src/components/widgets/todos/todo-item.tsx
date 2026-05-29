@@ -33,7 +33,7 @@ export function TodoItem({ todo, onToggle, onDelete }: TodoItemProps) {
       <button
         onClick={() => onToggle(todo.id)}
         className={cn(
-          "w-4 h-4 rounded border-2 shrink-0 transition-all duration-200 cursor-pointer flex items-center justify-center",
+          "w-5 h-5 rounded border-2 shrink-0 transition-all duration-200 cursor-pointer flex items-center justify-center",
           todo.completed
             ? "bg-purple-500 border-purple-500"
             : "border-white/20 hover:border-purple-400"
@@ -75,7 +75,7 @@ export function TodoItem({ todo, onToggle, onDelete }: TodoItemProps) {
       {/* Delete */}
       <button
         onClick={() => onDelete(todo.id)}
-        className="opacity-0 group-hover:opacity-100 text-muted-foreground hover:text-red-400 transition-all cursor-pointer"
+        className="opacity-40 group-hover:opacity-100 md:opacity-0 md:group-hover:opacity-100 text-muted-foreground hover:text-red-400 transition-all cursor-pointer p-1 -m-1"
       >
         <Trash2 className="w-3.5 h-3.5" />
       </button>

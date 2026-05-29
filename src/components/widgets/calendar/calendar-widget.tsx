@@ -53,7 +53,7 @@ export function CalendarWidget() {
   const selectedEvents = selectedDateStr ? eventsForDate(selectedDateStr) : []
 
   return (
-    <div className="flex gap-4 min-h-[400px]">
+    <div className="flex flex-col md:flex-row gap-4 min-h-[400px]">
       {/* Calendar grid */}
       <div className="flex-1 min-w-0">
         {/* Header */}
@@ -138,7 +138,7 @@ export function CalendarWidget() {
       </div>
 
       {/* Side panel */}
-      <div className="w-44 shrink-0 border-l border-white/5 pl-4 flex flex-col gap-3">
+      <div className="md:w-44 shrink-0 border-t md:border-t-0 md:border-l border-white/5 pt-4 md:pt-0 md:pl-4 flex flex-col gap-3">
         {selectedDate ? (
           <>
             <div className="flex items-center justify-between">
@@ -207,7 +207,7 @@ export function CalendarWidget() {
                     </div>
                     <button
                       onClick={() => deleteEvent(ev.id)}
-                      className="opacity-0 group-hover/ev:opacity-100 text-muted-foreground hover:text-red-400 transition-all cursor-pointer shrink-0"
+                      className="opacity-40 group-hover/ev:opacity-100 md:opacity-0 md:group-hover/ev:opacity-100 text-muted-foreground hover:text-red-400 transition-all cursor-pointer shrink-0"
                     >
                       <Trash2 className="w-3 h-3" />
                     </button>

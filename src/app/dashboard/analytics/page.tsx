@@ -49,7 +49,7 @@ export default function AnalyticsPage() {
           <h1 className="text-2xl font-semibold text-foreground">Analytics</h1>
           <p className="text-sm text-muted-foreground mt-1">Loading your productivity data…</p>
         </div>
-        <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
           {Array.from({ length: 4 }).map((_, i) => (
             <div key={i} className="glass rounded-xl h-28 animate-pulse" />
           ))}
@@ -71,7 +71,7 @@ export default function AnalyticsPage() {
       </div>
 
       {/* Stat cards */}
-      <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
+      <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
         <StatCard
           label="Focus Time"
           value={fmtMinutes(stats.focusMinutesThisWeek)}
