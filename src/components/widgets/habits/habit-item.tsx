@@ -47,7 +47,7 @@ export function HabitItem({ habit, today, onToggle, onDelete }: HabitItemProps) 
         whileTap={{ scale: 0.88 }}
         onClick={() => onToggle(habit.id, today)}
         className={cn(
-          "w-8 h-8 rounded-full border-2 flex items-center justify-center shrink-0 transition-all duration-200 cursor-pointer",
+          "w-11 h-11 sm:w-8 sm:h-8 rounded-full border-2 flex items-center justify-center shrink-0 transition-all duration-200 cursor-pointer",
           isDoneToday
             ? "border-transparent text-white shadow-lg"
             : "border-white/20 hover:border-current text-transparent"
@@ -66,7 +66,7 @@ export function HabitItem({ habit, today, onToggle, onDelete }: HabitItemProps) 
       {/* Delete */}
       <button
         onClick={() => onDelete(habit.id)}
-        className="opacity-30 group-hover:opacity-100 text-muted-foreground hover:text-red-400 transition-all cursor-pointer"
+        className="opacity-50 group-hover:opacity-100 text-muted-foreground hover:text-red-400 transition-all cursor-pointer p-1.5 -m-1.5 min-w-[36px] min-h-[36px] sm:min-w-0 sm:min-h-0 flex items-center justify-center"
       >
         <Trash2 className="w-3.5 h-3.5" />
       </button>

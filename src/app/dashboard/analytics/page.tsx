@@ -19,7 +19,7 @@ function fmtMinutes(m: number) {
 
 function ChartCard({ title, subtitle, children, className }: { title: string; subtitle?: string; children: React.ReactNode; className?: string }) {
   return (
-    <div className={`glass-strong rounded-2xl p-5 flex flex-col gap-3 ${className ?? ""}`}>
+    <div className={`glass-strong rounded-2xl p-4 md:p-5 flex flex-col gap-3 ${className ?? ""}`}>
       <div>
         <h3 className="text-sm font-semibold text-foreground">{title}</h3>
         {subtitle && <p className="text-xs text-muted-foreground mt-0.5">{subtitle}</p>}
@@ -52,12 +52,12 @@ export default function AnalyticsPage() {
             <div className="h-3 w-48 bg-white/[0.04] rounded animate-pulse" />
           </div>
         </div>
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3 md:gap-4">
           {Array.from({ length: 4 }).map((_, i) => (
             <div key={i} className="glass-strong rounded-2xl h-28 animate-pulse" />
           ))}
         </div>
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           {Array.from({ length: 4 }).map((_, i) => (
             <div key={i} className="glass-strong rounded-2xl h-64 animate-pulse" />
           ))}
@@ -119,11 +119,11 @@ export default function AnalyticsPage() {
       </div>
 
       {/* Charts row 1 */}
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
         <ChartCard
           title="Weekly Activity"
           subtitle="Hours logged per category — last 7 days"
-          className="lg:col-span-2"
+          className="md:col-span-2"
         >
           <ActivityBarChart data={weeklyActivity} />
         </ChartCard>
@@ -134,7 +134,7 @@ export default function AnalyticsPage() {
       </div>
 
       {/* Charts row 2 */}
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         <ChartCard title="Productivity Trend" subtitle="Daily logged time — last 30 days with 7-day average">
           <ProductivityTrendChart data={trend} />
         </ChartCard>

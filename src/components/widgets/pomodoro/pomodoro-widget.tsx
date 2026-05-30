@@ -108,7 +108,7 @@ export function PomodoroWidget() {
             key={m.value}
             onClick={() => switchMode(m.value)}
             className={cn(
-              "flex-1 px-3 py-1.5 rounded-lg text-xs font-medium transition-all cursor-pointer",
+              "flex-1 px-3 py-2.5 sm:py-1.5 rounded-lg text-xs font-medium transition-all cursor-pointer min-h-[40px] sm:min-h-0",
               mode === m.value ? "bg-white/10 text-foreground shadow-sm" : "text-muted-foreground hover:text-foreground"
             )}
           >
@@ -178,7 +178,7 @@ export function PomodoroWidget() {
       <div className="flex items-center gap-4">
         <button
           onClick={handleReset}
-          className="w-10 h-10 rounded-full bg-white/[0.04] hover:bg-white/[0.08] border border-white/[0.06] flex items-center justify-center transition-all cursor-pointer"
+          className="w-12 h-12 sm:w-10 sm:h-10 rounded-full bg-white/[0.04] hover:bg-white/[0.08] border border-white/[0.06] flex items-center justify-center transition-all cursor-pointer"
         >
           <RotateCcw className="w-4 h-4 text-muted-foreground" />
         </button>

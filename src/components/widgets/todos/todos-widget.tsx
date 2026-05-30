@@ -40,7 +40,7 @@ export function TodosWidget() {
               key={f.value}
               onClick={() => setFilter(f.value)}
               className={cn(
-                "flex items-center gap-1.5 px-3 py-1 rounded-lg text-xs font-medium transition-all cursor-pointer",
+                "flex items-center gap-1.5 px-3 py-2 sm:py-1 rounded-lg text-xs font-medium transition-all cursor-pointer min-h-[36px] sm:min-h-0",
                 filter === f.value
                   ? "bg-white/10 text-foreground shadow-sm"
                   : "text-muted-foreground hover:text-foreground"

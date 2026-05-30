@@ -120,7 +120,7 @@ export function HabitsWidget() {
                         type="button"
                         onClick={() => setColor(c)}
                         className={cn(
-                          "w-5 h-5 rounded-full transition-all cursor-pointer shrink-0",
+                          "w-7 h-7 sm:w-5 sm:h-5 rounded-full transition-all cursor-pointer shrink-0",
                           color === c ? "ring-2 ring-white/60" : "opacity-60 hover:opacity-100"
                         )}
                         style={{ backgroundColor: c }}
