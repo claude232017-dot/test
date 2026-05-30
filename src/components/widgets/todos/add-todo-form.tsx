@@ -1,6 +1,6 @@
 "use client"
 
-import { useEffect, useRef, useState } from "react"
+import { useState } from "react"
 import { Plus } from "lucide-react"
 import { Todo } from "@/types"
 import { Button } from "@/components/ui/button"
@@ -21,19 +21,6 @@ export function AddTodoForm({ onAdd }: AddTodoFormProps) {
   const [title, setTitle] = useState("")
   const [priority, setPriority] = useState<Todo["priority"]>("medium")
   const [dueDate, setDueDate] = useState("")
-  const [expanded, setExpanded] = useState(false)
-  const formRef = useRef<HTMLFormElement>(null)
-
-  useEffect(() => {
-    if (!expanded) return
-    function handleClick(e: MouseEvent) {
-      if (formRef.current && !formRef.current.contains(e.target as Node)) {
-        setExpanded(false)
-      }
-    }
-    document.addEventListener("mousedown", handleClick)
-    return () => document.removeEventListener("mousedown", handleClick)
-  }, [expanded])
 
   function handleSubmit(e: React.FormEvent) {
     e.preventDefault()
@@ -41,16 +28,15 @@ export function AddTodoForm({ onAdd }: AddTodoFormProps) {
     onAdd({ title: title.trim(), priority, due_date: dueDate || undefined })
     setTitle("")
     setDueDate("")
-    setExpanded(false)
   }
 
   return (
-    <form ref={formRef} onSubmit={handleSubmit} className="space-y-2.5">
+    <form onSubmit={handleSubmit} className="space-y-2.5 pb-4 border-b border-white/5">
+      {/* Input row */}
       <div className="flex gap-2">
         <Input
           value={title}
           onChange={e => setTitle(e.target.value)}
-          onFocus={() => setExpanded(true)}
           placeholder="Add a task…"
           className="h-9 text-sm"
         />
@@ -59,37 +45,33 @@ export function AddTodoForm({ onAdd }: AddTodoFormProps) {
         </Button>
       </div>
 
-      {expanded && (
-        <div className="flex flex-col sm:flex-row sm:items-center gap-2.5 pl-1">
-          {/* Priority */}
-          <div className="flex items-center gap-2">
-            <span className="text-xs text-muted-foreground shrink-0">Priority</span>
-            <div className="flex gap-1.5">
-              {PRIORITIES.map(p => (
-                <button
-                  key={p.value}
-                  type="button"
-                  onClick={() => setPriority(p.value)}
-                  className={cn(
-                    "px-2.5 py-1.5 rounded-lg text-xs border transition-all cursor-pointer min-h-[32px]",
-                    priority === p.value ? p.color : "text-muted-foreground border-white/10 bg-transparent"
-                  )}
-                >
-                  {p.label}
-                </button>
-              ))}
-            </div>
+      {/* Options row — always visible */}
+      <div className="flex flex-col sm:flex-row sm:items-center gap-2.5 pl-1">
+        <div className="flex items-center gap-2">
+          <span className="text-xs text-muted-foreground shrink-0">Priority</span>
+          <div className="flex gap-1.5">
+            {PRIORITIES.map(p => (
+              <button
+                key={p.value}
+                type="button"
+                onClick={() => setPriority(p.value)}
+                className={cn(
+                  "px-2.5 py-1.5 rounded-lg text-xs border transition-all cursor-pointer min-h-[32px]",
+                  priority === p.value ? p.color : "text-muted-foreground border-white/10 bg-transparent hover:border-white/20"
+                )}
+              >
+                {p.label}
+              </button>
+            ))}
           </div>
-
-          {/* Due date */}
-          <input
-            type="date"
-            value={dueDate}
-            onChange={e => setDueDate(e.target.value)}
-            className="sm:ml-auto text-xs bg-white/5 border border-white/10 rounded-lg px-2.5 py-1.5 text-muted-foreground focus:outline-none focus:border-purple-500/50 min-h-[32px] w-full sm:w-auto"
-          />
         </div>
-      )}
+        <input
+          type="date"
+          value={dueDate}
+          onChange={e => setDueDate(e.target.value)}
+          className="sm:ml-auto text-xs bg-white/5 border border-white/10 rounded-lg px-2.5 py-1.5 text-muted-foreground focus:outline-none focus:border-purple-500/50 min-h-[32px] w-full sm:w-auto"
+        />
+      </div>
     </form>
   )
 }
