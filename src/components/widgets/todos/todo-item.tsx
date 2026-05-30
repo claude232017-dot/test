@@ -18,6 +18,12 @@ const PRIORITY_BAR: Record<Todo["priority"], string> = {
   low: "bg-green-500",
 }
 
+const PRIORITY_LABEL: Record<Todo["priority"], string> = {
+  high: "High",
+  medium: "Med",
+  low: "Low",
+}
+
 interface TodoItemProps {
   todo: Todo
   onToggle: (id: string) => void
@@ -35,31 +41,32 @@ export function TodoItem({ todo, onToggle, onDelete }: TodoItemProps) {
       exit={{ opacity: 0, scale: 0.97 }}
       className="flex items-center gap-3 py-2.5 px-3 group rounded-xl hover:bg-white/[0.03] transition-colors relative overflow-hidden"
     >
-      {/* Priority bar */}
+      {/* Priority bar — slightly thicker */}
       {!todo.completed && (
-        <div className={cn("absolute left-0 top-2 bottom-2 w-0.5 rounded-full", PRIORITY_BAR[todo.priority])} />
+        <div className={cn("absolute left-0 top-2 bottom-2 w-[3px] rounded-full", PRIORITY_BAR[todo.priority])} />
       )}
 
-      {/* Checkbox */}
+      {/* Checkbox — larger hit area for mobile */}
       <button
         onClick={() => onToggle(todo.id)}
-        className={cn(
-          "w-5 h-5 rounded-md border-2 shrink-0 transition-all duration-200 cursor-pointer flex items-center justify-center",
-          todo.completed
-            ? "bg-purple-500 border-purple-500"
-            : "border-white/20 hover:border-purple-400"
-        )}
+        className="p-2 -m-2 shrink-0 cursor-pointer"
+        aria-label={todo.completed ? "Mark incomplete" : "Mark complete"}
       >
-        {todo.completed && (
-          <svg className="w-2.5 h-2.5 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={3}>
-            <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
-          </svg>
-        )}
+        <div className={cn(
+          "w-5 h-5 rounded-md border-2 transition-all duration-200 flex items-center justify-center",
+          todo.completed ? "bg-purple-500 border-purple-500" : "border-white/20 hover:border-purple-400"
+        )}>
+          {todo.completed && (
+            <svg className="w-2.5 h-2.5 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={3}>
+              <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
+            </svg>
+          )}
+        </div>
       </button>
 
       {/* Title */}
       <span className={cn(
-        "flex-1 text-sm transition-all",
+        "flex-1 text-sm transition-all min-w-0 truncate",
         todo.completed ? "line-through text-muted-foreground/40" : "text-foreground"
       )}>
         {todo.title}
@@ -75,18 +82,21 @@ export function TodoItem({ todo, onToggle, onDelete }: TodoItemProps) {
         </span>
       )}
 
-      {/* Priority badge */}
-      <span className={cn(
-        "text-[10px] px-1.5 py-0.5 rounded-md border font-medium shrink-0",
-        todo.completed ? "opacity-30 text-muted-foreground border-white/10 bg-transparent" : PRIORITY_STYLES[todo.priority]
-      )}>
-        {todo.priority}
-      </span>
+      {/* Priority badge — hidden when completed (strikethrough is enough) */}
+      {!todo.completed && (
+        <span className={cn(
+          "text-[10px] px-1.5 py-0.5 rounded-md border font-medium shrink-0",
+          PRIORITY_STYLES[todo.priority]
+        )}>
+          {PRIORITY_LABEL[todo.priority]}
+        </span>
+      )}
 
-      {/* Delete */}
+      {/* Delete — always visible on mobile, hover-only on desktop */}
       <button
         onClick={() => onDelete(todo.id)}
-        className="opacity-0 group-hover:opacity-100 text-muted-foreground hover:text-red-400 transition-all cursor-pointer p-1 -m-1 shrink-0"
+        className="opacity-50 group-hover:opacity-100 md:opacity-0 md:group-hover:opacity-100 text-muted-foreground hover:text-red-400 transition-all cursor-pointer p-2 -m-2 shrink-0"
+        aria-label="Delete task"
       >
         <Trash2 className="w-3.5 h-3.5" />
       </button>
