@@ -24,7 +24,7 @@ function Stepper({ value, onChange, max }: { value: number; onChange: (v: number
       <button
         type="button"
         onClick={() => onChange(Math.max(0, value - 1))}
-        className="w-9 h-9 rounded-xl bg-white/5 hover:bg-white/10 border border-white/10 flex items-center justify-center transition-colors cursor-pointer"
+        className="w-11 h-11 sm:w-9 sm:h-9 rounded-xl bg-white/5 hover:bg-white/10 border border-white/10 flex items-center justify-center transition-colors cursor-pointer"
       >
         <Minus className="w-3.5 h-3.5 text-muted-foreground" />
       </button>
@@ -32,7 +32,7 @@ function Stepper({ value, onChange, max }: { value: number; onChange: (v: number
       <button
         type="button"
         onClick={() => onChange(Math.min(max, value + 1))}
-        className="w-9 h-9 rounded-xl bg-white/5 hover:bg-white/10 border border-white/10 flex items-center justify-center transition-colors cursor-pointer"
+        className="w-11 h-11 sm:w-9 sm:h-9 rounded-xl bg-white/5 hover:bg-white/10 border border-white/10 flex items-center justify-center transition-colors cursor-pointer"
       >
         <Plus className="w-3.5 h-3.5 text-muted-foreground" />
       </button>
@@ -66,7 +66,7 @@ export function ActivityWidget() {
     <div className="flex flex-col md:flex-row gap-5 h-full min-h-[350px]">
 
       {/* Left: always-visible form */}
-      <div className="md:w-80 shrink-0 flex flex-col gap-5 md:border-r md:border-white/5 md:pr-5">
+      <div className="md:w-64 lg:w-80 shrink-0 flex flex-col gap-5 md:border-r md:border-white/5 md:pr-5">
         {/* Category */}
         <div className="space-y-2.5">
           <p className="text-[10px] uppercase tracking-widest font-medium text-muted-foreground/60">Category</p>
@@ -76,7 +76,7 @@ export function ActivityWidget() {
                 key={cat.name}
                 onClick={() => setCategory(cat.name)}
                 className={cn(
-                  "px-2.5 py-1.5 rounded-lg text-xs font-medium border transition-all cursor-pointer",
+                  "px-2.5 py-2 sm:py-1.5 rounded-lg text-xs font-medium border transition-all cursor-pointer min-h-[36px] sm:min-h-0",
                   category === cat.name
                     ? cat.bg + " border-current/30"
                     : "border-white/10 text-muted-foreground hover:bg-white/5"

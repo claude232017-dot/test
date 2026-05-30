@@ -72,8 +72,8 @@ export function HabitsWidget() {
             <div key={i} className="h-[68px] rounded-2xl bg-white/[0.03] animate-pulse" />
           ))
         ) : habits.length === 0 ? (
-          <div className="flex flex-col items-center justify-center h-32">
-            <Target className="w-8 h-8 text-muted-foreground/20 mb-2" />
+          <div className="flex flex-col items-center justify-center h-16 sm:h-32">
+            <Target className="w-7 h-7 sm:w-8 sm:h-8 text-muted-foreground/20 mb-2" />
             <p className="text-xs text-muted-foreground">No habits yet — add one below</p>
           </div>
         ) : (
@@ -111,34 +111,37 @@ export function HabitsWidget() {
                   className="w-full h-9 rounded-lg bg-white/5 px-3.5 text-sm text-foreground placeholder:text-muted-foreground/60 transition-colors"
                   style={{ border: `1px solid ${color}70`, outline: 'none', boxShadow: 'none' }}
                 />
-                <div className="flex items-center gap-3">
+                {/* Color row */}
+                <div className="flex items-center gap-2 flex-wrap">
                   <span className="text-xs text-muted-foreground shrink-0">Color</span>
-                  <div className="flex gap-2 flex-1">
+                  <div className="flex gap-2 flex-wrap">
                     {COLORS.map(c => (
                       <button
                         key={c}
                         type="button"
                         onClick={() => setColor(c)}
                         className={cn(
-                          "w-5 h-5 rounded-full transition-all cursor-pointer shrink-0",
+                          "w-7 h-7 sm:w-5 sm:h-5 rounded-full transition-all cursor-pointer shrink-0",
                           color === c ? "ring-2 ring-white/60" : "opacity-60 hover:opacity-100"
                         )}
                         style={{ backgroundColor: c }}
                       />
                     ))}
                   </div>
-                  <div className="flex items-center gap-2 shrink-0">
-                    <button
-                      type="button"
-                      onClick={() => setShowForm(false)}
-                      className="text-xs text-muted-foreground hover:text-foreground transition-colors cursor-pointer"
-                    >
-                      Cancel
-                    </button>
-                    <Button type="submit" size="sm" className="h-8" disabled={!name.trim()}>
-                      Add
-                    </Button>
-                  </div>
+                </div>
+
+                {/* Actions row */}
+                <div className="flex items-center justify-end gap-3">
+                  <button
+                    type="button"
+                    onClick={() => setShowForm(false)}
+                    className="text-xs text-muted-foreground hover:text-foreground transition-colors cursor-pointer"
+                  >
+                    Cancel
+                  </button>
+                  <Button type="submit" size="sm" className="h-9" disabled={!name.trim()}>
+                    Add habit
+                  </Button>
                 </div>
               </div>
             </motion.form>

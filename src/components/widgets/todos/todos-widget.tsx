@@ -31,16 +31,19 @@ export function TodosWidget() {
   })
 
   return (
-    <div className="flex flex-col h-full min-h-[400px]">
-      {/* Header */}
-      <div className="flex items-center justify-between mb-4">
+    <div className="flex flex-col h-full min-h-[400px] gap-4">
+      {/* Add form — always visible at top */}
+      <AddTodoForm onAdd={createTodo} />
+
+      {/* Filter tabs */}
+      <div className="flex items-center">
         <div className="flex gap-1 bg-white/[0.03] rounded-xl p-1">
           {FILTERS.map(f => (
             <button
               key={f.value}
               onClick={() => setFilter(f.value)}
               className={cn(
-                "flex items-center gap-1.5 px-3 py-1 rounded-lg text-xs font-medium transition-all cursor-pointer",
+                "flex items-center gap-1.5 px-3 py-2 sm:py-1 rounded-lg text-xs font-medium transition-all cursor-pointer min-h-[36px] sm:min-h-0",
                 filter === f.value
                   ? "bg-white/10 text-foreground shadow-sm"
                   : "text-muted-foreground hover:text-foreground"
@@ -60,11 +63,8 @@ export function TodosWidget() {
         </div>
       </div>
 
-      {/* Add form */}
-      <AddTodoForm onAdd={createTodo} />
-
       {/* List */}
-      <div className="flex-1 overflow-y-auto mt-3 space-y-0.5">
+      <div className="flex-1 overflow-y-auto space-y-0.5">
         {loading ? (
           Array.from({ length: 5 }).map((_, i) => (
             <div key={i} className="h-10 rounded-xl bg-white/[0.03] animate-pulse my-1" />

@@ -138,7 +138,7 @@ export function CalendarWidget() {
       </div>
 
       {/* Side panel */}
-      <div className="md:w-56 shrink-0 border-t md:border-t-0 md:border-l border-white/5 pt-4 md:pt-0 md:pl-5 flex flex-col gap-4">
+      <div className="md:w-48 lg:w-56 shrink-0 border-t md:border-t-0 md:border-l border-white/5 pt-4 md:pt-0 md:pl-4 lg:pl-5 flex flex-col gap-4">
         {selectedDate ? (
           <>
             <div className="flex items-center justify-between">

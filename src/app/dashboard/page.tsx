@@ -62,7 +62,7 @@ export default function DashboardPage() {
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.3 }}
       >
-        <h1 className="text-2xl md:text-3xl font-semibold tracking-tight">
+        <h1 className="text-xl sm:text-2xl md:text-3xl font-semibold tracking-tight">
           Your day <span className="text-gradient">at a glance</span>
         </h1>
         <p className="text-sm text-muted-foreground mt-1">
