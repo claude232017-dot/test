@@ -111,7 +111,7 @@ export function CalendarWidget() {
                   onClick={() => setSelectedDate(day)}
                   className={cn(
                     "relative flex flex-col items-center p-1 rounded-lg transition-all cursor-pointer min-h-[44px] group",
-                    isSelected ? "bg-purple-500/20" : "hover:bg-white/[0.06]"
+                    isSelected ? "bg-purple-500/20 border border-purple-500/30" : "hover:bg-white/5 border border-transparent"
                   )}
                 >
                   <span className={cn(
