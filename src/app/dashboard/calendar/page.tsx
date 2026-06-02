@@ -13,7 +13,7 @@ export default function CalendarPage() {
           <p className="text-xs text-muted-foreground mt-0.5">Schedule and manage your events</p>
         </div>
       </div>
-      <div className="glass-strong rounded-2xl p-5 flex-1 min-h-0">
+      <div className="rounded-2xl p-5 flex-1 min-h-0 border border-white/[0.08]" style={{ background: 'rgba(8, 10, 20, 0.92)', backdropFilter: 'blur(22px) saturate(150%)' }}>
         <CalendarWidget />
       </div>
     </div>
