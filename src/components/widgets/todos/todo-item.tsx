@@ -1,7 +1,7 @@
 "use client"
 
 import { motion } from "framer-motion"
-import { Trash2 } from "lucide-react"
+import { Trash2, Timer } from "lucide-react"
 import { format, isPast, isToday } from "date-fns"
 import { Todo } from "@/types"
 import { cn } from "@/lib/utils"
@@ -28,9 +28,11 @@ interface TodoItemProps {
   todo: Todo
   onToggle: (id: string) => void
   onDelete: (id: string) => void
+  onFocus?: (todo: Todo) => void
+  focusMinutes?: number
 }
 
-export function TodoItem({ todo, onToggle, onDelete }: TodoItemProps) {
+export function TodoItem({ todo, onToggle, onDelete, onFocus, focusMinutes }: TodoItemProps) {
   const isOverdue = todo.due_date && !todo.completed && isPast(new Date(todo.due_date + "T23:59:59")) && !isToday(new Date(todo.due_date))
 
   return (
@@ -41,12 +43,10 @@ export function TodoItem({ todo, onToggle, onDelete }: TodoItemProps) {
       exit={{ opacity: 0, scale: 0.97 }}
       className="flex items-center gap-3 py-2.5 px-3 group rounded-xl hover:bg-white/[0.03] transition-colors relative overflow-hidden"
     >
-      {/* Priority bar — slightly thicker */}
       {!todo.completed && (
         <div className={cn("absolute left-0 top-2 bottom-2 w-[3px] rounded-full", PRIORITY_BAR[todo.priority])} />
       )}
 
-      {/* Checkbox — larger hit area for mobile */}
       <button
         onClick={() => onToggle(todo.id)}
         className="p-2 -m-2 shrink-0 cursor-pointer"
@@ -64,7 +64,6 @@ export function TodoItem({ todo, onToggle, onDelete }: TodoItemProps) {
         </div>
       </button>
 
-      {/* Title */}
       <span className={cn(
         "flex-1 text-sm transition-all min-w-0 truncate",
         todo.completed ? "line-through text-muted-foreground/40" : "text-foreground"
@@ -72,7 +71,14 @@ export function TodoItem({ todo, onToggle, onDelete }: TodoItemProps) {
         {todo.title}
       </span>
 
-      {/* Due date */}
+      {/* Focus time badge */}
+      {focusMinutes != null && focusMinutes > 0 && (
+        <span className="flex items-center gap-0.5 text-[10px] text-purple-400/70 shrink-0">
+          <Timer className="w-2.5 h-2.5" />
+          {focusMinutes}m
+        </span>
+      )}
+
       {todo.due_date && (
         <span className={cn(
           "text-[10px] shrink-0",
@@ -82,7 +88,6 @@ export function TodoItem({ todo, onToggle, onDelete }: TodoItemProps) {
         </span>
       )}
 
-      {/* Priority badge — hidden when completed (strikethrough is enough) */}
       {!todo.completed && (
         <span className={cn(
           "text-[10px] px-1.5 py-0.5 rounded-md border font-medium shrink-0",
@@ -92,7 +97,17 @@ export function TodoItem({ todo, onToggle, onDelete }: TodoItemProps) {
         </span>
       )}
 
-      {/* Delete — always visible on mobile, hover-only on desktop */}
+      {/* Focus button — link task to Pomodoro */}
+      {!todo.completed && onFocus && (
+        <button
+          onClick={() => onFocus(todo)}
+          className="opacity-50 group-hover:opacity-100 md:opacity-0 md:group-hover:opacity-100 text-muted-foreground hover:text-purple-400 transition-all cursor-pointer p-2 -m-2 shrink-0"
+          aria-label="Focus on this task"
+        >
+          <Timer className="w-3.5 h-3.5" />
+        </button>
+      )}
+
       <button
         onClick={() => onDelete(todo.id)}
         className="opacity-50 group-hover:opacity-100 md:opacity-0 md:group-hover:opacity-100 text-muted-foreground hover:text-red-400 transition-all cursor-pointer p-2 -m-2 shrink-0"

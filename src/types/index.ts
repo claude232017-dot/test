@@ -57,5 +57,6 @@ export interface PomodoroSession {
   user_id: string
   duration_minutes: number
   completed: boolean
+  todo_id: string | null
   created_at: string
 }

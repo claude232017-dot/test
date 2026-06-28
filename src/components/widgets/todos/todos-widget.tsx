@@ -4,15 +4,19 @@ import { useState } from "react"
 import { AnimatePresence } from "framer-motion"
 import { CheckSquare } from "lucide-react"
 import { useTodos } from "@/hooks/useTodos"
+import { usePomodoroStore } from "@/stores/usePomodoroStore"
 import { Todo } from "@/types"
 import { AddTodoForm } from "./add-todo-form"
 import { TodoItem } from "./todo-item"
 import { cn } from "@/lib/utils"
+import { useRouter } from "next/navigation"
 
 type Filter = "all" | "active" | "completed"
 
 export function TodosWidget() {
   const { todos, loading, createTodo, toggleTodo, deleteTodo } = useTodos()
+  const setLinkedTodo = usePomodoroStore(s => s.setLinkedTodo)
+  const router = useRouter()
   const [filter, setFilter] = useState<Filter>("all")
 
   const activeCount = todos.filter(t => !t.completed).length
@@ -30,12 +34,15 @@ export function TodosWidget() {
     return true
   })
 
+  function handleFocus(todo: Todo) {
+    setLinkedTodo(todo.id, todo.title)
+    router.push("/dashboard/pomodoro")
+  }
+
   return (
     <div className="flex flex-col h-full min-h-[400px] gap-4">
-      {/* Add form — always visible at top */}
       <AddTodoForm onAdd={createTodo} />
 
-      {/* Filter tabs */}
       <div className="flex items-center">
         <div className="flex gap-1 bg-white/[0.03] rounded-xl p-1">
           {FILTERS.map(f => (
@@ -63,7 +70,6 @@ export function TodosWidget() {
         </div>
       </div>
 
-      {/* List */}
       <div className="flex-1 overflow-y-auto space-y-0.5">
         {loading ? (
           Array.from({ length: 5 }).map((_, i) => (
@@ -84,6 +90,7 @@ export function TodosWidget() {
                 todo={todo}
                 onToggle={toggleTodo}
                 onDelete={deleteTodo}
+                onFocus={handleFocus}
               />
             ))}
           </AnimatePresence>

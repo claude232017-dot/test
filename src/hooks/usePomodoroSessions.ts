@@ -16,16 +16,21 @@ export function usePomodoroSessions() {
 
   useEffect(() => { loadPomodoroToday() }, [])
 
-  async function logSession(durationMinutes: number) {
+  async function logSession(durationMinutes: number, todoId?: string | null) {
     const userId = await getCurrentUserId()
     if (!userId) { toast.error("Failed to log session"); return }
-    const { error } = await supabase
-      .from("pomodoro_sessions")
-      .insert({ duration_minutes: durationMinutes, completed: true, user_id: userId })
+
+    const row: Record<string, unknown> = {
+      duration_minutes: durationMinutes,
+      completed: true,
+      user_id: userId,
+    }
+    if (todoId) row.todo_id = todoId
+
+    const { error } = await supabase.from("pomodoro_sessions").insert(row)
     if (error) { toast.error("Failed to log session"); return }
     setPomodoroToday(prev => prev + 1)
 
-    // Cross-widget: auto-log activity, then refresh dependent caches.
     await supabase
       .from("activity_logs")
       .insert({ category: "Work", duration_minutes: durationMinutes, date: today, user_id: userId })
@@ -35,5 +40,15 @@ export function usePomodoroSessions() {
     store.loadAnalytics()
   }
 
-  return { todayCount, logSession }
+  async function getFocusMinutes(todoId: string): Promise<number> {
+    const { data } = await supabase
+      .from("pomodoro_sessions")
+      .select("duration_minutes")
+      .eq("todo_id", todoId)
+      .eq("completed", true)
+    if (!data) return 0
+    return data.reduce((sum, r) => sum + (r.duration_minutes || 0), 0)
+  }
+
+  return { todayCount, logSession, getFocusMinutes }
 }
