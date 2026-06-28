@@ -1,0 +1,2 @@
+ALTER TABLE pomodoro_sessions
+  ADD COLUMN IF NOT EXISTS todo_id UUID REFERENCES todos(id) ON DELETE SET NULL;

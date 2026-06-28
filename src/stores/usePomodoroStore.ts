@@ -14,6 +14,8 @@ interface PomodoroState {
   sessionCount: number
   targetTime: number | null
   pausedRemaining: number
+  linkedTodoId: string | null
+  linkedTodoTitle: string | null
 
   getSecondsLeft: () => number
   start: () => void
@@ -21,6 +23,7 @@ interface PomodoroState {
   reset: () => void
   switchMode: (mode: Mode) => void
   completeSession: () => Mode
+  setLinkedTodo: (id: string | null, title?: string | null) => void
 }
 
 export const usePomodoroStore = create<PomodoroState>((set, get) => ({
@@ -29,6 +32,8 @@ export const usePomodoroStore = create<PomodoroState>((set, get) => ({
   sessionCount: 0,
   targetTime: null,
   pausedRemaining: MODE_SECONDS.work,
+  linkedTodoId: null,
+  linkedTodoTitle: null,
 
   getSecondsLeft: () => {
     const { running, targetTime, pausedRemaining } = get()
@@ -94,5 +99,9 @@ export const usePomodoroStore = create<PomodoroState>((set, get) => ({
       })
       return "work"
     }
+  },
+
+  setLinkedTodo: (id, title) => {
+    set({ linkedTodoId: id, linkedTodoTitle: title ?? null })
   },
 }))
