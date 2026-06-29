@@ -4,7 +4,7 @@ import { useMemo } from "react"
 import { format, parseISO } from "date-fns"
 import { useDataStore } from "@/stores/useDataStore"
 
-export type SearchResultType = "note" | "todo" | "event" | "habit"
+export type SearchResultType = "note" | "todo" | "event" | "habit" | "goal"
 
 export interface SearchResult {
   id: string
@@ -24,10 +24,11 @@ export function useGlobalSearch(query: string): {
   const todos = useDataStore(s => s.todos)
   const calendarByMonth = useDataStore(s => s.calendarByMonth)
   const habits = useDataStore(s => s.habits)
+  const goals = useDataStore(s => s.goals)
 
   return useMemo(() => {
     const q = query.trim().toLowerCase()
-    const empty = { note: [], todo: [], event: [], habit: [] } as Record<SearchResultType, SearchResult[]>
+    const empty = { note: [], todo: [], event: [], habit: [], goal: [] } as Record<SearchResultType, SearchResult[]>
 
     if (!q) return { results: empty, total: 0 }
 
@@ -82,9 +83,22 @@ export function useGlobalSearch(query: string): {
         href: "/dashboard/habits",
       }))
 
-    const results = { note: noteResults, todo: todoResults, event: eventResults, habit: habitResults }
-    const total = noteResults.length + todoResults.length + eventResults.length + habitResults.length
+    const goalResults: SearchResult[] = goals
+      .filter(g => matches(g.title) || matches(g.description))
+      .slice(0, MAX_PER_GROUP)
+      .map(g => ({
+        id: g.id,
+        type: "goal",
+        title: g.title,
+        snippet: g.completed
+          ? "Completed"
+          : `${g.current_value} / ${g.target_value}${g.unit ? " " + g.unit : ""}`,
+        href: "/dashboard/goals",
+      }))
+
+    const results = { note: noteResults, todo: todoResults, event: eventResults, habit: habitResults, goal: goalResults }
+    const total = noteResults.length + todoResults.length + eventResults.length + habitResults.length + goalResults.length
 
     return { results, total }
-  }, [query, notes, todos, calendarByMonth, habits])
+  }, [query, notes, todos, calendarByMonth, habits, goals])
 }

@@ -52,6 +52,20 @@ export interface CalendarEvent {
   created_at: string
 }
 
+export interface Goal {
+  id: string
+  user_id: string
+  title: string
+  description: string | null
+  target_value: number
+  current_value: number
+  unit: string
+  deadline: string | null
+  color: string
+  completed: boolean
+  created_at: string
+}
+
 export interface PomodoroSession {
   id: string
   user_id: string

@@ -29,6 +29,7 @@ export function RealtimeProvider({ children }: { children: React.ReactNode }) {
         store().loadHabits()
         store().loadAnalytics()
       })
+      .on("postgres_changes", { event: "*", schema: "public", table: "goals" }, () => store().loadGoals())
       .on("postgres_changes", { event: "*", schema: "public", table: "pomodoro_sessions" }, () => {
         store().loadPomodoroToday()
         store().loadAnalytics()

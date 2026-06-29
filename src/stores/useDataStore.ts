@@ -2,7 +2,7 @@ import { create } from "zustand"
 import { format, subDays, startOfWeek, eachDayOfInterval } from "date-fns"
 import { createClient } from "@/lib/supabase/client"
 import { ACTIVITY_CATEGORIES } from "@/lib/activity-categories"
-import type { Note, Todo, CalendarEvent, ActivityLog } from "@/types"
+import type { Note, Todo, CalendarEvent, ActivityLog, Goal } from "@/types"
 import {
   type HabitWithLogs,
   type AnalyticsSnapshot,
@@ -29,6 +29,12 @@ interface DataState {
   todosHydrated: boolean
   setTodos: (updater: Todo[] | ((prev: Todo[]) => Todo[])) => void
   loadTodos: () => Promise<void>
+
+  // ── Goals ────────────────────────────────────────────────────────────
+  goals: Goal[]
+  goalsHydrated: boolean
+  setGoals: (updater: Goal[] | ((prev: Goal[]) => Goal[])) => void
+  loadGoals: () => Promise<void>
 
   // ── Habits (with logs) ───────────────────────────────────────────────
   habits: HabitWithLogs[]
@@ -97,6 +103,21 @@ export const useDataStore = create<DataState>((set, get) => ({
       .order("created_at", { ascending: false })
     if (!error && data) set({ todos: data, todosHydrated: true })
     else set({ todosHydrated: true })
+  },
+
+  // ── Goals ────────────────────────────────────────────────────────────
+  goals: [],
+  goalsHydrated: false,
+  setGoals: (updater) =>
+    set(s => ({ goals: typeof updater === "function" ? updater(s.goals) : updater })),
+  loadGoals: async () => {
+    const supabase = createClient()
+    const { data, error } = await supabase
+      .from("goals")
+      .select("id,user_id,title,description,target_value,current_value,unit,deadline,color,completed,created_at")
+      .order("created_at", { ascending: false })
+    if (!error && data) set({ goals: data, goalsHydrated: true })
+    else set({ goalsHydrated: true })
   },
 
   // ── Habits ───────────────────────────────────────────────────────────

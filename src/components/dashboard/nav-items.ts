@@ -1,6 +1,6 @@
 import {
   LayoutDashboard, StickyNote, CheckSquare, Activity,
-  CalendarDays, Target, Timer, BarChart2, type LucideIcon,
+  CalendarDays, Target, Timer, BarChart2, Trophy, type LucideIcon,
 } from "lucide-react"
 
 export interface NavItem {
@@ -17,6 +17,7 @@ export const navItems: NavItem[] = [
   { href: "/dashboard/calendar", label: "Calendar", icon: CalendarDays, group: "main" },
   { href: "/dashboard/activity", label: "Activity", icon: Activity, group: "track" },
   { href: "/dashboard/habits", label: "Habits", icon: Target, group: "track" },
+  { href: "/dashboard/goals", label: "Goals", icon: Trophy, group: "track" },
   { href: "/dashboard/pomodoro", label: "Pomodoro", icon: Timer, group: "track" },
   { href: "/dashboard/analytics", label: "Analytics", icon: BarChart2, group: "track" },
 ]
