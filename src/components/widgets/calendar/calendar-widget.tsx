@@ -1,10 +1,11 @@
 "use client"
 
 import { useState } from "react"
+import { useSearchParams } from "next/navigation"
 import { motion, AnimatePresence } from "framer-motion"
 import {
   format, startOfMonth, endOfMonth, eachDayOfInterval,
-  getDay, isSameDay, isToday, addMonths, subMonths
+  getDay, isSameDay, isToday, addMonths, subMonths, parse, isValid
 } from "date-fns"
 import { ChevronLeft, ChevronRight, Plus, Trash2, CalendarDays } from "lucide-react"
 import { useCalendarEvents } from "@/hooks/useCalendarEvents"
@@ -16,7 +17,15 @@ const WEEKDAYS = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"]
 const EVENT_COLORS = ["#7c3aed", "#2563eb", "#06b6d4", "#16a34a", "#d97706", "#dc2626", "#db2777"]
 
 export function CalendarWidget() {
-  const [currentMonth, setCurrentMonth] = useState(new Date())
+  const searchParams = useSearchParams()
+  const [currentMonth, setCurrentMonth] = useState(() => {
+    const monthParam = searchParams.get("month")
+    if (monthParam) {
+      const parsed = parse(monthParam, "yyyy-MM", new Date())
+      if (isValid(parsed)) return parsed
+    }
+    return new Date()
+  })
   const [selectedDate, setSelectedDate] = useState<Date | null>(null)
   const [direction, setDirection] = useState(0)
   const { events, loading, createEvent, deleteEvent, eventsForDate } = useCalendarEvents(currentMonth)
