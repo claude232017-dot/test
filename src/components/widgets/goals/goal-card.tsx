@@ -2,8 +2,8 @@
 
 import { useState } from "react"
 import { motion } from "framer-motion"
-import { Plus, Trash2, Check, Pencil, Calendar, Trophy } from "lucide-react"
-import { format, differenceInDays, parseISO, isPast } from "date-fns"
+import { Plus, Trash2, Check, Calendar, Trophy } from "lucide-react"
+import { differenceInDays, parseISO, isPast } from "date-fns"
 import type { Goal } from "@/types"
 import { progressPct } from "@/hooks/useGoals"
 import { cn } from "@/lib/utils"
@@ -14,11 +14,12 @@ interface GoalCardProps {
   onUpdateProgress: (id: string, value: number) => void
   onToggleComplete: (id: string) => void
   onDelete: (id: string) => void
+  onOpen?: (goal: Goal) => void
 }
 
 const MILESTONE_TICKS = [25, 50, 75]
 
-export function GoalCard({ goal, onIncrement, onUpdateProgress, onToggleComplete, onDelete }: GoalCardProps) {
+export function GoalCard({ goal, onIncrement, onUpdateProgress, onToggleComplete, onDelete, onOpen }: GoalCardProps) {
   const [editing, setEditing] = useState(false)
   const [editValue, setEditValue] = useState(String(goal.current_value))
 
@@ -40,8 +41,13 @@ export function GoalCard({ goal, onIncrement, onUpdateProgress, onToggleComplete
       initial={{ opacity: 0, y: -4 }}
       animate={{ opacity: 1, y: 0 }}
       exit={{ opacity: 0, scale: 0.97 }}
+      onClick={() => onOpen?.(goal)}
+      role={onOpen ? "button" : undefined}
+      tabIndex={onOpen ? 0 : undefined}
+      onKeyDown={onOpen ? (e) => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); onOpen(goal) } } : undefined}
       className={cn(
         "relative rounded-2xl p-4 border bg-[rgba(var(--overlay),0.03)] border-[rgba(var(--overlay),0.06)] overflow-hidden group transition-colors",
+        onOpen && "cursor-pointer hover:bg-[rgba(var(--overlay),0.05)]",
         goal.completed && "opacity-60"
       )}
     >
@@ -50,7 +56,7 @@ export function GoalCard({ goal, onIncrement, onUpdateProgress, onToggleComplete
 
       <div className="flex items-start gap-3 mb-3 pl-2">
         <button
-          onClick={() => onToggleComplete(goal.id)}
+          onClick={(e) => { e.stopPropagation(); onToggleComplete(goal.id) }}
           className={cn(
             "w-5 h-5 rounded-md border-2 transition-all duration-200 flex items-center justify-center shrink-0 mt-0.5 cursor-pointer",
             goal.completed ? "border-transparent" : "border-[rgba(var(--overlay),0.2)] hover:border-purple-400"
@@ -74,7 +80,7 @@ export function GoalCard({ goal, onIncrement, onUpdateProgress, onToggleComplete
         </div>
 
         <button
-          onClick={() => onDelete(goal.id)}
+          onClick={(e) => { e.stopPropagation(); onDelete(goal.id) }}
           className="opacity-50 group-hover:opacity-100 md:opacity-0 md:group-hover:opacity-100 text-muted-foreground hover:text-red-400 transition-all cursor-pointer p-2 -m-2 shrink-0"
           aria-label="Delete goal"
         >
@@ -113,13 +119,14 @@ export function GoalCard({ goal, onIncrement, onUpdateProgress, onToggleComplete
               value={editValue}
               onChange={e => setEditValue(e.target.value)}
               onBlur={commitEdit}
-              onKeyDown={e => { if (e.key === "Enter") commitEdit(); if (e.key === "Escape") { setEditing(false); setEditValue(String(goal.current_value)) } }}
+              onClick={(e) => e.stopPropagation()}
+              onKeyDown={e => { e.stopPropagation(); if (e.key === "Enter") commitEdit(); if (e.key === "Escape") { setEditing(false); setEditValue(String(goal.current_value)) } }}
               autoFocus
               className="w-16 h-6 px-1.5 rounded bg-[rgba(var(--overlay),0.06)] border border-[rgba(var(--overlay),0.12)] text-foreground text-xs tabular-nums focus:outline-none focus:border-purple-500/50"
             />
           ) : (
             <button
-              onClick={() => { setEditValue(String(goal.current_value)); setEditing(true) }}
+              onClick={(e) => { e.stopPropagation(); setEditValue(String(goal.current_value)); setEditing(true) }}
               className="font-semibold text-foreground tabular-nums hover:text-purple-400 transition-colors cursor-pointer"
               title="Click to edit"
             >
@@ -143,7 +150,7 @@ export function GoalCard({ goal, onIncrement, onUpdateProgress, onToggleComplete
           )}
           {!goal.completed && (
             <button
-              onClick={() => onIncrement(goal.id, 1)}
+              onClick={(e) => { e.stopPropagation(); onIncrement(goal.id, 1) }}
               className="flex items-center justify-center w-7 h-7 rounded-full text-white shadow-md cursor-pointer transition-transform hover:scale-105 active:scale-95"
               style={{ backgroundColor: goal.color }}
               aria-label="Increment progress"

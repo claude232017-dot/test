@@ -6,14 +6,18 @@ import { Plus, Trophy } from "lucide-react"
 import { useGoals } from "@/hooks/useGoals"
 import { GoalCard } from "./goal-card"
 import { AddGoalForm } from "./add-goal-form"
+import { GoalDetailModal } from "./goal-detail-modal"
 import { Button } from "@/components/ui/button"
+import type { Goal } from "@/types"
 
 export function GoalsWidget() {
-  const { goals, loading, createGoal, updateProgress, incrementProgress, toggleComplete, deleteGoal } = useGoals()
+  const { goals, loading, createGoal, updateProgress, incrementProgress, updateGoal, toggleComplete, deleteGoal } = useGoals()
   const [showForm, setShowForm] = useState(false)
+  const [openId, setOpenId] = useState<string | null>(null)
 
   const active = goals.filter(g => !g.completed)
   const completed = goals.filter(g => g.completed)
+  const openGoal = openId ? goals.find(g => g.id === openId) ?? null : null
 
   return (
     <div className="flex flex-col gap-4 min-h-[350px]">
@@ -73,6 +77,7 @@ export function GoalsWidget() {
                   onUpdateProgress={updateProgress}
                   onToggleComplete={toggleComplete}
                   onDelete={deleteGoal}
+                  onOpen={g => setOpenId(g.id)}
                 />
               ))}
             </AnimatePresence>
@@ -94,6 +99,7 @@ export function GoalsWidget() {
                       onUpdateProgress={updateProgress}
                       onToggleComplete={toggleComplete}
                       onDelete={deleteGoal}
+                      onOpen={g => setOpenId(g.id)}
                     />
                   ))}
                 </AnimatePresence>
@@ -102,6 +108,16 @@ export function GoalsWidget() {
           </>
         )}
       </div>
+
+      <GoalDetailModal
+        goal={openGoal}
+        onClose={() => setOpenId(null)}
+        onIncrement={incrementProgress}
+        onUpdateProgress={updateProgress}
+        onUpdate={updateGoal}
+        onToggleComplete={toggleComplete}
+        onDelete={deleteGoal}
+      />
     </div>
   )
 }
