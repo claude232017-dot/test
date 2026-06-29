@@ -7,9 +7,11 @@ import { cn } from "@/lib/utils"
 import { LayoutDashboard } from "lucide-react"
 import { navItems, isNavActive, GROUP_LABELS, type NavItem } from "./nav-items"
 import { ThemeToggle } from "@/components/ui/theme-toggle"
+import { useTodoBadge } from "@/hooks/useTodoBadge"
 
 export function Sidebar() {
   const pathname = usePathname()
+  const { overdue, dueToday, total: todoBadgeCount } = useTodoBadge()
 
   const groups: NavItem["group"][] = ["main", "track"]
 
@@ -35,6 +37,7 @@ export function Sidebar() {
             </p>
             {navItems.filter(i => i.group === group).map(({ href, label, icon: Icon }) => {
               const active = isNavActive(pathname, href)
+              const isTodos = href === "/dashboard/todos"
               return (
                 <Link
                   key={href}
@@ -57,7 +60,24 @@ export function Sidebar() {
                     aria-hidden="true"
                   />
                   <span className="relative z-10">{label}</span>
-                  {active && (
+                  {isTodos && todoBadgeCount > 0 && (
+                    <span
+                      className={cn(
+                        "relative z-10 ml-auto min-w-[18px] h-[18px] flex items-center justify-center rounded-full px-1 text-[10px] font-semibold leading-none text-white",
+                        overdue > 0 ? "bg-red-500 shadow-[0_0_8px_rgba(239,68,68,0.5)]" : "bg-amber-500 shadow-[0_0_8px_rgba(245,158,11,0.4)]"
+                      )}
+                      title={overdue > 0 ? `${overdue} overdue, ${dueToday} due today` : `${dueToday} due today`}
+                    >
+                      {todoBadgeCount}
+                    </span>
+                  )}
+                  {active && !isTodos && (
+                    <motion.span
+                      layoutId="sidebar-dot"
+                      className="ml-auto w-1.5 h-1.5 rounded-full bg-purple-400 relative z-10 shadow-[0_0_8px_rgba(167,139,250,0.8)]"
+                    />
+                  )}
+                  {active && isTodos && todoBadgeCount === 0 && (
                     <motion.span
                       layoutId="sidebar-dot"
                       className="ml-auto w-1.5 h-1.5 rounded-full bg-purple-400 relative z-10 shadow-[0_0_8px_rgba(167,139,250,0.8)]"

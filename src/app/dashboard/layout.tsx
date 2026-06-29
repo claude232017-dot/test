@@ -1,6 +1,7 @@
 import { Sidebar } from "@/components/dashboard/sidebar"
 import { Topbar } from "@/components/dashboard/topbar"
 import { RealtimeProvider } from "@/components/providers/realtime-provider"
+import { TodoReminder } from "@/components/dashboard/todo-reminder"
 
 export default function DashboardLayout({ children }: { children: React.ReactNode }) {
   return (
@@ -16,6 +17,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
           </main>
         </div>
       </div>
+      <TodoReminder />
     </RealtimeProvider>
   )
 }

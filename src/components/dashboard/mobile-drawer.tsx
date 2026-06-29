@@ -10,6 +10,7 @@ import { createClient } from "@/lib/supabase/client"
 import { cn } from "@/lib/utils"
 import { navItems, isNavActive, GROUP_LABELS, type NavItem } from "./nav-items"
 import { ThemeToggle } from "@/components/ui/theme-toggle"
+import { useTodoBadge } from "@/hooks/useTodoBadge"
 
 interface MobileDrawerProps {
   name: string
@@ -48,6 +49,7 @@ export function MobileDrawer({ name, email, initial }: MobileDrawerProps) {
     router.refresh()
   }
 
+  const { overdue, dueToday, total: todoBadgeCount } = useTodoBadge()
   const groups: NavItem["group"][] = ["main", "track"]
 
   return (
@@ -114,6 +116,7 @@ export function MobileDrawer({ name, email, initial }: MobileDrawerProps) {
                     </p>
                     {navItems.filter(i => i.group === group).map(({ href, label, icon: Icon }) => {
                       const active = isNavActive(pathname, href)
+                      const isTodos = href === "/dashboard/todos"
                       return (
                         <Link
                           key={href}
@@ -128,7 +131,17 @@ export function MobileDrawer({ name, email, initial }: MobileDrawerProps) {
                         >
                           <Icon className={cn("w-[18px] h-[18px] shrink-0", active && "text-purple-400")} aria-hidden="true" />
                           {label}
-                          {active && <span className="ml-auto w-1.5 h-1.5 rounded-full bg-purple-400" aria-hidden="true" />}
+                          {isTodos && todoBadgeCount > 0 && (
+                            <span
+                              className={cn(
+                                "ml-auto min-w-[18px] h-[18px] flex items-center justify-center rounded-full px-1 text-[10px] font-semibold leading-none text-white",
+                                overdue > 0 ? "bg-red-500" : "bg-amber-500"
+                              )}
+                            >
+                              {todoBadgeCount}
+                            </span>
+                          )}
+                          {active && !(isTodos && todoBadgeCount > 0) && <span className="ml-auto w-1.5 h-1.5 rounded-full bg-purple-400" aria-hidden="true" />}
                         </Link>
                       )
                     })}
