@@ -56,7 +56,7 @@ export function NotesWidget() {
         <div className="flex-1 overflow-y-auto space-y-1 pr-1">
           {loading ? (
             Array.from({ length: 4 }).map((_, i) => (
-              <div key={i} className="h-16 rounded-lg bg-white/5 animate-pulse" />
+              <div key={i} className="h-16 rounded-lg bg-[rgba(var(--overlay),0.05)] animate-pulse" />
             ))
           ) : filtered.length === 0 ? (
             <div className="flex flex-col items-center justify-center h-32 text-center">
@@ -89,7 +89,7 @@ export function NotesWidget() {
       {/* Divider + editor panel — only rendered when there are notes to show */}
       {hasNotes && (
         <>
-          <div className="hidden md:block w-px bg-white/5 shrink-0" />
+          <div className="hidden md:block w-px bg-[rgba(var(--overlay),0.05)] shrink-0" />
           <div className={cn("flex-1 overflow-y-auto flex flex-col", !selectedId ? "hidden md:flex" : "flex")}>
             {selectedNote ? (
               <>

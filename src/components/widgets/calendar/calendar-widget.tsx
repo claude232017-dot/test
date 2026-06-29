@@ -58,7 +58,7 @@ export function CalendarWidget() {
       <div className="flex-1 min-w-0">
         {/* Header */}
         <div className="flex items-center justify-between mb-4">
-          <button onClick={prevMonth} className="p-1 rounded-lg hover:bg-white/5 transition-colors cursor-pointer">
+          <button onClick={prevMonth} className="p-1 rounded-lg hover:bg-[rgba(var(--overlay),0.05)] transition-colors cursor-pointer">
             <ChevronLeft className="w-4 h-4 text-muted-foreground" />
           </button>
           <AnimatePresence mode="wait">
@@ -72,7 +72,7 @@ export function CalendarWidget() {
               {format(currentMonth, "MMMM yyyy")}
             </motion.h3>
           </AnimatePresence>
-          <button onClick={nextMonth} className="p-1 rounded-lg hover:bg-white/5 transition-colors cursor-pointer">
+          <button onClick={nextMonth} className="p-1 rounded-lg hover:bg-[rgba(var(--overlay),0.05)] transition-colors cursor-pointer">
             <ChevronRight className="w-4 h-4 text-muted-foreground" />
           </button>
         </div>
@@ -111,7 +111,7 @@ export function CalendarWidget() {
                   onClick={() => setSelectedDate(day)}
                   className={cn(
                     "relative flex flex-col items-center p-1 rounded-lg transition-all cursor-pointer min-h-[44px] group",
-                    isSelected ? "bg-purple-500/20 border border-purple-500/30" : "hover:bg-white/5 border border-transparent"
+                    isSelected ? "bg-purple-500/20 border border-purple-500/30" : "hover:bg-[rgba(var(--overlay),0.05)] border border-transparent"
                   )}
                 >
                   <span className={cn(
@@ -138,14 +138,14 @@ export function CalendarWidget() {
       </div>
 
       {/* Side panel */}
-      <div className="md:w-48 lg:w-56 shrink-0 border-t md:border-t-0 md:border-l border-white/5 pt-4 md:pt-0 md:pl-4 lg:pl-5 flex flex-col gap-4">
+      <div className="md:w-48 lg:w-56 shrink-0 border-t md:border-t-0 md:border-l border-[rgba(var(--overlay),0.05)] pt-4 md:pt-0 md:pl-4 lg:pl-5 flex flex-col gap-4">
         {selectedDate ? (
           <>
             <div className="flex items-center justify-between">
               <p className="text-xs font-semibold text-foreground">{format(selectedDate, "MMM d")}</p>
               <button
                 onClick={() => setShowForm(v => !v)}
-                className="w-6 h-6 rounded-lg bg-white/5 hover:bg-white/10 flex items-center justify-center transition-colors cursor-pointer"
+                className="w-6 h-6 rounded-lg bg-[rgba(var(--overlay),0.05)] hover:bg-[rgba(var(--overlay),0.1)] flex items-center justify-center transition-colors cursor-pointer"
               >
                 <Plus className="w-3.5 h-3.5 text-muted-foreground" />
               </button>
@@ -161,7 +161,7 @@ export function CalendarWidget() {
                   onSubmit={handleCreateEvent}
                   className="overflow-hidden"
                 >
-                  <div className="rounded-xl border border-white/[0.08] bg-white/[0.03] p-3 space-y-3">
+                  <div className="rounded-xl border border-[rgba(var(--overlay),0.08)] bg-[rgba(var(--overlay),0.03)] p-3 space-y-3">
                     <Input
                       value={eventTitle}
                       onChange={e => setEventTitle(e.target.value)}
@@ -179,7 +179,7 @@ export function CalendarWidget() {
                       {EVENT_COLORS.map(c => (
                         <button
                           key={c} type="button" onClick={() => setEventColor(c)}
-                          className={cn("w-5 h-5 rounded-full cursor-pointer transition-all", eventColor === c ? "ring-2 ring-white/60" : "opacity-60 hover:opacity-100")}
+                          className={cn("w-5 h-5 rounded-full cursor-pointer transition-all", eventColor === c ? "ring-2 ring-[rgba(var(--overlay),0.6)]" : "opacity-60 hover:opacity-100")}
                           style={{ backgroundColor: c }}
                         />
                       ))}
@@ -200,7 +200,7 @@ export function CalendarWidget() {
                 selectedEvents.map(ev => (
                   <div
                     key={ev.id}
-                    className="flex items-start gap-1.5 group/ev rounded-lg p-1.5 hover:bg-white/5 transition-colors"
+                    className="flex items-start gap-1.5 group/ev rounded-lg p-1.5 hover:bg-[rgba(var(--overlay),0.05)] transition-colors"
                   >
                     <div className="w-2 h-2 rounded-full mt-0.5 shrink-0" style={{ backgroundColor: ev.color }} />
                     <div className="flex-1 min-w-0">

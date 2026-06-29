@@ -47,15 +47,15 @@ export function ProductivityTrendChart({ data }: Props) {
             <stop offset="95%" stopColor="#06b6d4" stopOpacity={0} />
           </linearGradient>
         </defs>
-        <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.04)" vertical={false} />
+        <CartesianGrid strokeDasharray="3 3" stroke="rgba(var(--overlay),0.04)" vertical={false} />
         <XAxis
           dataKey="date"
-          tick={{ fill: "#64748b", fontSize: 10 }}
+          tick={{ fill: "hsl(var(--muted-foreground))", fontSize: 10 }}
           axisLine={false} tickLine={false}
           interval={4}
         />
-        <YAxis tick={{ fill: "#64748b", fontSize: 10 }} axisLine={false} tickLine={false} unit="m" />
-        <Tooltip content={<CustomTooltip />} cursor={{ stroke: "rgba(255,255,255,0.1)" }} />
+        <YAxis tick={{ fill: "hsl(var(--muted-foreground))", fontSize: 10 }} axisLine={false} tickLine={false} unit="m" />
+        <Tooltip content={<CustomTooltip />} cursor={{ stroke: "rgba(var(--overlay),0.1)" }} />
         <Area
           type="monotone" dataKey="minutes"
           stroke="#7c3aed" strokeWidth={2}

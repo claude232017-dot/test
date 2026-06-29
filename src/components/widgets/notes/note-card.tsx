@@ -20,7 +20,7 @@ export function NoteCard({ note, isSelected, onClick }: NoteCardProps) {
         "w-full text-left px-3 py-2.5 rounded-xl border transition-all duration-150 cursor-pointer",
         isSelected
           ? "border-purple-500/40 bg-purple-500/10 shadow-[inset_2px_0_0_rgba(139,92,246,0.6)]"
-          : "border-white/5 bg-white/[0.02] hover:bg-white/[0.05] hover:border-white/10"
+          : "border-[rgba(var(--overlay),0.05)] bg-[rgba(var(--overlay),0.02)] hover:bg-[rgba(var(--overlay),0.05)] hover:border-[rgba(var(--overlay),0.1)]"
       )}
     >
       <p className="text-sm font-medium text-foreground truncate leading-snug">

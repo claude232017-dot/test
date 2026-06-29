@@ -20,7 +20,7 @@ export function HabitItem({ habit, today, onToggle, onDelete }: HabitItemProps) 
   return (
     <motion.div
       layout
-      className="flex items-center gap-3 py-3 px-3.5 rounded-2xl border border-white/[0.06] bg-white/[0.02] group transition-colors hover:bg-white/[0.04]"
+      className="flex items-center gap-3 py-3 px-3.5 rounded-2xl border border-[rgba(var(--overlay),0.06)] bg-[rgba(var(--overlay),0.02)] group transition-colors hover:bg-[rgba(var(--overlay),0.04)]"
     >
       {/* Color dot */}
       <div
@@ -50,7 +50,7 @@ export function HabitItem({ habit, today, onToggle, onDelete }: HabitItemProps) 
           "w-11 h-11 sm:w-8 sm:h-8 rounded-full border-2 flex items-center justify-center shrink-0 transition-all duration-200 cursor-pointer",
           isDoneToday
             ? "border-transparent text-white shadow-lg"
-            : "border-white/20 hover:border-current text-transparent"
+            : "border-[rgba(var(--overlay),0.2)] hover:border-current text-transparent"
         )}
         style={
           isDoneToday

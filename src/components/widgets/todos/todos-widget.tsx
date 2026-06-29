@@ -44,7 +44,7 @@ export function TodosWidget() {
       <AddTodoForm onAdd={createTodo} />
 
       <div className="flex items-center">
-        <div className="flex gap-1 bg-white/[0.03] rounded-xl p-1">
+        <div className="flex gap-1 bg-[rgba(var(--overlay),0.03)] rounded-xl p-1">
           {FILTERS.map(f => (
             <button
               key={f.value}
@@ -52,7 +52,7 @@ export function TodosWidget() {
               className={cn(
                 "flex items-center gap-1.5 px-3 py-2 sm:py-1 rounded-lg text-xs font-medium transition-all cursor-pointer min-h-[36px] sm:min-h-0",
                 filter === f.value
-                  ? "bg-white/10 text-foreground shadow-sm"
+                  ? "bg-[rgba(var(--overlay),0.1)] text-foreground shadow-sm"
                   : "text-muted-foreground hover:text-foreground"
               )}
             >
@@ -60,7 +60,7 @@ export function TodosWidget() {
               {f.count > 0 && (
                 <span className={cn(
                   "text-[10px] min-w-[16px] h-4 px-1 rounded-full flex items-center justify-center font-semibold",
-                  filter === f.value ? "bg-purple-500/30 text-purple-300" : "bg-white/5 text-muted-foreground"
+                  filter === f.value ? "bg-purple-500/30 text-purple-300" : "bg-[rgba(var(--overlay),0.05)] text-muted-foreground"
                 )}>
                   {f.count}
                 </span>
@@ -73,7 +73,7 @@ export function TodosWidget() {
       <div className="flex-1 overflow-y-auto space-y-0.5">
         {loading ? (
           Array.from({ length: 5 }).map((_, i) => (
-            <div key={i} className="h-10 rounded-xl bg-white/[0.03] animate-pulse my-1" />
+            <div key={i} className="h-10 rounded-xl bg-[rgba(var(--overlay),0.03)] animate-pulse my-1" />
           ))
         ) : filtered.length === 0 ? (
           <div className="flex flex-col items-center justify-center h-32">

@@ -12,7 +12,7 @@ const buttonVariants = cva(
         destructive: "bg-destructive text-white hover:bg-destructive/90",
         outline: "glass glass-hover border text-foreground",
         secondary: "bg-secondary text-foreground hover:bg-secondary/80",
-        ghost: "hover:bg-white/5 text-foreground",
+        ghost: "hover:bg-[rgba(var(--overlay),0.05)] text-foreground",
         link: "text-primary underline-offset-4 hover:underline",
         cyan: "bg-[#06b6d4] text-white hover:bg-[#0891b2] shadow-lg shadow-cyan-900/25",
       },

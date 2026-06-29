@@ -31,7 +31,7 @@ export function AddTodoForm({ onAdd }: AddTodoFormProps) {
   }
 
   return (
-    <form onSubmit={handleSubmit} className="space-y-2.5 pb-4 border-b border-white/5">
+    <form onSubmit={handleSubmit} className="space-y-2.5 pb-4 border-b border-[rgba(var(--overlay),0.05)]">
       {/* Input row */}
       <div className="flex gap-2">
         <Input
@@ -57,7 +57,7 @@ export function AddTodoForm({ onAdd }: AddTodoFormProps) {
                 onClick={() => setPriority(p.value)}
                 className={cn(
                   "px-2.5 py-1.5 rounded-lg text-xs border transition-all cursor-pointer min-h-[32px]",
-                  priority === p.value ? p.color : "text-muted-foreground border-white/10 bg-transparent hover:border-white/20"
+                  priority === p.value ? p.color : "text-muted-foreground border-[rgba(var(--overlay),0.1)] bg-transparent hover:border-[rgba(var(--overlay),0.2)]"
                 )}
               >
                 {p.label}
@@ -69,7 +69,7 @@ export function AddTodoForm({ onAdd }: AddTodoFormProps) {
           type="date"
           value={dueDate}
           onChange={e => setDueDate(e.target.value)}
-          className="sm:ml-auto text-xs bg-white/5 border border-white/10 rounded-lg px-2.5 py-1.5 text-muted-foreground focus:outline-none focus:border-purple-500/50 min-h-[32px] w-full sm:w-auto"
+          className="sm:ml-auto text-xs bg-[rgba(var(--overlay),0.05)] border border-[rgba(var(--overlay),0.1)] rounded-lg px-2.5 py-1.5 text-muted-foreground focus:outline-none focus:border-purple-500/50 min-h-[32px] w-full sm:w-auto"
         />
       </div>
     </form>
