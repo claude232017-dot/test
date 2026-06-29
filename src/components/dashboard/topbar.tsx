@@ -2,6 +2,7 @@ import { format } from "date-fns"
 import { createClient } from "@/lib/supabase/server"
 import { UserMenu } from "./user-menu"
 import { MobileDrawer } from "./mobile-drawer"
+import { SearchTrigger } from "./search-trigger"
 
 export async function Topbar() {
   const supabase = await createClient()
@@ -25,7 +26,10 @@ export async function Topbar() {
         </div>
       </div>
 
-      <UserMenu name={name} email={email} initial={initial} />
+      <div className="flex items-center gap-2">
+        <SearchTrigger />
+        <UserMenu name={name} email={email} initial={initial} />
+      </div>
     </header>
   )
 }
