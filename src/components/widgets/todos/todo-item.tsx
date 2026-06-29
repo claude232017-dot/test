@@ -81,16 +81,21 @@ export function TodoItem({ todo, onToggle, onDelete, onFocus, focusMinutes }: To
         </span>
       )}
 
+      {isOverdue && (
+        <span className="text-[10px] shrink-0 px-1.5 py-0.5 rounded-md font-semibold uppercase tracking-wide text-red-400 bg-red-500/15 border border-red-500/30">
+          Overdue
+        </span>
+      )}
+      {isDueToday && (
+        <span className="text-[10px] shrink-0 px-1.5 py-0.5 rounded-md font-semibold uppercase tracking-wide text-amber-400 bg-amber-500/15 border border-amber-500/30">
+          Today
+        </span>
+      )}
       {todo.due_date && (
         <span className={cn(
-          "text-[10px] shrink-0 px-1.5 py-0.5 rounded-md font-medium",
-          isOverdue
-            ? "text-red-400 bg-red-500/10 border border-red-500/20"
-            : isDueToday
-              ? "text-amber-400 bg-amber-500/10 border border-amber-500/20"
-              : "text-muted-foreground/60"
+          "text-[10px] shrink-0",
+          isOverdue ? "text-red-400/80" : isDueToday ? "text-amber-400/80" : "text-muted-foreground/60"
         )}>
-          {isOverdue ? "Overdue · " : isDueToday ? "Today · " : ""}
           {format(new Date(todo.due_date), "MMM d")}
         </span>
       )}
