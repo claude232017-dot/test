@@ -86,6 +86,21 @@ export function useGoals() {
     return updateProgress(id, goal.current_value + by)
   }
 
+  async function updateGoal(id: string, fields: Partial<Pick<Goal, "title" | "description" | "target_value" | "unit" | "deadline" | "color">>) {
+    const goal = goals.find(g => g.id === id)
+    if (!goal) return
+
+    const next = { ...goal, ...fields }
+    const completed = next.current_value >= next.target_value
+    setGoals(prev => prev.map(g => g.id !== id ? g : { ...next, completed }))
+
+    const { error } = await supabase
+      .from("goals")
+      .update({ ...fields, completed })
+      .eq("id", id)
+    if (error) { toast.error("Failed to update goal"); loadGoals() }
+  }
+
   async function toggleComplete(id: string) {
     const goal = goals.find(g => g.id === id)
     if (!goal) return
@@ -102,7 +117,7 @@ export function useGoals() {
     if (error) { toast.error("Failed to delete goal"); loadGoals() }
   }
 
-  return { goals, loading, createGoal, updateProgress, incrementProgress, toggleComplete, deleteGoal }
+  return { goals, loading, createGoal, updateProgress, incrementProgress, updateGoal, toggleComplete, deleteGoal }
 }
 
 export { progressPct }
