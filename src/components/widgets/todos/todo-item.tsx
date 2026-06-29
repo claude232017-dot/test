@@ -2,7 +2,7 @@
 
 import { motion } from "framer-motion"
 import { Trash2, Timer } from "lucide-react"
-import { format, isPast, isToday } from "date-fns"
+import { format, isPast, isToday, startOfDay } from "date-fns"
 import { Todo } from "@/types"
 import { cn } from "@/lib/utils"
 
@@ -33,7 +33,9 @@ interface TodoItemProps {
 }
 
 export function TodoItem({ todo, onToggle, onDelete, onFocus, focusMinutes }: TodoItemProps) {
-  const isOverdue = todo.due_date && !todo.completed && isPast(new Date(todo.due_date + "T23:59:59")) && !isToday(new Date(todo.due_date))
+  const dueDate = todo.due_date ? startOfDay(new Date(todo.due_date + "T12:00:00")) : null
+  const isDueToday = dueDate && !todo.completed && isToday(dueDate)
+  const isOverdue = dueDate && !todo.completed && isPast(new Date(todo.due_date + "T23:59:59")) && !isToday(dueDate)
 
   return (
     <motion.div
@@ -81,9 +83,14 @@ export function TodoItem({ todo, onToggle, onDelete, onFocus, focusMinutes }: To
 
       {todo.due_date && (
         <span className={cn(
-          "text-[10px] shrink-0",
-          isOverdue ? "text-red-400" : "text-muted-foreground/60"
+          "text-[10px] shrink-0 px-1.5 py-0.5 rounded-md font-medium",
+          isOverdue
+            ? "text-red-400 bg-red-500/10 border border-red-500/20"
+            : isDueToday
+              ? "text-amber-400 bg-amber-500/10 border border-amber-500/20"
+              : "text-muted-foreground/60"
         )}>
+          {isOverdue ? "Overdue · " : isDueToday ? "Today · " : ""}
           {format(new Date(todo.due_date), "MMM d")}
         </span>
       )}
