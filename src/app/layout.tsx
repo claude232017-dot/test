@@ -2,6 +2,7 @@ import type { Metadata, Viewport } from "next"
 import { Plus_Jakarta_Sans } from "next/font/google"
 import { Toaster } from "sonner"
 import { Analytics } from "@vercel/analytics/next"
+import { ThemeProvider } from "@/components/providers/theme-provider"
 import "./globals.css"
 
 const jakarta = Plus_Jakarta_Sans({
@@ -25,27 +26,22 @@ export const viewport: Viewport = {
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en" className={`${jakarta.variable} h-full antialiased`}>
+    <html lang="en" className={`${jakarta.variable} h-full antialiased`} suppressHydrationWarning>
       <body className="h-full relative">
-        {/* Ambient background blobs */}
-        <div aria-hidden="true" className="pointer-events-none fixed inset-0 overflow-hidden">
-          <div className="bg-blob w-96 h-96 bg-purple-600/8 -top-32 -left-32" />
-          <div className="bg-blob w-80 h-80 bg-blue-600/6 top-1/2 -right-20" />
-          <div className="bg-blob w-64 h-64 bg-cyan-600/5 bottom-0 left-1/3" />
-        </div>
-        {children}
-        <Toaster
-          theme="dark"
-          position="bottom-right"
-          toastOptions={{
-            style: {
-              background: "rgba(15, 23, 42, 0.92)",
-              border: "1px solid rgba(255,255,255,0.08)",
-              backdropFilter: "blur(16px)",
-              color: "#f8fafc",
-            },
-          }}
-        />
+        <ThemeProvider>
+          <div aria-hidden="true" className="pointer-events-none fixed inset-0 overflow-hidden">
+            <div className="bg-blob w-96 h-96 bg-purple-600/8 -top-32 -left-32" />
+            <div className="bg-blob w-80 h-80 bg-blue-600/6 top-1/2 -right-20" />
+            <div className="bg-blob w-64 h-64 bg-cyan-600/5 bottom-0 left-1/3" />
+          </div>
+          {children}
+          <Toaster
+            position="bottom-right"
+            toastOptions={{
+              className: "!bg-card !text-card-foreground !border-border",
+            }}
+          />
+        </ThemeProvider>
         <Analytics />
       </body>
     </html>

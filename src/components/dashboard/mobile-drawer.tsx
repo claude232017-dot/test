@@ -9,6 +9,7 @@ import { toast } from "sonner"
 import { createClient } from "@/lib/supabase/client"
 import { cn } from "@/lib/utils"
 import { navItems, isNavActive, GROUP_LABELS, type NavItem } from "./nav-items"
+import { ThemeToggle } from "@/components/ui/theme-toggle"
 
 interface MobileDrawerProps {
   name: string
@@ -135,8 +136,13 @@ export function MobileDrawer({ name, email, initial }: MobileDrawerProps) {
                 ))}
               </nav>
 
+              {/* Theme toggle */}
+              <div className="px-2 mt-4 pt-4 border-t border-border/40">
+                <ThemeToggle className="w-full justify-center" />
+              </div>
+
               {/* User footer */}
-              <div className="mt-4 pt-4 border-t border-white/8">
+              <div className="mt-4 pt-4 border-t border-border/40">
                 <div className="flex items-center gap-3 px-2 mb-2">
                   <span className="w-9 h-9 rounded-full brand-gradient flex items-center justify-center text-xs font-semibold text-white shrink-0">
                     {initial}

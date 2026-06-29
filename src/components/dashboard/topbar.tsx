@@ -12,7 +12,7 @@ export async function Topbar() {
   const today = format(new Date(), "EEEE, MMMM d")
 
   return (
-    <header className="sticky top-0 z-30 flex items-center justify-between gap-3 px-4 md:px-6 h-16 border-b border-white/5 glass-strong">
+    <header className="sticky top-0 z-30 flex items-center justify-between gap-3 px-4 md:px-6 h-16 border-b border-border/40 glass-strong">
       {/* Left: hamburger (mobile) + greeting (desktop) */}
       <div className="flex items-center gap-2 min-w-0">
         <MobileDrawer name={name} email={email} initial={initial} />

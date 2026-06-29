@@ -6,6 +6,7 @@ import { motion } from "framer-motion"
 import { cn } from "@/lib/utils"
 import { LayoutDashboard } from "lucide-react"
 import { navItems, isNavActive, GROUP_LABELS, type NavItem } from "./nav-items"
+import { ThemeToggle } from "@/components/ui/theme-toggle"
 
 export function Sidebar() {
   const pathname = usePathname()
@@ -13,7 +14,7 @@ export function Sidebar() {
   const groups: NavItem["group"][] = ["main", "track"]
 
   return (
-    <aside className="hidden md:flex flex-col w-60 h-full glass-strong border-r border-white/5 py-5 px-3">
+    <aside className="hidden md:flex flex-col w-60 h-full glass-strong border-r border-border/40 py-5 px-3">
       {/* Logo */}
       <Link href="/dashboard" className="flex items-center gap-3 px-3 mb-7 group">
         <div className="w-9 h-9 rounded-xl brand-gradient flex items-center justify-center shrink-0 shadow-lg shadow-purple-900/30 transition-transform group-hover:scale-105">
@@ -47,7 +48,7 @@ export function Sidebar() {
                   {active && (
                     <motion.span
                       layoutId="sidebar-pill"
-                      className="absolute inset-0 rounded-lg bg-white/[0.07] border border-white/10"
+                      className="absolute inset-0 rounded-lg bg-primary/10 border border-primary/15"
                       transition={{ type: "spring", duration: 0.4, bounce: 0.18 }}
                     />
                   )}
@@ -68,6 +69,10 @@ export function Sidebar() {
           </div>
         ))}
       </nav>
+
+      <div className="px-3 pt-3 border-t border-border/40">
+        <ThemeToggle className="w-full justify-center" />
+      </div>
     </aside>
   )
 }
