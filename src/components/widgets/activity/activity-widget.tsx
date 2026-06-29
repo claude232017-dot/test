@@ -24,7 +24,7 @@ function Stepper({ value, onChange, max }: { value: number; onChange: (v: number
       <button
         type="button"
         onClick={() => onChange(Math.max(0, value - 1))}
-        className="w-11 h-11 sm:w-9 sm:h-9 rounded-xl bg-white/5 hover:bg-white/10 border border-white/10 flex items-center justify-center transition-colors cursor-pointer"
+        className="w-11 h-11 sm:w-9 sm:h-9 rounded-xl bg-[rgba(var(--overlay),0.05)] hover:bg-[rgba(var(--overlay),0.1)] border border-[rgba(var(--overlay),0.1)] flex items-center justify-center transition-colors cursor-pointer"
       >
         <Minus className="w-3.5 h-3.5 text-muted-foreground" />
       </button>
@@ -32,7 +32,7 @@ function Stepper({ value, onChange, max }: { value: number; onChange: (v: number
       <button
         type="button"
         onClick={() => onChange(Math.min(max, value + 1))}
-        className="w-11 h-11 sm:w-9 sm:h-9 rounded-xl bg-white/5 hover:bg-white/10 border border-white/10 flex items-center justify-center transition-colors cursor-pointer"
+        className="w-11 h-11 sm:w-9 sm:h-9 rounded-xl bg-[rgba(var(--overlay),0.05)] hover:bg-[rgba(var(--overlay),0.1)] border border-[rgba(var(--overlay),0.1)] flex items-center justify-center transition-colors cursor-pointer"
       >
         <Plus className="w-3.5 h-3.5 text-muted-foreground" />
       </button>
@@ -66,7 +66,7 @@ export function ActivityWidget() {
     <div className="flex flex-col md:flex-row gap-5 h-full min-h-[350px]">
 
       {/* Left: always-visible form */}
-      <div className="md:w-64 lg:w-80 shrink-0 flex flex-col gap-5 md:border-r md:border-white/5 md:pr-5">
+      <div className="md:w-64 lg:w-80 shrink-0 flex flex-col gap-5 md:border-r md:border-[rgba(var(--overlay),0.05)] md:pr-5">
         {/* Category */}
         <div className="space-y-2.5">
           <p className="text-[10px] uppercase tracking-widest font-medium text-muted-foreground/60">Category</p>
@@ -79,7 +79,7 @@ export function ActivityWidget() {
                   "px-2.5 py-2 sm:py-1.5 rounded-lg text-xs font-medium border transition-all cursor-pointer min-h-[36px] sm:min-h-0",
                   category === cat.name
                     ? cat.bg + " border-current/30"
-                    : "border-white/10 text-muted-foreground hover:bg-white/5"
+                    : "border-[rgba(var(--overlay),0.1)] text-muted-foreground hover:bg-[rgba(var(--overlay),0.05)]"
                 )}
               >
                 {cat.name}
@@ -114,7 +114,7 @@ export function ActivityWidget() {
         </button>
 
         {/* Color legend */}
-        <div className="mt-auto pt-4 border-t border-white/5">
+        <div className="mt-auto pt-4 border-t border-[rgba(var(--overlay),0.05)]">
           <div className="flex flex-wrap gap-x-2.5 gap-y-1.5">
             {ACTIVITY_CATEGORIES.map(cat => (
               <div key={cat.name} className="flex items-center gap-1.5">
@@ -136,7 +136,7 @@ export function ActivityWidget() {
               <span className="text-xs text-muted-foreground">Today&apos;s total</span>
               <span className="text-sm font-semibold text-foreground">{formatDuration(totalMinutes)}</span>
             </div>
-            <div className="flex rounded-full overflow-hidden h-1.5 bg-white/5">
+            <div className="flex rounded-full overflow-hidden h-1.5 bg-[rgba(var(--overlay),0.05)]">
               {categoryTotals.map(cat => (
                 <div
                   key={cat.name}
@@ -159,7 +159,7 @@ export function ActivityWidget() {
         <div className="flex-1 overflow-y-auto space-y-2">
           {loading ? (
             Array.from({ length: 3 }).map((_, i) => (
-              <div key={i} className="h-11 rounded-xl bg-white/5 animate-pulse" />
+              <div key={i} className="h-11 rounded-xl bg-[rgba(var(--overlay),0.05)] animate-pulse" />
             ))
           ) : logs.length === 0 ? (
             <div className="flex flex-col items-center justify-center h-full">
@@ -176,7 +176,7 @@ export function ActivityWidget() {
                     initial={{ opacity: 0, y: -4 }}
                     animate={{ opacity: 1, y: 0 }}
                     exit={{ opacity: 0, scale: 0.97 }}
-                    className="flex items-center gap-3 px-3.5 py-2.5 rounded-xl bg-white/[0.02] border border-white/5 group"
+                    className="flex items-center gap-3 px-3.5 py-2.5 rounded-xl bg-[rgba(var(--overlay),0.02)] border border-[rgba(var(--overlay),0.05)] group"
                   >
                     <div className="w-2.5 h-2.5 rounded-full shrink-0" style={{ backgroundColor: cat?.color ?? "#888" }} />
                     <span className="text-sm text-foreground flex-1">{log.category}</span>

@@ -25,7 +25,7 @@ export function HabitHeatmap({ logs, color, today }: HabitHeatmapProps) {
               title={day}
               className="w-4 h-4 rounded-sm transition-all"
               style={{
-                backgroundColor: done ? color : "rgba(255,255,255,0.06)",
+                backgroundColor: done ? color : "rgba(var(--overlay),0.06)",
                 boxShadow: done ? `0 0 6px ${color}60` : "none",
               }}
             />

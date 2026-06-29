@@ -53,7 +53,7 @@ export function HabitsWidget() {
               pct === 100 ? "text-green-400" : pct >= 50 ? "text-purple-400" : "text-muted-foreground"
             )}>{pct}%</span>
           </div>
-          <div className="w-full h-1.5 bg-white/[0.05] rounded-full overflow-hidden">
+          <div className="w-full h-1.5 bg-[rgba(var(--overlay),0.05)] rounded-full overflow-hidden">
             <motion.div
               className="h-full rounded-full"
               style={{ background: pct === 100 ? "#22c55e" : "linear-gradient(90deg, #7c3aed, #06b6d4)" }}
@@ -69,7 +69,7 @@ export function HabitsWidget() {
       <div className="flex-1 overflow-y-auto space-y-2">
         {loading ? (
           Array.from({ length: 3 }).map((_, i) => (
-            <div key={i} className="h-[68px] rounded-2xl bg-white/[0.03] animate-pulse" />
+            <div key={i} className="h-[68px] rounded-2xl bg-[rgba(var(--overlay),0.03)] animate-pulse" />
           ))
         ) : habits.length === 0 ? (
           <div className="flex flex-col items-center justify-center h-16 sm:h-32">
@@ -102,13 +102,13 @@ export function HabitsWidget() {
               onSubmit={handleAdd}
               className="overflow-hidden"
             >
-              <div className="pb-4 border-b border-white/5 mb-4 space-y-3">
+              <div className="pb-4 border-b border-[rgba(var(--overlay),0.05)] mb-4 space-y-3">
                 <input
                   value={name}
                   onChange={e => setName(e.target.value)}
                   placeholder="Habit name…"
                   autoFocus
-                  className="w-full h-9 rounded-lg bg-white/5 px-3.5 text-sm text-foreground placeholder:text-muted-foreground/60 transition-colors"
+                  className="w-full h-9 rounded-lg bg-[rgba(var(--overlay),0.05)] px-3.5 text-sm text-foreground placeholder:text-muted-foreground/60 transition-colors"
                   style={{ border: `1px solid ${color}70`, outline: 'none', boxShadow: 'none' }}
                 />
                 {/* Color row */}
@@ -122,7 +122,7 @@ export function HabitsWidget() {
                         onClick={() => setColor(c)}
                         className={cn(
                           "w-7 h-7 sm:w-5 sm:h-5 rounded-full transition-all cursor-pointer shrink-0",
-                          color === c ? "ring-2 ring-white/60" : "opacity-60 hover:opacity-100"
+                          color === c ? "ring-2 ring-[rgba(var(--overlay),0.6)]" : "opacity-60 hover:opacity-100"
                         )}
                         style={{ backgroundColor: c }}
                       />

@@ -41,7 +41,7 @@ export function TodoItem({ todo, onToggle, onDelete, onFocus, focusMinutes }: To
       initial={{ opacity: 0, y: -6 }}
       animate={{ opacity: 1, y: 0 }}
       exit={{ opacity: 0, scale: 0.97 }}
-      className="flex items-center gap-3 py-2.5 px-3 group rounded-xl hover:bg-white/[0.03] transition-colors relative overflow-hidden"
+      className="flex items-center gap-3 py-2.5 px-3 group rounded-xl hover:bg-[rgba(var(--overlay),0.03)] transition-colors relative overflow-hidden"
     >
       {!todo.completed && (
         <div className={cn("absolute left-0 top-2 bottom-2 w-[3px] rounded-full", PRIORITY_BAR[todo.priority])} />
@@ -54,7 +54,7 @@ export function TodoItem({ todo, onToggle, onDelete, onFocus, focusMinutes }: To
       >
         <div className={cn(
           "w-5 h-5 rounded-md border-2 transition-all duration-200 flex items-center justify-center",
-          todo.completed ? "bg-purple-500 border-purple-500" : "border-white/20 hover:border-purple-400"
+          todo.completed ? "bg-purple-500 border-purple-500" : "border-[rgba(var(--overlay),0.2)] hover:border-purple-400"
         )}>
           {todo.completed && (
             <svg className="w-2.5 h-2.5 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={3}>

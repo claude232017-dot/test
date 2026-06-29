@@ -43,7 +43,7 @@ export function HabitRadialChart({ data, overallPct }: Props) {
           data={data}
           startAngle={90} endAngle={-270}
         >
-          <RadialBar dataKey="completionRate" cornerRadius={4} background={{ fill: "rgba(255,255,255,0.04)" }} />
+          <RadialBar dataKey="completionRate" cornerRadius={4} background={{ fill: "rgba(var(--overlay),0.04)" }} />
           <Tooltip content={<CustomTooltip />} />
         </RadialBarChart>
       </ResponsiveContainer>

@@ -77,7 +77,7 @@ export function NoteEditor({ note, onUpdate, onDelete }: NoteEditorProps) {
         value={content}
         onChange={e => setContent(e.target.value)}
         placeholder="Start writing…"
-        className="flex-1 bg-transparent resize-none text-sm leading-relaxed p-3 min-h-0 text-foreground placeholder:text-muted-foreground/30 rounded-xl border border-white/[0.06] focus:border-purple-500/40 transition-colors"
+        className="flex-1 bg-transparent resize-none text-sm leading-relaxed p-3 min-h-0 text-foreground placeholder:text-muted-foreground/30 rounded-xl border border-[rgba(var(--overlay),0.06)] focus:border-purple-500/40 transition-colors"
         style={{ outline: 'none', boxShadow: 'none' }}
       />
     </div>

@@ -16,6 +16,7 @@
   }
 
   .dark {
+    --overlay: 255, 255, 255;
     --background: 240 28% 5%;
     --foreground: 220 24% 97%;
     --card: 236 24% 8%;
@@ -53,6 +54,7 @@
   }
 
   .light {
+    --overlay: 0, 0, 0;
     --background: 220 20% 97%;
     --foreground: 235 25% 12%;
     --card: 0 0% 100%;

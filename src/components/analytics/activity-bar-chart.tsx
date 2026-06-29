@@ -31,13 +31,13 @@ export function ActivityBarChart({ data }: Props) {
   return (
     <ResponsiveContainer width="100%" height={220}>
       <BarChart data={data} barSize={20} margin={{ top: 4, right: 4, left: -20, bottom: 0 }}>
-        <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.04)" vertical={false} />
-        <XAxis dataKey="date" tick={{ fill: "#64748b", fontSize: 11 }} axisLine={false} tickLine={false} />
-        <YAxis tick={{ fill: "#64748b", fontSize: 11 }} axisLine={false} tickLine={false} unit="h" />
-        <Tooltip content={<CustomTooltip />} cursor={{ fill: "rgba(255,255,255,0.03)" }} />
+        <CartesianGrid strokeDasharray="3 3" stroke="rgba(var(--overlay),0.04)" vertical={false} />
+        <XAxis dataKey="date" tick={{ fill: "hsl(var(--muted-foreground))", fontSize: 11 }} axisLine={false} tickLine={false} />
+        <YAxis tick={{ fill: "hsl(var(--muted-foreground))", fontSize: 11 }} axisLine={false} tickLine={false} unit="h" />
+        <Tooltip content={<CustomTooltip />} cursor={{ fill: "rgba(var(--overlay),0.03)" }} />
         <Legend
           wrapperStyle={{ fontSize: 11, paddingTop: 12 }}
-          formatter={(value) => <span style={{ color: "#94a3b8" }}>{value}</span>}
+          formatter={(value) => <span className="text-muted-foreground">{value}</span>}
         />
         {ACTIVITY_CATEGORIES.map(cat => (
           <Bar key={cat.name} dataKey={cat.name} stackId="a" fill={cat.color} radius={[0, 0, 0, 0]} />

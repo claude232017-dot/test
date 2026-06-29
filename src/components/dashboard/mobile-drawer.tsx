@@ -56,7 +56,7 @@ export function MobileDrawer({ name, email, initial }: MobileDrawerProps) {
         onClick={() => setOpen(true)}
         aria-label="Open navigation menu"
         aria-expanded={open}
-        className="md:hidden flex items-center justify-center w-10 h-10 -ml-1.5 rounded-lg text-foreground hover:bg-white/5 transition-colors cursor-pointer"
+        className="md:hidden flex items-center justify-center w-10 h-10 -ml-1.5 rounded-lg text-foreground hover:bg-[rgba(var(--overlay),0.05)] transition-colors cursor-pointer"
       >
         <Menu className="w-5 h-5" aria-hidden="true" />
       </button>
@@ -83,7 +83,7 @@ export function MobileDrawer({ name, email, initial }: MobileDrawerProps) {
               animate={{ x: 0 }}
               exit={{ x: "-100%" }}
               transition={{ type: "spring", stiffness: 380, damping: 38 }}
-              className="absolute left-0 top-0 bottom-0 w-[82%] max-w-xs glass-strong border-r border-white/10 flex flex-col py-5 px-3 shadow-2xl"
+              className="absolute left-0 top-0 bottom-0 w-[82%] max-w-xs glass-strong border-r border-[rgba(var(--overlay),0.1)] flex flex-col py-5 px-3 shadow-2xl"
             >
               {/* Header */}
               <div className="flex items-center justify-between px-2 mb-6">
@@ -99,7 +99,7 @@ export function MobileDrawer({ name, email, initial }: MobileDrawerProps) {
                 <button
                   onClick={() => setOpen(false)}
                   aria-label="Close navigation menu"
-                  className="flex items-center justify-center w-9 h-9 rounded-lg text-muted-foreground hover:text-foreground hover:bg-white/5 transition-colors cursor-pointer"
+                  className="flex items-center justify-center w-9 h-9 rounded-lg text-muted-foreground hover:text-foreground hover:bg-[rgba(var(--overlay),0.05)] transition-colors cursor-pointer"
                 >
                   <X className="w-5 h-5" aria-hidden="true" />
                 </button>
@@ -122,8 +122,8 @@ export function MobileDrawer({ name, email, initial }: MobileDrawerProps) {
                           className={cn(
                             "flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium transition-colors",
                             active
-                              ? "bg-white/[0.08] border border-white/10 text-foreground"
-                              : "text-muted-foreground hover:text-foreground hover:bg-white/5 border border-transparent"
+                              ? "bg-[rgba(var(--overlay),0.08)] border border-[rgba(var(--overlay),0.1)] text-foreground"
+                              : "text-muted-foreground hover:text-foreground hover:bg-[rgba(var(--overlay),0.05)] border border-transparent"
                           )}
                         >
                           <Icon className={cn("w-[18px] h-[18px] shrink-0", active && "text-purple-400")} aria-hidden="true" />
