@@ -3,7 +3,7 @@
 import { useEffect, useMemo, useRef, useState } from "react"
 import { useRouter } from "next/navigation"
 import { motion, AnimatePresence } from "framer-motion"
-import { Search, StickyNote, CheckSquare, CalendarDays, Target, X } from "lucide-react"
+import { Search, StickyNote, CheckSquare, CalendarDays, Target, Trophy, X } from "lucide-react"
 import { useCommandPaletteStore } from "@/stores/useCommandPaletteStore"
 import { useDataStore } from "@/stores/useDataStore"
 import { useGlobalSearch, type SearchResult, type SearchResultType } from "@/hooks/useGlobalSearch"
@@ -14,9 +14,10 @@ const TYPE_META: Record<SearchResultType, { icon: typeof StickyNote; label: stri
   todo:  { icon: CheckSquare,  label: "Todos",      color: "text-purple-400" },
   event: { icon: CalendarDays, label: "Calendar",   color: "text-cyan-400" },
   habit: { icon: Target,       label: "Habits",     color: "text-green-400" },
+  goal:  { icon: Trophy,       label: "Goals",      color: "text-amber-400" },
 }
 
-const TYPE_ORDER: SearchResultType[] = ["note", "todo", "event", "habit"]
+const TYPE_ORDER: SearchResultType[] = ["note", "todo", "event", "habit", "goal"]
 
 export function CommandPalette() {
   const open = useCommandPaletteStore(s => s.open)
@@ -27,6 +28,7 @@ export function CommandPalette() {
   const loadNotes = useDataStore(s => s.loadNotes)
   const loadTodos = useDataStore(s => s.loadTodos)
   const loadHabits = useDataStore(s => s.loadHabits)
+  const loadGoals = useDataStore(s => s.loadGoals)
   const loadCalendar = useDataStore(s => s.loadCalendar)
 
   const [query, setQuery] = useState("")
@@ -59,7 +61,7 @@ export function CommandPalette() {
     setQuery("")
     setActiveIndex(0)
     // Warm caches if needed
-    loadNotes(); loadTodos(); loadHabits()
+    loadNotes(); loadTodos(); loadHabits(); loadGoals()
     loadCalendar(new Date())
     setTimeout(() => inputRef.current?.focus(), 50)
     const prev = document.body.style.overflow
