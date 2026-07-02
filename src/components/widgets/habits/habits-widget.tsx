@@ -4,16 +4,34 @@ import { useState } from "react"
 import { AnimatePresence, motion } from "framer-motion"
 import { Plus, Target } from "lucide-react"
 import { toast } from "sonner"
+import { DndContext, closestCenter, KeyboardSensor, PointerSensor, useSensor, useSensors, type DragEndEvent } from "@dnd-kit/core"
+import { SortableContext, sortableKeyboardCoordinates, arrayMove, verticalListSortingStrategy } from "@dnd-kit/sortable"
 import { useHabits, calculateStreak } from "@/hooks/useHabits"
 import { HabitItem } from "./habit-item"
+import { SortableItem } from "@/components/ui/sortable-item"
 import { Button } from "@/components/ui/button"
 import { cn } from "@/lib/utils"
 
 const COLORS = ["#7c3aed", "#2563eb", "#06b6d4", "#16a34a", "#d97706", "#dc2626", "#db2777", "#6366f1"]
 
 export function HabitsWidget() {
-  const { habits, loading, today, createHabit, toggleHabitLog, deleteHabit } = useHabits()
+  const { habits, loading, today, createHabit, toggleHabitLog, deleteHabit, reorderHabits } = useHabits()
   const [showForm, setShowForm] = useState(false)
+
+  const sensors = useSensors(
+    useSensor(PointerSensor, { activationConstraint: { distance: 5 } }),
+    useSensor(KeyboardSensor, { coordinateGetter: sortableKeyboardCoordinates }),
+  )
+
+  function handleDragEnd(e: DragEndEvent) {
+    const { active, over } = e
+    if (!over || active.id === over.id) return
+    const oldIndex = habits.findIndex(h => h.id === active.id)
+    const newIndex = habits.findIndex(h => h.id === over.id)
+    if (oldIndex < 0 || newIndex < 0) return
+    const nextOrder = arrayMove(habits, oldIndex, newIndex).map(h => h.id)
+    reorderHabits(nextOrder)
+  }
   const [name, setName] = useState("")
   const [color, setColor] = useState(COLORS[0])
 
@@ -66,7 +84,7 @@ export function HabitsWidget() {
       )}
 
       {/* Habits list */}
-      <div className="flex-1 overflow-y-auto space-y-2">
+      <div className="flex-1 overflow-y-auto space-y-2 pl-5">
         {loading ? (
           Array.from({ length: 3 }).map((_, i) => (
             <div key={i} className="h-[68px] rounded-2xl bg-[rgba(var(--overlay),0.03)] animate-pulse" />
@@ -77,17 +95,22 @@ export function HabitsWidget() {
             <p className="text-xs text-muted-foreground">No habits yet — add one below</p>
           </div>
         ) : (
-          <AnimatePresence initial={false}>
-            {habits.map(habit => (
-              <HabitItem
-                key={habit.id}
-                habit={habit}
-                today={today}
-                onToggle={handleToggle}
-                onDelete={deleteHabit}
-              />
-            ))}
-          </AnimatePresence>
+          <DndContext sensors={sensors} collisionDetection={closestCenter} onDragEnd={handleDragEnd}>
+            <SortableContext items={habits.map(h => h.id)} strategy={verticalListSortingStrategy}>
+              <AnimatePresence initial={false}>
+                {habits.map(habit => (
+                  <SortableItem key={habit.id} id={habit.id}>
+                    <HabitItem
+                      habit={habit}
+                      today={today}
+                      onToggle={handleToggle}
+                      onDelete={deleteHabit}
+                    />
+                  </SortableItem>
+                ))}
+              </AnimatePresence>
+            </SortableContext>
+          </DndContext>
         )}
       </div>
 

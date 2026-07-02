@@ -14,6 +14,7 @@ export interface Todo {
   completed: boolean
   priority: "low" | "medium" | "high"
   due_date: string | null
+  position: number
   created_at: string
 }
 
@@ -31,6 +32,7 @@ export interface Habit {
   user_id: string
   name: string
   color: string
+  position: number
   created_at: string
 }
 
@@ -63,6 +65,7 @@ export interface Goal {
   deadline: string | null
   color: string
   completed: boolean
+  position: number
   created_at: string
 }
 

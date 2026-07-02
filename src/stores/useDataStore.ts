@@ -99,8 +99,8 @@ export const useDataStore = create<DataState>((set, get) => ({
     const supabase = createClient()
     const { data, error } = await supabase
       .from("todos")
-      .select("id,user_id,title,completed,priority,due_date,created_at")
-      .order("created_at", { ascending: false })
+      .select("id,user_id,title,completed,priority,due_date,position,created_at")
+      .order("position", { ascending: true, nullsFirst: false })
     if (!error && data) set({ todos: data, todosHydrated: true })
     else set({ todosHydrated: true })
   },
@@ -114,8 +114,8 @@ export const useDataStore = create<DataState>((set, get) => ({
     const supabase = createClient()
     const { data, error } = await supabase
       .from("goals")
-      .select("id,user_id,title,description,target_value,current_value,unit,deadline,color,completed,created_at")
-      .order("created_at", { ascending: false })
+      .select("id,user_id,title,description,target_value,current_value,unit,deadline,color,completed,position,created_at")
+      .order("position", { ascending: true, nullsFirst: false })
     if (!error && data) set({ goals: data, goalsHydrated: true })
     else set({ goalsHydrated: true })
   },
@@ -129,7 +129,7 @@ export const useDataStore = create<DataState>((set, get) => ({
     const supabase = createClient()
     const since = format(subDays(new Date(), 30), "yyyy-MM-dd")
     const [{ data: habitData }, { data: logData }] = await Promise.all([
-      supabase.from("habits").select("id,user_id,name,color,created_at").order("created_at", { ascending: true }),
+      supabase.from("habits").select("id,user_id,name,color,position,created_at").order("position", { ascending: true, nullsFirst: false }),
       supabase.from("habit_logs").select("habit_id,completed_date").gte("completed_date", since),
     ])
     if (habitData) {

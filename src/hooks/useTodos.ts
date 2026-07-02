@@ -23,6 +23,8 @@ export function useTodos() {
     const userId = await getCurrentUserId()
     if (!userId) { toast.error("You must be signed in to add a task"); return }
 
+    const nextPosition = todos.length > 0 ? Math.max(...todos.map(t => t.position)) + 1000 : 1000
+
     const optimistic: Todo = {
       id: crypto.randomUUID(),
       user_id: userId,
@@ -30,17 +32,34 @@ export function useTodos() {
       completed: false,
       priority: fields.priority,
       due_date: fields.due_date ?? null,
+      position: nextPosition,
       created_at: new Date().toISOString(),
     }
-    setTodos(prev => [optimistic, ...prev])
+    setTodos(prev => [...prev, optimistic])
 
-    const { data, error } = await supabase.from("todos").insert({ ...fields, user_id: userId }).select().single()
+    const { data, error } = await supabase.from("todos").insert({ ...fields, position: nextPosition, user_id: userId }).select().single()
     if (error) {
       toast.error("Failed to create todo")
       setTodos(prev => prev.filter(t => t.id !== optimistic.id))
       return
     }
     setTodos(prev => prev.map(t => t.id === optimistic.id ? data : t))
+  }
+
+  async function reorderTodos(orderedIds: string[]) {
+    // Recompute all positions with 1000-step gaps
+    const idToPos = new Map(orderedIds.map((id, i) => [id, (i + 1) * 1000]))
+    setTodos(prev => {
+      const next = prev.map(t => idToPos.has(t.id) ? { ...t, position: idToPos.get(t.id)! } : t)
+      return [...next].sort((a, b) => a.position - b.position)
+    })
+
+    const updates = await Promise.all(
+      orderedIds.map(id =>
+        supabase.from("todos").update({ position: idToPos.get(id)! }).eq("id", id)
+      )
+    )
+    if (updates.some(r => r.error)) { toast.error("Failed to save order"); loadTodos() }
   }
 
   async function toggleTodo(id: string) {
@@ -61,5 +80,5 @@ export function useTodos() {
     if (error) { toast.error("Failed to delete todo"); loadTodos() }
   }
 
-  return { todos, loading, createTodo, toggleTodo, deleteTodo }
+  return { todos, loading, createTodo, toggleTodo, deleteTodo, reorderTodos }
 }

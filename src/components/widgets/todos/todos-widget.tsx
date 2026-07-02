@@ -3,21 +3,42 @@
 import { useState } from "react"
 import { AnimatePresence } from "framer-motion"
 import { CheckSquare } from "lucide-react"
+import { DndContext, closestCenter, KeyboardSensor, PointerSensor, useSensor, useSensors, type DragEndEvent } from "@dnd-kit/core"
+import { SortableContext, sortableKeyboardCoordinates, arrayMove, verticalListSortingStrategy } from "@dnd-kit/sortable"
 import { useTodos } from "@/hooks/useTodos"
 import { usePomodoroStore } from "@/stores/usePomodoroStore"
 import { Todo } from "@/types"
 import { AddTodoForm } from "./add-todo-form"
 import { TodoItem } from "./todo-item"
+import { SortableItem } from "@/components/ui/sortable-item"
 import { cn } from "@/lib/utils"
 import { useRouter } from "next/navigation"
 
 type Filter = "all" | "active" | "completed"
 
 export function TodosWidget() {
-  const { todos, loading, createTodo, toggleTodo, deleteTodo } = useTodos()
+  const { todos, loading, createTodo, toggleTodo, deleteTodo, reorderTodos } = useTodos()
   const setLinkedTodo = usePomodoroStore(s => s.setLinkedTodo)
   const router = useRouter()
   const [filter, setFilter] = useState<Filter>("all")
+
+  const sensors = useSensors(
+    useSensor(PointerSensor, { activationConstraint: { distance: 5 } }),
+    useSensor(KeyboardSensor, { coordinateGetter: sortableKeyboardCoordinates }),
+  )
+
+  function handleDragEnd(e: DragEndEvent) {
+    const { active, over } = e
+    if (!over || active.id === over.id) return
+    const activeTodo = todos.find(t => t.id === active.id)
+    const overTodo = todos.find(t => t.id === over.id)
+    if (!activeTodo || !overTodo || activeTodo.completed !== overTodo.completed) return
+    // Reorder within the same completion group (persists global order)
+    const oldIndex = todos.findIndex(t => t.id === active.id)
+    const newIndex = todos.findIndex(t => t.id === over.id)
+    const nextOrder = arrayMove(todos, oldIndex, newIndex).map(t => t.id)
+    reorderTodos(nextOrder)
+  }
 
   const activeCount = todos.filter(t => !t.completed).length
   const completedCount = todos.filter(t => t.completed).length
@@ -70,7 +91,7 @@ export function TodosWidget() {
         </div>
       </div>
 
-      <div className="flex-1 overflow-y-auto space-y-0.5">
+      <div className="flex-1 overflow-y-auto space-y-0.5 pl-5">
         {loading ? (
           Array.from({ length: 5 }).map((_, i) => (
             <div key={i} className="h-10 rounded-xl bg-[rgba(var(--overlay),0.03)] animate-pulse my-1" />
@@ -83,17 +104,22 @@ export function TodosWidget() {
             </p>
           </div>
         ) : (
-          <AnimatePresence initial={false}>
-            {filtered.map(todo => (
-              <TodoItem
-                key={todo.id}
-                todo={todo}
-                onToggle={toggleTodo}
-                onDelete={deleteTodo}
-                onFocus={handleFocus}
-              />
-            ))}
-          </AnimatePresence>
+          <DndContext sensors={sensors} collisionDetection={closestCenter} onDragEnd={handleDragEnd}>
+            <SortableContext items={filtered.map(t => t.id)} strategy={verticalListSortingStrategy}>
+              <AnimatePresence initial={false}>
+                {filtered.map(todo => (
+                  <SortableItem key={todo.id} id={todo.id}>
+                    <TodoItem
+                      todo={todo}
+                      onToggle={toggleTodo}
+                      onDelete={deleteTodo}
+                      onFocus={handleFocus}
+                    />
+                  </SortableItem>
+                ))}
+              </AnimatePresence>
+            </SortableContext>
+          </DndContext>
         )}
       </div>
     </div>
