@@ -1,28 +1,44 @@
 "use client"
 
-import { useEffect, useState } from "react"
+import { useEffect, useMemo, useState } from "react"
 import { createClient, getCurrentUserId } from "@/lib/supabase/client"
 import { useDataStore } from "@/stores/useDataStore"
 import { CalendarEvent } from "@/types"
 import { toast } from "sonner"
-import { format } from "date-fns"
+import { format, addMonths, subMonths } from "date-fns"
 
 const EMPTY: CalendarEvent[] = []
 
-export function useCalendarEvents(month: Date) {
+export function useCalendarEvents(currentDate: Date) {
   const supabase = createClient()
-  const monthKey = format(month, "yyyy-MM")
+  const monthKey = format(currentDate, "yyyy-MM")
 
-  const events = useDataStore(s => s.calendarByMonth[monthKey] ?? EMPTY)
+  // Also cover the previous/next month in case a week or view straddles the boundary
+  const prevKey = format(subMonths(currentDate, 1), "yyyy-MM")
+  const nextKey = format(addMonths(currentDate, 1), "yyyy-MM")
+
+  const monthEvents = useDataStore(s => s.calendarByMonth[monthKey] ?? EMPTY)
+  const prevEvents = useDataStore(s => s.calendarByMonth[prevKey] ?? EMPTY)
+  const nextEvents = useDataStore(s => s.calendarByMonth[nextKey] ?? EMPTY)
   const hydrated = useDataStore(s => !!s.calendarHydrated[monthKey])
   const setCalendar = useDataStore(s => s.setCalendar)
   const loadCalendar = useDataStore(s => s.loadCalendar)
+
+  const events = useMemo(
+    () => [...prevEvents, ...monthEvents, ...nextEvents],
+    [prevEvents, monthEvents, nextEvents]
+  )
 
   const [loading, setLoading] = useState(!hydrated)
 
   useEffect(() => {
     setLoading(!useDataStore.getState().calendarHydrated[monthKey])
-    loadCalendar(month).finally(() => setLoading(false))
+    // Load current month; also fetch neighbors so week view stays consistent at boundaries
+    Promise.all([
+      loadCalendar(currentDate),
+      loadCalendar(subMonths(currentDate, 1)),
+      loadCalendar(addMonths(currentDate, 1)),
+    ]).finally(() => setLoading(false))
   }, [monthKey])
 
   async function createEvent(fields: {
@@ -44,9 +60,12 @@ export function useCalendarEvents(month: Date) {
   }
 
   async function deleteEvent(id: string) {
-    setCalendar(monthKey, prev => prev.filter(e => e.id !== id))
+    // The event might live in any of the three cached month buckets
+    ;[prevKey, monthKey, nextKey].forEach(key => {
+      setCalendar(key, prev => prev.filter(e => e.id !== id))
+    })
     const { error } = await supabase.from("calendar_events").delete().eq("id", id)
-    if (error) { toast.error("Failed to delete event"); loadCalendar(month) }
+    if (error) { toast.error("Failed to delete event"); loadCalendar(currentDate) }
   }
 
   function eventsForDate(date: string) {
