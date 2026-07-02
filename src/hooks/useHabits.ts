@@ -38,13 +38,28 @@ export function useHabits() {
   async function createHabit(name: string, color: string) {
     const userId = await getCurrentUserId()
     if (!userId) { toast.error("You must be signed in to create a habit"); return }
+    const nextPosition = habits.length > 0 ? Math.max(...habits.map(h => h.position)) + 1000 : 1000
     const { data, error } = await supabase
       .from("habits")
-      .insert({ name, color, user_id: userId })
+      .insert({ name, color, position: nextPosition, user_id: userId })
       .select()
       .single()
     if (error) { toast.error("Failed to create habit"); return }
     setHabits(prev => [...prev, { ...data, logs: [] }])
+  }
+
+  async function reorderHabits(orderedIds: string[]) {
+    const idToPos = new Map(orderedIds.map((id, i) => [id, (i + 1) * 1000]))
+    setHabits(prev => {
+      const next = prev.map(h => idToPos.has(h.id) ? { ...h, position: idToPos.get(h.id)! } : h)
+      return [...next].sort((a, b) => a.position - b.position)
+    })
+    const updates = await Promise.all(
+      orderedIds.map(id =>
+        supabase.from("habits").update({ position: idToPos.get(id)! }).eq("id", id)
+      )
+    )
+    if (updates.some(r => r.error)) { toast.error("Failed to save order"); loadHabits() }
   }
 
   async function toggleHabitLog(habitId: string, date: string) {
@@ -82,5 +97,5 @@ export function useHabits() {
     if (error) { toast.error("Failed to delete habit"); loadHabits() }
   }
 
-  return { habits, loading, today, createHabit, toggleHabitLog, deleteHabit }
+  return { habits, loading, today, createHabit, toggleHabitLog, deleteHabit, reorderHabits }
 }

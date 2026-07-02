@@ -37,6 +37,7 @@ export function useGoals() {
   }) {
     const userId = await getCurrentUserId()
     if (!userId) { toast.error("You must be signed in to create a goal"); return }
+    const nextPosition = goals.length > 0 ? Math.max(...goals.map(g => g.position)) + 1000 : 1000
     const payload = {
       title: fields.title,
       description: fields.description || null,
@@ -44,11 +45,26 @@ export function useGoals() {
       unit: fields.unit ?? "",
       deadline: fields.deadline || null,
       color: fields.color,
+      position: nextPosition,
       user_id: userId,
     }
     const { data, error } = await supabase.from("goals").insert(payload).select().single()
     if (error) { toast.error("Failed to create goal"); return }
-    setGoals(prev => [data, ...prev])
+    setGoals(prev => [...prev, data])
+  }
+
+  async function reorderGoals(orderedIds: string[]) {
+    const idToPos = new Map(orderedIds.map((id, i) => [id, (i + 1) * 1000]))
+    setGoals(prev => {
+      const next = prev.map(g => idToPos.has(g.id) ? { ...g, position: idToPos.get(g.id)! } : g)
+      return [...next].sort((a, b) => a.position - b.position)
+    })
+    const updates = await Promise.all(
+      orderedIds.map(id =>
+        supabase.from("goals").update({ position: idToPos.get(id)! }).eq("id", id)
+      )
+    )
+    if (updates.some(r => r.error)) { toast.error("Failed to save order"); loadGoals() }
   }
 
   async function updateProgress(id: string, newValue: number) {
@@ -117,7 +133,7 @@ export function useGoals() {
     if (error) { toast.error("Failed to delete goal"); loadGoals() }
   }
 
-  return { goals, loading, createGoal, updateProgress, incrementProgress, updateGoal, toggleComplete, deleteGoal }
+  return { goals, loading, createGoal, updateProgress, incrementProgress, updateGoal, toggleComplete, deleteGoal, reorderGoals }
 }
 
 export { progressPct }
