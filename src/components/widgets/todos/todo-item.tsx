@@ -1,7 +1,7 @@
 "use client"
 
 import { motion } from "framer-motion"
-import { Trash2, Timer } from "lucide-react"
+import { Trash2, Timer, Repeat } from "lucide-react"
 import { format, isPast, isToday, startOfDay } from "date-fns"
 import { Todo } from "@/types"
 import { cn } from "@/lib/utils"
@@ -67,10 +67,16 @@ export function TodoItem({ todo, onToggle, onDelete, onFocus, focusMinutes }: To
       </button>
 
       <span className={cn(
-        "flex-1 text-sm transition-all min-w-0 truncate",
+        "flex-1 flex items-center gap-1.5 text-sm transition-all min-w-0",
         todo.completed ? "line-through text-muted-foreground/40" : "text-foreground"
       )}>
-        {todo.title}
+        <span className="truncate">{todo.title}</span>
+        {todo.recurrence && todo.recurrence !== "none" && (
+          <Repeat
+            className="w-3 h-3 shrink-0 text-purple-400/70"
+            aria-label={`Repeats ${todo.recurrence}`}
+          />
+        )}
       </span>
 
       {/* Focus time badge */}

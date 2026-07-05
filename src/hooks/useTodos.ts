@@ -1,10 +1,21 @@
 "use client"
 
 import { useEffect, useState } from "react"
+import { format, addDays, addWeeks, addMonths, parseISO } from "date-fns"
 import { createClient, getCurrentUserId } from "@/lib/supabase/client"
 import { useDataStore } from "@/stores/useDataStore"
-import { Todo } from "@/types"
+import { Todo, Recurrence } from "@/types"
 import { toast } from "sonner"
+
+/** Next due date for a recurring todo, advanced from its current due date (or today). */
+function nextDueDate(dueDate: string | null, recurrence: Recurrence): string {
+  const base = dueDate ? parseISO(dueDate) : new Date()
+  const next =
+    recurrence === "daily" ? addDays(base, 1) :
+    recurrence === "weekly" ? addWeeks(base, 1) :
+    addMonths(base, 1)
+  return format(next, "yyyy-MM-dd")
+}
 
 export function useTodos() {
   const supabase = createClient()
@@ -19,11 +30,11 @@ export function useTodos() {
     loadTodos().finally(() => setLoading(false))
   }, [])
 
-  async function createTodo(fields: { title: string; priority: Todo["priority"]; due_date?: string }) {
+  async function createTodo(fields: { title: string; priority: Todo["priority"]; due_date?: string; recurrence?: Recurrence }) {
     const userId = await getCurrentUserId()
     if (!userId) { toast.error("You must be signed in to add a task"); return }
 
-    const nextPosition = todos.length > 0 ? Math.max(...todos.map(t => t.position)) + 1000 : 1000
+    const nextPosition = todos.length > 0 ? Math.max(...todos.map(t => t.position ?? 0)) + 1000 : 1000
 
     const optimistic: Todo = {
       id: crypto.randomUUID(),
@@ -32,12 +43,17 @@ export function useTodos() {
       completed: false,
       priority: fields.priority,
       due_date: fields.due_date ?? null,
+      recurrence: fields.recurrence ?? "none",
       position: nextPosition,
       created_at: new Date().toISOString(),
     }
     setTodos(prev => [...prev, optimistic])
 
-    const { data, error } = await supabase.from("todos").insert({ ...fields, position: nextPosition, user_id: userId }).select().single()
+    const { data, error } = await supabase
+      .from("todos")
+      .insert({ ...fields, recurrence: fields.recurrence ?? "none", position: nextPosition, user_id: userId })
+      .select()
+      .single()
     if (error) {
       toast.error("Failed to create todo")
       setTodos(prev => prev.filter(t => t.id !== optimistic.id))
@@ -71,6 +87,31 @@ export function useTodos() {
     if (error) {
       toast.error("Failed to update todo")
       setTodos(prev => prev.map(t => t.id === id ? { ...t, completed: todo.completed } : t))
+      return
+    }
+
+    // Completing a recurring todo spawns the next occurrence
+    if (newCompleted && todo.recurrence && todo.recurrence !== "none") {
+      const due = nextDueDate(todo.due_date, todo.recurrence)
+      const userId = await getCurrentUserId()
+      if (!userId) return
+      const nextPosition = Math.max(0, ...todos.map(t => t.position ?? 0)) + 1000
+      const { data, error: spawnError } = await supabase
+        .from("todos")
+        .insert({
+          title: todo.title,
+          priority: todo.priority,
+          due_date: due,
+          recurrence: todo.recurrence,
+          position: nextPosition,
+          user_id: userId,
+        })
+        .select()
+        .single()
+      if (!spawnError && data) {
+        setTodos(prev => [...prev, data])
+        toast(`↻ Next "${todo.title}" scheduled for ${format(parseISO(due), "MMM d")}`)
+      }
     }
   }
 
