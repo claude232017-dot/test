@@ -4,8 +4,9 @@ import { useState } from "react"
 import { useSearchParams } from "next/navigation"
 import { motion, AnimatePresence } from "framer-motion"
 import {
-  format, addMonths, subMonths, addDays, subDays,
+  format, addMonths, addDays,
   startOfWeek, endOfWeek, parse, isValid,
+  isSameMonth, isSameWeek, isSameDay,
 } from "date-fns"
 import { ChevronLeft, ChevronRight, Plus, Trash2, CalendarDays } from "lucide-react"
 import { useCalendarEvents } from "@/hooks/useCalendarEvents"
@@ -47,18 +48,25 @@ export function CalendarWidget() {
   const [eventColor, setEventColor] = useState(EVENT_COLORS[0])
   const [eventDesc, setEventDesc] = useState("")
 
-  function goPrev() {
-    setDirection(-1)
-    if (view === "month") setCurrentDate(m => subMonths(m, 1))
-    else if (view === "week") setCurrentDate(m => subDays(m, 7))
-    else setCurrentDate(m => subDays(m, 1))
+  function step(delta: 1 | -1) {
+    setDirection(delta)
+    const next =
+      view === "month" ? addMonths(currentDate, delta) :
+      view === "week" ? addDays(currentDate, 7 * delta) :
+      addDays(currentDate, delta)
+    setCurrentDate(next)
+    // Drop a selection that scrolled out of the visible period — keeping it
+    // would show a side panel for a date outside the cached month window.
+    if (selectedDate) {
+      const stillVisible =
+        view === "month" ? isSameMonth(selectedDate, next) :
+        view === "week" ? isSameWeek(selectedDate, next, { weekStartsOn: 0 }) :
+        isSameDay(selectedDate, next)
+      if (!stillVisible) setSelectedDate(null)
+    }
   }
-  function goNext() {
-    setDirection(1)
-    if (view === "month") setCurrentDate(m => addMonths(m, 1))
-    else if (view === "week") setCurrentDate(m => addDays(m, 7))
-    else setCurrentDate(m => addDays(m, 1))
-  }
+  function goPrev() { step(-1) }
+  function goNext() { step(1) }
   function goToday() {
     setDirection(0)
     setCurrentDate(new Date())
@@ -74,7 +82,9 @@ export function CalendarWidget() {
 
   async function handleCreateEvent(e: React.FormEvent) {
     e.preventDefault()
-    const targetDate = selectedDate ?? (view === "day" ? currentDate : null)
+    // Day view always creates on the day being displayed — a leftover
+    // selection from another view must not win over what the user sees.
+    const targetDate = view === "day" ? currentDate : selectedDate
     if (!eventTitle.trim() || !targetDate) return
     await createEvent({
       title: eventTitle.trim(),
