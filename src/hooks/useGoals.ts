@@ -37,7 +37,7 @@ export function useGoals() {
   }) {
     const userId = await getCurrentUserId()
     if (!userId) { toast.error("You must be signed in to create a goal"); return }
-    const nextPosition = goals.length > 0 ? Math.max(...goals.map(g => g.position)) + 1000 : 1000
+    const nextPosition = goals.length > 0 ? Math.max(...goals.map(g => g.position ?? 0)) + 1000 : 1000
     const payload = {
       title: fields.title,
       description: fields.description || null,

@@ -5,15 +5,21 @@ import { createClient, getCurrentUserId } from "@/lib/supabase/client"
 import { useDataStore } from "@/stores/useDataStore"
 import { toast } from "sonner"
 import { format } from "date-fns"
+import { isScheduledOn } from "@/lib/habit-schedule"
 import type { HabitWithLogs } from "@/lib/store/types"
 
 export type { HabitWithLogs }
+export { isScheduledOn }
 
-export function calculateStreak(logs: string[], today: string): number {
+export function calculateStreak(logs: string[], today: string, scheduleDays?: number[] | null): number {
   let streak = 0
   let current = today
-  while (logs.includes(current)) {
-    streak++
+  // Bounded walk: skip unscheduled days, count consecutive completed scheduled days
+  for (let i = 0; i < 366; i++) {
+    if (isScheduledOn(scheduleDays, current)) {
+      if (!logs.includes(current)) break
+      streak++
+    }
     const d = new Date(current + "T12:00:00")
     d.setDate(d.getDate() - 1)
     current = format(d, "yyyy-MM-dd")
@@ -35,13 +41,15 @@ export function useHabits() {
     loadHabits().finally(() => setLoading(false))
   }, [])
 
-  async function createHabit(name: string, color: string) {
+  async function createHabit(name: string, color: string, scheduleDays?: number[] | null) {
     const userId = await getCurrentUserId()
     if (!userId) { toast.error("You must be signed in to create a habit"); return }
-    const nextPosition = habits.length > 0 ? Math.max(...habits.map(h => h.position)) + 1000 : 1000
+    const nextPosition = habits.length > 0 ? Math.max(...habits.map(h => h.position ?? 0)) + 1000 : 1000
+    // All 7 days selected (or nothing passed) = every day = NULL in the DB
+    const schedule = scheduleDays && scheduleDays.length > 0 && scheduleDays.length < 7 ? scheduleDays : null
     const { data, error } = await supabase
       .from("habits")
-      .insert({ name, color, position: nextPosition, user_id: userId })
+      .insert({ name, color, schedule_days: schedule, position: nextPosition, user_id: userId })
       .select()
       .single()
     if (error) { toast.error("Failed to create habit"); return }

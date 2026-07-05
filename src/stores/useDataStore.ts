@@ -2,6 +2,7 @@ import { create } from "zustand"
 import { format, subDays, startOfWeek, eachDayOfInterval } from "date-fns"
 import { createClient } from "@/lib/supabase/client"
 import { ACTIVITY_CATEGORIES } from "@/lib/activity-categories"
+import { isScheduledOn } from "@/lib/habit-schedule"
 import type { Note, Todo, CalendarEvent, ActivityLog, Goal } from "@/types"
 import {
   type HabitWithLogs,
@@ -99,7 +100,7 @@ export const useDataStore = create<DataState>((set, get) => ({
     const supabase = createClient()
     const { data, error } = await supabase
       .from("todos")
-      .select("id,user_id,title,completed,priority,due_date,position,created_at")
+      .select("id,user_id,title,completed,priority,due_date,recurrence,position,created_at")
       .order("position", { ascending: true, nullsFirst: false })
     if (!error && data) set({ todos: data, todosHydrated: true })
     else set({ todosHydrated: true })
@@ -129,7 +130,7 @@ export const useDataStore = create<DataState>((set, get) => ({
     const supabase = createClient()
     const since = format(subDays(new Date(), 30), "yyyy-MM-dd")
     const [{ data: habitData }, { data: logData }] = await Promise.all([
-      supabase.from("habits").select("id,user_id,name,color,position,created_at").order("position", { ascending: true, nullsFirst: false }),
+      supabase.from("habits").select("id,user_id,name,color,schedule_days,position,created_at").order("position", { ascending: true, nullsFirst: false }),
       supabase.from("habit_logs").select("habit_id,completed_date").gte("completed_date", since),
     ])
     if (habitData) {
@@ -226,7 +227,7 @@ export const useDataStore = create<DataState>((set, get) => ({
 
     const [activityRes, habitRes, habitLogRes, todoRes, pomRes] = await Promise.all([
       supabase.from("activity_logs").select("category,duration_minutes,date").gte("date", thirtyDaysAgo),
-      supabase.from("habits").select("id,name,color"),
+      supabase.from("habits").select("id,name,color,schedule_days"),
       supabase.from("habit_logs").select("habit_id,completed_date").gte("completed_date", weekStart),
       supabase.from("todos").select("completed"),
       supabase.from("pomodoro_sessions").select("created_at,completed").eq("completed", true).gte("created_at", fourteenDaysAgo + "T00:00:00"),
@@ -284,13 +285,15 @@ export const useDataStore = create<DataState>((set, get) => ({
       isToday: date === todayStr,
     }))
 
-    // Habit radial (this week)
-    const weekDays = eachDayOfInterval({ start: new Date(weekStart + "T12:00:00"), end: today }).length
+    // Habit radial (this week) — measured against each habit's scheduled days
+    const weekWindow = eachDayOfInterval({ start: new Date(weekStart + "T12:00:00"), end: today })
+      .map(d => format(d, "yyyy-MM-dd"))
     const habitRadial = habits.map(h => {
+      const scheduledCount = weekWindow.filter(d => isScheduledOn(h.schedule_days, d)).length
       const done = habitLogs.filter(l => l.habit_id === h.id).length
       return {
         name: h.name,
-        completionRate: weekDays > 0 ? Math.round((done / weekDays) * 100) : 0,
+        completionRate: scheduledCount > 0 ? Math.min(100, Math.round((done / scheduledCount) * 100)) : 0,
         fill: h.color,
       }
     })
@@ -302,7 +305,7 @@ export const useDataStore = create<DataState>((set, get) => ({
       focusMinutesThisWeek: thisWeekLogs.reduce((s, l) => s + l.duration_minutes, 0),
       focusMinutesLastWeek: lastWeekLogs.reduce((s, l) => s + l.duration_minutes, 0),
       habitsDoneToday: habitLogs.filter(l => l.completed_date === todayStr).length,
-      totalHabits: habits.length,
+      totalHabits: habits.filter(h => isScheduledOn(h.schedule_days, todayStr)).length,
       todosCompleted: todos.filter(t => t.completed).length,
       pomodorosToday: pomSessions.filter(s => s.created_at.startsWith(todayStr)).length,
     }

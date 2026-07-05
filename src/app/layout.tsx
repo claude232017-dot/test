@@ -3,6 +3,7 @@ import { Plus_Jakarta_Sans } from "next/font/google"
 import { Toaster } from "sonner"
 import { Analytics } from "@vercel/analytics/next"
 import { ThemeProvider } from "@/components/providers/theme-provider"
+import { ServiceWorkerRegister } from "@/components/providers/sw-register"
 import "./globals.css"
 
 const jakarta = Plus_Jakarta_Sans({
@@ -16,6 +17,13 @@ export const metadata: Metadata = {
   description: "Track your daily activity, notes, todos, habits, and more.",
   manifest: "/manifest.json",
   appleWebApp: { capable: true, statusBarStyle: "black-translucent", title: "DayFlow" },
+  icons: {
+    icon: [
+      { url: "/icon.svg", type: "image/svg+xml" },
+      { url: "/icon-192.png", sizes: "192x192", type: "image/png" },
+    ],
+    apple: "/apple-touch-icon.png",
+  },
 }
 
 export const viewport: Viewport = {
@@ -42,6 +50,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
             }}
           />
         </ThemeProvider>
+        <ServiceWorkerRegister />
         <Analytics />
       </body>
     </html>

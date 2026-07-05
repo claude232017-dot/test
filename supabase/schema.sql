@@ -1,5 +1,6 @@
--- DayFlow Dashboard Schema
--- Run this in the Supabase SQL Editor
+-- DayFlow Dashboard Schema (canonical — matches the current app)
+-- Run this in the Supabase SQL Editor for a FRESH database.
+-- For an existing database, run the files in supabase/migrations/ instead.
 --
 -- Note: `user_id` defaults to `auth.uid()` and every RLS policy has a matching
 -- `with check`, so inserts are scoped to the signed-in user automatically.
@@ -26,6 +27,8 @@ create table if not exists todos (
   completed boolean default false,
   priority text check (priority in ('low','medium','high')) default 'medium',
   due_date date,
+  recurrence text check (recurrence in ('none','daily','weekly','monthly')) default 'none',
+  position numeric default extract(epoch from now()),
   created_at timestamptz default now()
 );
 alter table todos enable row level security;
@@ -38,6 +41,8 @@ create table if not exists habits (
   user_id uuid references auth.users(id) on delete cascade not null default auth.uid(),
   name text not null,
   color text default '#7c3aed',
+  schedule_days integer[],          -- 0=Sun … 6=Sat; NULL = every day
+  position numeric default extract(epoch from now()),
   created_at timestamptz default now()
 );
 alter table habits enable row level security;
@@ -54,6 +59,25 @@ create table if not exists habit_logs (
 );
 alter table habit_logs enable row level security;
 create policy "Users manage own habit logs" on habit_logs
+  for all using (auth.uid() = user_id) with check (auth.uid() = user_id);
+
+-- Goals / milestones
+create table if not exists goals (
+  id uuid primary key default gen_random_uuid(),
+  user_id uuid references auth.users(id) on delete cascade not null default auth.uid(),
+  title text not null,
+  description text,
+  target_value numeric not null check (target_value > 0),
+  current_value numeric not null default 0 check (current_value >= 0),
+  unit text default '',
+  deadline date,
+  color text default '#7c3aed',
+  completed boolean default false,
+  position numeric default extract(epoch from now()),
+  created_at timestamptz default now()
+);
+alter table goals enable row level security;
+create policy "Users manage own goals" on goals
   for all using (auth.uid() = user_id) with check (auth.uid() = user_id);
 
 -- Activity Logs
@@ -90,6 +114,7 @@ create table if not exists pomodoro_sessions (
   user_id uuid references auth.users(id) on delete cascade not null default auth.uid(),
   duration_minutes int not null default 25,
   completed boolean default false,
+  todo_id uuid references todos(id) on delete set null,
   created_at timestamptz default now()
 );
 alter table pomodoro_sessions enable row level security;
@@ -108,16 +133,3 @@ $$ language plpgsql;
 create trigger notes_updated_at
   before update on notes
   for each row execute function update_updated_at();
-
--- ─────────────────────────────────────────────────────────────────────────
--- Migration for an EXISTING database (already created with the old schema):
--- run these once to add the user_id default + with-check guard.
---
---   alter table notes            alter column user_id set default auth.uid();
---   alter table todos            alter column user_id set default auth.uid();
---   alter table habits           alter column user_id set default auth.uid();
---   alter table habit_logs       alter column user_id set default auth.uid();
---   alter table activity_logs    alter column user_id set default auth.uid();
---   alter table calendar_events  alter column user_id set default auth.uid();
---   alter table pomodoro_sessions alter column user_id set default auth.uid();
--- ─────────────────────────────────────────────────────────────────────────

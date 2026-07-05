@@ -6,13 +6,15 @@ import { Plus, Target } from "lucide-react"
 import { toast } from "sonner"
 import { DndContext, closestCenter, KeyboardSensor, PointerSensor, useSensor, useSensors, type DragEndEvent } from "@dnd-kit/core"
 import { SortableContext, sortableKeyboardCoordinates, arrayMove, verticalListSortingStrategy } from "@dnd-kit/sortable"
-import { useHabits, calculateStreak } from "@/hooks/useHabits"
+import { useHabits, calculateStreak, isScheduledOn } from "@/hooks/useHabits"
 import { HabitItem } from "./habit-item"
 import { SortableItem } from "@/components/ui/sortable-item"
 import { Button } from "@/components/ui/button"
 import { cn } from "@/lib/utils"
 
 const COLORS = ["#7c3aed", "#2563eb", "#06b6d4", "#16a34a", "#d97706", "#dc2626", "#db2777", "#6366f1"]
+const WEEKDAY_CHIPS = ["S", "M", "T", "W", "T", "F", "S"] // index = getDay()
+const ALL_DAYS = [0, 1, 2, 3, 4, 5, 6]
 
 export function HabitsWidget() {
   const { habits, loading, today, createHabit, toggleHabitLog, deleteHabit, reorderHabits } = useHabits()
@@ -34,13 +36,22 @@ export function HabitsWidget() {
   }
   const [name, setName] = useState("")
   const [color, setColor] = useState(COLORS[0])
+  const [days, setDays] = useState<number[]>(ALL_DAYS)
+
+  function toggleDay(d: number) {
+    setDays(prev => {
+      const next = prev.includes(d) ? prev.filter(x => x !== d) : [...prev, d].sort()
+      return next.length === 0 ? prev : next // at least one day required
+    })
+  }
 
   async function handleAdd(e: React.FormEvent) {
     e.preventDefault()
     if (!name.trim()) return
-    await createHabit(name.trim(), color)
+    await createHabit(name.trim(), color, days)
     setName("")
     setColor(COLORS[0])
+    setDays(ALL_DAYS)
     setShowForm(false)
   }
 
@@ -50,14 +61,16 @@ export function HabitsWidget() {
     const wasDone = habit.logs.includes(date)
     await toggleHabitLog(habitId, date)
     if (!wasDone) {
-      const newStreak = calculateStreak([...habit.logs, date], date)
+      const newStreak = calculateStreak([...habit.logs, date], date, habit.schedule_days)
       if (newStreak === 7) toast.success(`🔥 7-day streak on "${habit.name}"! Keep it up!`)
       else if (newStreak === 30) toast.success(`🏆 30-day streak on "${habit.name}"! Incredible!`)
     }
   }
 
-  const doneToday = habits.filter(h => h.logs.includes(today)).length
-  const pct = habits.length > 0 ? Math.round((doneToday / habits.length) * 100) : 0
+  // Only habits scheduled today count toward the daily summary
+  const scheduledToday = habits.filter(h => isScheduledOn(h.schedule_days, today))
+  const doneToday = scheduledToday.filter(h => h.logs.includes(today)).length
+  const pct = scheduledToday.length > 0 ? Math.round((doneToday / scheduledToday.length) * 100) : 0
 
   return (
     <div className="flex flex-col gap-4 min-h-[350px]">
@@ -65,7 +78,11 @@ export function HabitsWidget() {
       {habits.length > 0 && (
         <div className="space-y-1.5">
           <div className="flex items-center justify-between text-xs">
-            <span className="text-muted-foreground">{doneToday}/{habits.length} habits done today</span>
+            <span className="text-muted-foreground">
+              {scheduledToday.length === 0
+                ? "No habits scheduled today"
+                : `${doneToday}/${scheduledToday.length} habits done today`}
+            </span>
             <span className={cn(
               "font-semibold tabular-nums",
               pct === 100 ? "text-green-400" : pct >= 50 ? "text-purple-400" : "text-muted-foreground"
@@ -151,6 +168,31 @@ export function HabitsWidget() {
                       />
                     ))}
                   </div>
+                </div>
+
+                {/* Schedule row */}
+                <div className="flex items-center gap-2 flex-wrap">
+                  <span className="text-xs text-muted-foreground shrink-0">Days</span>
+                  <div className="flex gap-1.5">
+                    {WEEKDAY_CHIPS.map((label, d) => (
+                      <button
+                        key={d}
+                        type="button"
+                        onClick={() => toggleDay(d)}
+                        aria-pressed={days.includes(d)}
+                        className={cn(
+                          "w-7 h-7 rounded-full text-[10px] font-semibold transition-all cursor-pointer shrink-0",
+                          days.includes(d)
+                            ? "text-white shadow-sm"
+                            : "bg-[rgba(var(--overlay),0.05)] text-muted-foreground hover:text-foreground"
+                        )}
+                        style={days.includes(d) ? { backgroundColor: color } : undefined}
+                      >
+                        {label}
+                      </button>
+                    ))}
+                  </div>
+                  {days.length === 7 && <span className="text-[10px] text-muted-foreground/60">every day</span>}
                 </div>
 
                 {/* Actions row */}

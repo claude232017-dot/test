@@ -7,6 +7,8 @@ export interface Note {
   updated_at: string
 }
 
+export type Recurrence = "none" | "daily" | "weekly" | "monthly"
+
 export interface Todo {
   id: string
   user_id: string
@@ -14,6 +16,7 @@ export interface Todo {
   completed: boolean
   priority: "low" | "medium" | "high"
   due_date: string | null
+  recurrence: Recurrence
   position: number
   created_at: string
 }
@@ -32,6 +35,8 @@ export interface Habit {
   user_id: string
   name: string
   color: string
+  /** Weekdays the habit applies to (0=Sun … 6=Sat). null = every day. */
+  schedule_days: number[] | null
   position: number
   created_at: string
 }
