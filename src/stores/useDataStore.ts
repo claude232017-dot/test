@@ -128,7 +128,9 @@ export const useDataStore = create<DataState>((set, get) => ({
     set(s => ({ habits: typeof updater === "function" ? updater(s.habits) : updater })),
   loadHabits: async () => {
     const supabase = createClient()
-    const since = format(subDays(new Date(), 30), "yyyy-MM-dd")
+    // 366-day horizon: must cover the full streak walk in calculateStreak,
+    // otherwise long streaks silently cap at the fetch window.
+    const since = format(subDays(new Date(), 366), "yyyy-MM-dd")
     const [{ data: habitData }, { data: logData }] = await Promise.all([
       supabase.from("habits").select("id,user_id,name,color,schedule_days,position,created_at").order("position", { ascending: true, nullsFirst: false }),
       supabase.from("habit_logs").select("habit_id,completed_date").gte("completed_date", since),

@@ -65,7 +65,13 @@ export function useCalendarEvents(currentDate: Date) {
       setCalendar(key, prev => prev.filter(e => e.id !== id))
     })
     const { error } = await supabase.from("calendar_events").delete().eq("id", id)
-    if (error) { toast.error("Failed to delete event"); loadCalendar(currentDate) }
+    if (error) {
+      toast.error("Failed to delete event")
+      // Restore every bucket the optimistic removal touched
+      loadCalendar(subMonths(currentDate, 1))
+      loadCalendar(currentDate)
+      loadCalendar(addMonths(currentDate, 1))
+    }
   }
 
   function eventsForDate(date: string) {

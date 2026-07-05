@@ -2,7 +2,7 @@
 
 import { motion } from "framer-motion"
 import { Trash2, Timer, Repeat } from "lucide-react"
-import { format, isPast, isToday, startOfDay } from "date-fns"
+import { format, isPast, isToday, startOfDay, parseISO } from "date-fns"
 import { Todo } from "@/types"
 import { cn } from "@/lib/utils"
 
@@ -102,7 +102,7 @@ export function TodoItem({ todo, onToggle, onDelete, onFocus, focusMinutes }: To
           "text-[10px] shrink-0",
           isOverdue ? "text-red-400/80" : isDueToday ? "text-amber-400/80" : "text-muted-foreground/60"
         )}>
-          {format(new Date(todo.due_date), "MMM d")}
+          {format(parseISO(todo.due_date), "MMM d")}
         </span>
       )}
 

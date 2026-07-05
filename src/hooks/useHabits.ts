@@ -14,11 +14,13 @@ export { isScheduledOn }
 export function calculateStreak(logs: string[], today: string, scheduleDays?: number[] | null): number {
   let streak = 0
   let current = today
-  // Bounded walk: skip unscheduled days, count consecutive completed scheduled days
+  // Bounded walk: skip unscheduled days, count consecutive completed scheduled
+  // days. An unlogged *today* doesn't break the streak (the user simply hasn't
+  // checked in yet) — only unlogged past scheduled days do.
   for (let i = 0; i < 366; i++) {
     if (isScheduledOn(scheduleDays, current)) {
-      if (!logs.includes(current)) break
-      streak++
+      if (logs.includes(current)) streak++
+      else if (current !== today) break
     }
     const d = new Date(current + "T12:00:00")
     d.setDate(d.getDate() - 1)

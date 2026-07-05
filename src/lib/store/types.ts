@@ -1,6 +1,6 @@
 import type { Habit } from "@/types"
 
-// Habit with its completed-date strings (last 30 days) attached.
+// Habit with its completed-date strings (last 366 days — the streak horizon) attached.
 export interface HabitWithLogs extends Habit {
   logs: string[]
 }
