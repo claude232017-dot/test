@@ -30,6 +30,10 @@ export const viewport: Viewport = {
   themeColor: "#7c3aed",
   width: "device-width",
   initialScale: 1,
+  // Required for env(safe-area-inset-*) to report real values on notched
+  // iPhones; combined with the black-translucent status bar it keeps the
+  // installed PWA's top bar out from under the notch. No effect on desktop.
+  viewportFit: "cover",
 }
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {

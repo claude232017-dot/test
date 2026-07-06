@@ -108,7 +108,7 @@ export function InstallPrompt() {
           animate={{ opacity: 1, y: 0 }}
           exit={{ opacity: 0, y: 24 }}
           transition={{ duration: 0.25, ease: "easeOut" }}
-          className="fixed bottom-4 inset-x-4 sm:left-auto sm:right-6 sm:max-w-sm z-40 glass-strong rounded-2xl border border-[rgba(var(--overlay),0.1)] shadow-2xl p-4"
+          className="fixed bottom-[calc(1rem+env(safe-area-inset-bottom))] inset-x-4 sm:left-auto sm:right-6 sm:max-w-sm z-40 glass-strong rounded-2xl border border-[rgba(var(--overlay),0.1)] shadow-2xl p-4"
           role="dialog"
           aria-label="Install DayFlow"
         >

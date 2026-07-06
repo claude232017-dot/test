@@ -93,7 +93,7 @@ export function MobileDrawer({ name, email, initial }: MobileDrawerProps) {
               animate={{ x: 0 }}
               exit={{ x: "-100%" }}
               transition={{ type: "spring", stiffness: 380, damping: 38 }}
-              className="absolute left-0 top-0 bottom-0 w-[82%] max-w-xs glass-strong border-r border-[rgba(var(--overlay),0.1)] flex flex-col py-5 px-3 shadow-2xl"
+              className="absolute left-0 top-0 bottom-0 w-[82%] max-w-xs glass-strong border-r border-[rgba(var(--overlay),0.1)] flex flex-col pb-5 pt-[calc(1.25rem+env(safe-area-inset-top))] px-3 shadow-2xl"
             >
               {/* Header */}
               <div className="flex items-center justify-between px-2 mb-6">
