@@ -1,6 +1,7 @@
 "use client"
 
 import { useEffect, useState } from "react"
+import { createPortal } from "react-dom"
 import Link from "next/link"
 import { usePathname, useRouter } from "next/navigation"
 import { motion, AnimatePresence } from "framer-motion"
@@ -23,6 +24,9 @@ export function MobileDrawer({ name, email, initial }: MobileDrawerProps) {
   const router = useRouter()
   const [open, setOpen] = useState(false)
   const [signingOut, setSigningOut] = useState(false)
+  const [mounted, setMounted] = useState(false)
+
+  useEffect(() => { setMounted(true) }, [])
 
   // Close on route change
   useEffect(() => { setOpen(false) }, [pathname])
@@ -63,9 +67,13 @@ export function MobileDrawer({ name, email, initial }: MobileDrawerProps) {
         <Menu className="w-5 h-5" aria-hidden="true" />
       </button>
 
-      <AnimatePresence>
-        {open && (
-          <div className="md:hidden fixed inset-0 z-50">
+      {/* Portal to <body>: the topbar's backdrop-filter (glass-strong) makes it
+          the containing block for fixed descendants, which would trap this
+          fullscreen overlay inside the 64px header. */}
+      {mounted && createPortal(
+        <AnimatePresence>
+          {open && (
+            <div className="md:hidden fixed inset-0 z-50">
             {/* Scrim */}
             <motion.div
               initial={{ opacity: 0 }}
@@ -177,8 +185,10 @@ export function MobileDrawer({ name, email, initial }: MobileDrawerProps) {
               </div>
             </motion.aside>
           </div>
-        )}
-      </AnimatePresence>
+          )}
+        </AnimatePresence>,
+        document.body
+      )}
     </>
   )
 }
