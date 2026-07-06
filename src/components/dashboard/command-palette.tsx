@@ -125,7 +125,7 @@ export function CommandPalette() {
                 value={query}
                 onChange={e => setQuery(e.target.value)}
                 placeholder="Search notes, todos, events, habits…"
-                className="flex-1 bg-transparent outline-none text-sm text-foreground placeholder:text-muted-foreground/60"
+                className="flex-1 bg-transparent outline-none text-base sm:text-sm text-foreground placeholder:text-muted-foreground/60"
               />
               <button
                 onClick={() => setOpen(false)}

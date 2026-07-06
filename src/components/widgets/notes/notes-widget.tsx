@@ -45,7 +45,7 @@ export function NotesWidget() {
               value={search}
               onChange={e => setSearch(e.target.value)}
               placeholder="Search…"
-              className="pl-8 h-8 text-xs"
+              className="pl-8 h-8 text-base sm:text-xs"
             />
           </div>
           <Button size="icon" className="h-8 w-8 shrink-0" onClick={handleCreate}>

@@ -47,7 +47,7 @@ export function AddTodoForm({ onAdd }: AddTodoFormProps) {
           value={title}
           onChange={e => setTitle(e.target.value)}
           placeholder="Add a task…"
-          className="h-9 text-sm"
+          className="h-9 text-base sm:text-sm"
         />
         <Button type="submit" size="icon" className="h-9 w-9 shrink-0" disabled={!title.trim()}>
           <Plus className="w-4 h-4" />
@@ -78,7 +78,7 @@ export function AddTodoForm({ onAdd }: AddTodoFormProps) {
           type="date"
           value={dueDate}
           onChange={e => setDueDate(e.target.value)}
-          className="sm:ml-auto text-xs bg-[rgba(var(--overlay),0.05)] border border-[rgba(var(--overlay),0.1)] rounded-lg px-2.5 py-1.5 text-muted-foreground focus:outline-none focus:border-purple-500/50 min-h-[32px] w-full sm:w-auto"
+          className="sm:ml-auto text-base sm:text-xs bg-[rgba(var(--overlay),0.05)] border border-[rgba(var(--overlay),0.1)] rounded-lg px-2.5 py-1.5 text-muted-foreground focus:outline-none focus:border-purple-500/50 min-h-[32px] w-full sm:w-auto"
         />
       </div>
 

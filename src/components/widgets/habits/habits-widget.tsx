@@ -148,7 +148,7 @@ export function HabitsWidget() {
                   onChange={e => setName(e.target.value)}
                   placeholder="Habit name…"
                   autoFocus
-                  className="w-full h-9 rounded-lg bg-[rgba(var(--overlay),0.05)] px-3.5 text-sm text-foreground placeholder:text-muted-foreground/60 transition-colors"
+                  className="w-full h-9 rounded-lg bg-[rgba(var(--overlay),0.05)] px-3.5 text-base sm:text-sm text-foreground placeholder:text-muted-foreground/60 transition-colors"
                   style={{ border: `1px solid ${color}70`, outline: 'none', boxShadow: 'none' }}
                 />
                 {/* Color row */}
