@@ -43,7 +43,9 @@ export function SortableItem({ id, children, handleClassName, disabled }: Sortab
           {...listeners}
           aria-label="Drag to reorder"
           className={cn(
-            "absolute left-0 top-1/2 -translate-y-1/2 -translate-x-full pr-1 opacity-0 group-hover/sortable:opacity-100 md:group-hover/sortable:opacity-100 focus-visible:opacity-100 text-muted-foreground hover:text-foreground transition-opacity cursor-grab active:cursor-grabbing touch-none",
+            // Touch screens have no hover: keep the handle visible (dimmed) on
+            // mobile, hover-revealed on desktop. py-3 pads the touch target.
+            "absolute left-0 top-1/2 -translate-y-1/2 -translate-x-full pr-1 py-3 opacity-50 md:opacity-0 md:group-hover/sortable:opacity-100 focus-visible:opacity-100 text-muted-foreground hover:text-foreground transition-opacity cursor-grab active:cursor-grabbing touch-none",
             handleClassName
           )}
           onClick={(e) => e.stopPropagation()}

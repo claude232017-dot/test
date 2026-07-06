@@ -161,7 +161,7 @@ export function GoalDetailModal({ goal, onClose, onIncrement, onUpdateProgress, 
                   value={form.description}
                   onChange={e => setForm(f => ({ ...f, description: e.target.value }))}
                   placeholder="Description (optional)"
-                  className="h-8 text-xs mt-2"
+                  className="h-8 text-base sm:text-xs mt-2"
                 />
               ) : goal.description ? (
                 <p className="text-xs text-muted-foreground mt-1">{goal.description}</p>
@@ -341,7 +341,7 @@ export function GoalDetailModal({ goal, onClose, onIncrement, onUpdateProgress, 
                     value={form.target_value}
                     onChange={e => setForm(f => ({ ...f, target_value: e.target.value }))}
                     min="1"
-                    className="h-9 text-sm"
+                    className="h-9 text-base sm:text-sm"
                   />
                 </div>
                 <div>
@@ -350,7 +350,7 @@ export function GoalDetailModal({ goal, onClose, onIncrement, onUpdateProgress, 
                     value={form.unit}
                     onChange={e => setForm(f => ({ ...f, unit: e.target.value }))}
                     placeholder="books, km, …"
-                    className="h-9 text-sm"
+                    className="h-9 text-base sm:text-sm"
                   />
                 </div>
               </div>
@@ -360,7 +360,7 @@ export function GoalDetailModal({ goal, onClose, onIncrement, onUpdateProgress, 
                   type="date"
                   value={form.deadline}
                   onChange={e => setForm(f => ({ ...f, deadline: e.target.value }))}
-                  className="w-full h-9 text-sm bg-[rgba(var(--overlay),0.05)] border border-[rgba(var(--overlay),0.1)] rounded-lg px-3 text-muted-foreground focus:outline-none focus:border-purple-500/50"
+                  className="w-full h-9 text-base sm:text-sm bg-[rgba(var(--overlay),0.05)] border border-[rgba(var(--overlay),0.1)] rounded-lg px-3 text-muted-foreground focus:outline-none focus:border-purple-500/50"
                 />
               </div>
               <div>

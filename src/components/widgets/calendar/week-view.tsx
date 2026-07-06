@@ -18,15 +18,18 @@ export function WeekView({ currentDate, selectedDate, direction, onSelectDate, e
   const days = Array.from({ length: 7 }, (_, i) => addDays(weekStart, i))
 
   return (
-    <AnimatePresence mode="wait">
-      <motion.div
-        key={format(weekStart, "yyyy-MM-dd")}
-        initial={{ opacity: 0, x: direction * 30 }}
-        animate={{ opacity: 1, x: 0 }}
-        exit={{ opacity: 0, x: direction * -30 }}
-        transition={{ duration: 0.2 }}
-        className="grid grid-cols-7 gap-1 h-full"
-      >
+    // Phones can't fit 7 readable columns — let the week scroll sideways
+    // there; desktop keeps the full-width grid.
+    <div className="h-full overflow-x-auto md:overflow-x-visible">
+      <AnimatePresence mode="wait">
+        <motion.div
+          key={format(weekStart, "yyyy-MM-dd")}
+          initial={{ opacity: 0, x: direction * 30 }}
+          animate={{ opacity: 1, x: 0 }}
+          exit={{ opacity: 0, x: direction * -30 }}
+          transition={{ duration: 0.2 }}
+          className="grid grid-cols-7 gap-1 h-full min-w-[560px] md:min-w-0"
+        >
         {days.map(day => {
           const dateStr = format(day, "yyyy-MM-dd")
           const dayEvents = eventsForDate(dateStr)
@@ -84,7 +87,8 @@ export function WeekView({ currentDate, selectedDate, direction, onSelectDate, e
             </button>
           )
         })}
-      </motion.div>
-    </AnimatePresence>
+        </motion.div>
+      </AnimatePresence>
+    </div>
   )
 }

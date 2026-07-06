@@ -53,14 +53,14 @@ export function AddGoalForm({ onCreate, onCancel }: AddGoalFormProps) {
         value={title}
         onChange={e => setTitle(e.target.value)}
         placeholder="Goal title (e.g. Read 20 books this year)"
-        className="h-9 text-sm"
+        className="h-9 text-base sm:text-sm"
         autoFocus
       />
       <Input
         value={description}
         onChange={e => setDescription(e.target.value)}
         placeholder="Description (optional)"
-        className="h-9 text-sm"
+        className="h-9 text-base sm:text-sm"
       />
       <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
         <Input
@@ -69,19 +69,19 @@ export function AddGoalForm({ onCreate, onCancel }: AddGoalFormProps) {
           onChange={e => setTarget(e.target.value)}
           placeholder="Target"
           min="1"
-          className="h-9 text-sm"
+          className="h-9 text-base sm:text-sm"
         />
         <Input
           value={unit}
           onChange={e => setUnit(e.target.value)}
           placeholder="Unit (books, km, …)"
-          className="h-9 text-sm"
+          className="h-9 text-base sm:text-sm"
         />
         <input
           type="date"
           value={deadline}
           onChange={e => setDeadline(e.target.value)}
-          className="col-span-2 sm:col-span-1 h-9 text-sm bg-[rgba(var(--overlay),0.05)] border border-[rgba(var(--overlay),0.1)] rounded-lg px-3 text-muted-foreground focus:outline-none focus:border-purple-500/50"
+          className="col-span-2 sm:col-span-1 h-9 text-base sm:text-sm bg-[rgba(var(--overlay),0.05)] border border-[rgba(var(--overlay),0.1)] rounded-lg px-3 text-muted-foreground focus:outline-none focus:border-purple-500/50"
         />
       </div>
       <div className="flex items-center gap-2 flex-wrap">

@@ -122,7 +122,7 @@ export function GoalCard({ goal, onIncrement, onUpdateProgress, onToggleComplete
               onClick={(e) => e.stopPropagation()}
               onKeyDown={e => { e.stopPropagation(); if (e.key === "Enter") commitEdit(); if (e.key === "Escape") { setEditing(false); setEditValue(String(goal.current_value)) } }}
               autoFocus
-              className="w-16 h-6 px-1.5 rounded bg-[rgba(var(--overlay),0.06)] border border-[rgba(var(--overlay),0.12)] text-foreground text-xs tabular-nums focus:outline-none focus:border-purple-500/50"
+              className="w-20 sm:w-16 h-7 sm:h-6 px-1.5 rounded bg-[rgba(var(--overlay),0.06)] border border-[rgba(var(--overlay),0.12)] text-foreground text-base sm:text-xs tabular-nums focus:outline-none focus:border-purple-500/50"
             />
           ) : (
             <button
@@ -151,11 +151,11 @@ export function GoalCard({ goal, onIncrement, onUpdateProgress, onToggleComplete
           {!goal.completed && (
             <button
               onClick={(e) => { e.stopPropagation(); onIncrement(goal.id, 1) }}
-              className="flex items-center justify-center w-7 h-7 rounded-full text-white shadow-md cursor-pointer transition-transform hover:scale-105 active:scale-95"
+              className="flex items-center justify-center w-9 h-9 sm:w-7 sm:h-7 rounded-full text-white shadow-md cursor-pointer transition-transform hover:scale-105 active:scale-95"
               style={{ backgroundColor: goal.color }}
               aria-label="Increment progress"
             >
-              <Plus className="w-3.5 h-3.5" />
+              <Plus className="w-4 h-4 sm:w-3.5 sm:h-3.5" />
             </button>
           )}
         </div>

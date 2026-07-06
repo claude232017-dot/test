@@ -225,14 +225,14 @@ export function CalendarWidget() {
                           value={eventTitle}
                           onChange={e => setEventTitle(e.target.value)}
                           placeholder="Event title…"
-                          className="h-8 text-xs"
+                          className="h-8 text-base sm:text-xs"
                           autoFocus
                         />
                         <Input
                           value={eventDesc}
                           onChange={e => setEventDesc(e.target.value)}
                           placeholder="Description (opt)"
-                          className="h-8 text-xs"
+                          className="h-8 text-base sm:text-xs"
                         />
                         <div className="flex gap-1.5 flex-wrap">
                           {EVENT_COLORS.map(c => (
@@ -302,8 +302,8 @@ export function CalendarWidget() {
                 className="overflow-hidden"
               >
                 <div className="rounded-xl border border-[rgba(var(--overlay),0.08)] bg-[rgba(var(--overlay),0.03)] p-3 space-y-3 mb-2">
-                  <Input value={eventTitle} onChange={e => setEventTitle(e.target.value)} placeholder="Event title…" className="h-8 text-xs" autoFocus />
-                  <Input value={eventDesc} onChange={e => setEventDesc(e.target.value)} placeholder="Description (opt)" className="h-8 text-xs" />
+                  <Input value={eventTitle} onChange={e => setEventTitle(e.target.value)} placeholder="Event title…" className="h-8 text-base sm:text-xs" autoFocus />
+                  <Input value={eventDesc} onChange={e => setEventDesc(e.target.value)} placeholder="Description (opt)" className="h-8 text-base sm:text-xs" />
                   <div className="flex gap-1.5 flex-wrap">
                     {EVENT_COLORS.map(c => (
                       <button
