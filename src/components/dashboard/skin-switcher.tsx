@@ -1,7 +1,7 @@
 "use client"
 
 import { Check, Palette } from "lucide-react"
-import { useSkinStore, SKIN_META, SKINS, type Skin } from "@/stores/useSkinStore"
+import { useSkinStore, SKIN_META, SELECTABLE_SKINS, type Skin } from "@/stores/useSkinStore"
 import { DropdownMenuItem, DropdownMenuLabel } from "@/components/ui/dropdown-menu"
 import { cn } from "@/lib/utils"
 
@@ -26,7 +26,7 @@ export function SkinSwitcher() {
         <span className="deck-label text-[10px] text-muted-foreground">Appearance</span>
       </DropdownMenuLabel>
 
-      {SKINS.map(value => {
+      {SELECTABLE_SKINS.map(value => {
         const active = skin === value
         const meta = SKIN_META[value]
         return (
