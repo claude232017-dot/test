@@ -11,7 +11,7 @@ import { Input } from "@/components/ui/input"
 import { cn } from "@/lib/utils"
 
 const MILESTONE_TICKS = [25, 50, 75]
-const COLORS = ["#7c3aed", "#2563eb", "#06b6d4", "#16a34a", "#d97706", "#dc2626", "#db2777", "#6366f1"]
+const COLORS = ["#f5c542", "#0f9bbd", "#9085e9", "#0ca30c", "#e66767", "#c98500", "#37d67a", "#b9b8ae"]
 
 interface GoalDetailModalProps {
   goal: Goal | null
@@ -199,12 +199,12 @@ export function GoalDetailModal({ goal, onClose, onIncrement, onUpdateProgress, 
                     onBlur={commitProgressEdit}
                     onKeyDown={e => { if (e.key === "Enter") commitProgressEdit(); if (e.key === "Escape") setEditingProgress(false) }}
                     autoFocus
-                    className="w-24 h-9 px-2 rounded-lg bg-[rgba(var(--overlay),0.06)] border border-[rgba(var(--overlay),0.12)] text-2xl font-bold text-foreground tabular-nums focus:outline-none focus:border-purple-500/50"
+                    className="w-24 h-9 px-2 rounded-lg bg-[rgba(var(--overlay),0.06)] border border-[rgba(var(--overlay),0.12)] text-2xl font-bold text-foreground tabular-nums focus:outline-none focus:border-primary/50"
                   />
                 ) : (
                   <button
                     onClick={() => { setProgressInput(String(goal.current_value)); setEditingProgress(true) }}
-                    className="text-2xl font-bold text-foreground tabular-nums hover:text-purple-400 transition-colors cursor-pointer"
+                    className="text-2xl font-bold text-foreground tabular-nums hover:text-gold transition-colors cursor-pointer"
                     title="Click to edit"
                   >
                     {formatNumber(goal.current_value)}
@@ -250,7 +250,7 @@ export function GoalDetailModal({ goal, onClose, onIncrement, onUpdateProgress, 
                 </button>
                 <button
                   onClick={() => onIncrement(goal.id, 1)}
-                  className="flex items-center justify-center w-11 h-11 rounded-full text-white shadow-md cursor-pointer transition-transform hover:scale-105 active:scale-95"
+                  className="flex items-center justify-center w-11 h-11 rounded-full text-primary-foreground shadow-md cursor-pointer transition-transform hover:scale-105 active:scale-95"
                   style={{ backgroundColor: goal.color }}
                   aria-label="Increment"
                 >
@@ -335,7 +335,7 @@ export function GoalDetailModal({ goal, onClose, onIncrement, onUpdateProgress, 
             <div className="px-5 pb-4 space-y-3">
               <div className="grid grid-cols-2 gap-2">
                 <div>
-                  <label className="text-[10px] uppercase tracking-wider text-muted-foreground/60 px-1 mb-1 block">Target</label>
+                  <label className="text-[10px] font-mono uppercase tracking-wider text-muted-foreground/60 px-1 mb-1 block">Target</label>
                   <Input
                     type="number"
                     value={form.target_value}
@@ -345,7 +345,7 @@ export function GoalDetailModal({ goal, onClose, onIncrement, onUpdateProgress, 
                   />
                 </div>
                 <div>
-                  <label className="text-[10px] uppercase tracking-wider text-muted-foreground/60 px-1 mb-1 block">Unit</label>
+                  <label className="text-[10px] font-mono uppercase tracking-wider text-muted-foreground/60 px-1 mb-1 block">Unit</label>
                   <Input
                     value={form.unit}
                     onChange={e => setForm(f => ({ ...f, unit: e.target.value }))}
@@ -355,16 +355,16 @@ export function GoalDetailModal({ goal, onClose, onIncrement, onUpdateProgress, 
                 </div>
               </div>
               <div>
-                <label className="text-[10px] uppercase tracking-wider text-muted-foreground/60 px-1 mb-1 block">Deadline</label>
+                <label className="text-[10px] font-mono uppercase tracking-wider text-muted-foreground/60 px-1 mb-1 block">Deadline</label>
                 <input
                   type="date"
                   value={form.deadline}
                   onChange={e => setForm(f => ({ ...f, deadline: e.target.value }))}
-                  className="w-full h-9 text-base sm:text-sm bg-[rgba(var(--overlay),0.05)] border border-[rgba(var(--overlay),0.1)] rounded-lg px-3 text-muted-foreground focus:outline-none focus:border-purple-500/50"
+                  className="w-full h-9 text-base sm:text-sm bg-[rgba(var(--overlay),0.05)] border border-[rgba(var(--overlay),0.1)] rounded-lg px-3 text-muted-foreground focus:outline-none focus:border-primary/50"
                 />
               </div>
               <div>
-                <label className="text-[10px] uppercase tracking-wider text-muted-foreground/60 px-1 mb-1 block">Color</label>
+                <label className="text-[10px] font-mono uppercase tracking-wider text-muted-foreground/60 px-1 mb-1 block">Color</label>
                 <div className="flex items-center gap-2 flex-wrap">
                   {COLORS.map(c => (
                     <button
@@ -431,7 +431,7 @@ function Stat({ label, value, tone, full }: { label: string; value: string; tone
       "rounded-lg bg-[rgba(var(--overlay),0.03)] border border-[rgba(var(--overlay),0.05)] px-3 py-2",
       full && "col-span-2"
     )}>
-      <p className="text-[10px] uppercase tracking-wider text-muted-foreground/60">{label}</p>
+      <p className="text-[10px] font-mono uppercase tracking-wider text-muted-foreground/60">{label}</p>
       <p className={cn(
         "text-sm font-semibold tabular-nums mt-0.5",
         tone === "warn" && "text-amber-400",

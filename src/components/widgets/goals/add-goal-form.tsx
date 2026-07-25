@@ -5,7 +5,7 @@ import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { cn } from "@/lib/utils"
 
-const COLORS = ["#7c3aed", "#2563eb", "#06b6d4", "#16a34a", "#d97706", "#dc2626", "#db2777", "#6366f1"]
+const COLORS = ["#f5c542", "#0f9bbd", "#9085e9", "#0ca30c", "#e66767", "#c98500", "#37d67a", "#b9b8ae"]
 
 interface AddGoalFormProps {
   onCreate: (fields: {
@@ -81,7 +81,7 @@ export function AddGoalForm({ onCreate, onCancel }: AddGoalFormProps) {
           type="date"
           value={deadline}
           onChange={e => setDeadline(e.target.value)}
-          className="col-span-2 sm:col-span-1 h-9 text-base sm:text-sm bg-[rgba(var(--overlay),0.05)] border border-[rgba(var(--overlay),0.1)] rounded-lg px-3 text-muted-foreground focus:outline-none focus:border-purple-500/50"
+          className="col-span-2 sm:col-span-1 h-9 text-base sm:text-sm bg-[rgba(var(--overlay),0.05)] border border-[rgba(var(--overlay),0.1)] rounded-lg px-3 text-muted-foreground focus:outline-none focus:border-primary/50"
         />
       </div>
       <div className="flex items-center gap-2 flex-wrap">

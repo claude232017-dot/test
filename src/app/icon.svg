@@ -1,25 +1,21 @@
 <svg width="512" height="512" viewBox="0 0 512 512" fill="none" xmlns="http://www.w3.org/2000/svg">
   <defs>
-    <linearGradient id="bg" x1="0" y1="0" x2="512" y2="512" gradientUnits="userSpaceOnUse">
-      <stop stop-color="#7c3aed"/>
-      <stop offset="0.55" stop-color="#2563eb"/>
-      <stop offset="1" stop-color="#06b6d4"/>
-    </linearGradient>
-    <linearGradient id="bar" x1="0" y1="0" x2="0" y2="512" gradientUnits="userSpaceOnUse">
-      <stop stop-color="#ffffff"/>
-      <stop offset="1" stop-color="#e5e7ff"/>
+    <linearGradient id="gold" x1="0" y1="0" x2="0" y2="512" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#f8d264"/>
+      <stop offset="1" stop-color="#f5c542"/>
     </linearGradient>
   </defs>
-  <!-- Full-bleed background keeps the icon valid as a maskable icon -->
-  <rect width="512" height="512" rx="116" fill="url(#bg)"/>
+  <!-- Near-black command-deck plane; full-bleed so it stays valid as a maskable icon -->
+  <rect width="512" height="512" rx="116" fill="#0a0a0f"/>
+  <rect x="8" y="8" width="496" height="496" rx="108" fill="none" stroke="#f5c542" stroke-opacity="0.22" stroke-width="2"/>
   <!-- Ascending "flow" bars: tracked progress rising over time -->
-  <g fill="url(#bar)">
-    <rect x="150" y="296" width="44" height="86" rx="22" opacity="0.65"/>
-    <rect x="234" y="244" width="44" height="138" rx="22" opacity="0.82"/>
-    <rect x="318" y="170" width="44" height="212" rx="22"/>
+  <g fill="url(#gold)">
+    <rect x="150" y="296" width="44" height="86" rx="10" opacity="0.55"/>
+    <rect x="234" y="244" width="44" height="138" rx="10" opacity="0.78"/>
+    <rect x="318" y="170" width="44" height="212" rx="10"/>
   </g>
   <!-- Flow line connecting the peaks with a leading node -->
-  <path d="M156 286 L256 234 L356 160" stroke="#ffffff" stroke-width="20" stroke-linecap="round" stroke-linejoin="round" fill="none" opacity="0.95"/>
-  <circle cx="356" cy="160" r="22" fill="#ffffff"/>
-  <circle cx="356" cy="160" r="11" fill="#06b6d4"/>
+  <path d="M156 286 L256 234 L356 160" stroke="#f5c542" stroke-width="20" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+  <circle cx="356" cy="160" r="22" fill="#f8d264"/>
+  <circle cx="356" cy="160" r="10" fill="#0a0a0f"/>
 </svg>

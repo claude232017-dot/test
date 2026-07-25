@@ -11,7 +11,7 @@ import { cn } from "@/lib/utils"
 
 const TYPE_META: Record<SearchResultType, { icon: typeof StickyNote; label: string; color: string }> = {
   note:  { icon: StickyNote,   label: "Notes",      color: "text-amber-400" },
-  todo:  { icon: CheckSquare,  label: "Todos",      color: "text-purple-400" },
+  todo:  { icon: CheckSquare,  label: "Todos",      color: "text-gold" },
   event: { icon: CalendarDays, label: "Calendar",   color: "text-cyan-400" },
   habit: { icon: Target,       label: "Habits",     color: "text-green-400" },
   goal:  { icon: Trophy,       label: "Goals",      color: "text-amber-400" },
@@ -153,7 +153,7 @@ export function CommandPalette() {
                   const meta = TYPE_META[type]
                   return (
                     <div key={type} className="mb-1">
-                      <p className="px-4 pt-2 pb-1 text-[10px] font-semibold uppercase tracking-wider text-muted-foreground/50">
+                      <p className="px-4 pt-2 pb-1 text-[10px] font-semibold font-mono uppercase tracking-wider text-muted-foreground/50">
                         {meta.label}
                       </p>
                       {list.map(r => {

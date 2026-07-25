@@ -12,9 +12,9 @@ import { cn } from "@/lib/utils"
 type Mode = "work" | "short" | "long"
 
 const MODES: { value: Mode; label: string; minutes: number; color: string; ring: string }[] = [
-  { value: "work", label: "Focus", minutes: 25, color: "text-purple-400", ring: "#7c3aed" },
-  { value: "short", label: "Short Break", minutes: 5, color: "text-green-400", ring: "#16a34a" },
-  { value: "long", label: "Long Break", minutes: 15, color: "text-blue-400", ring: "#2563eb" },
+  { value: "work", label: "Focus", minutes: 25, color: "text-gold", ring: "#f5c542" },
+  { value: "short", label: "Short Break", minutes: 5, color: "text-green-400", ring: "#0ca30c" },
+  { value: "long", label: "Long Break", minutes: 15, color: "text-cyan-400", ring: "#0f9bbd" },
 ]
 
 const R = 80
@@ -139,12 +139,12 @@ export function PomodoroWidget() {
       {store.mode === "work" && (
         <div className="w-full relative" ref={pickerRef}>
           {store.linkedTodoId ? (
-            <div className="flex items-center gap-2 px-3 py-2 rounded-lg bg-purple-500/10 border border-purple-500/20">
-              <Target className="w-3.5 h-3.5 text-purple-400 shrink-0" />
-              <span className="text-xs text-purple-300 truncate flex-1">{store.linkedTodoTitle}</span>
+            <div className="flex items-center gap-2 px-3 py-2 rounded-lg bg-primary/10 border border-primary/20">
+              <Target className="w-3.5 h-3.5 text-gold shrink-0" />
+              <span className="text-xs text-gold truncate flex-1">{store.linkedTodoTitle}</span>
               <button
                 onClick={() => store.setLinkedTodo(null)}
-                className="p-1 -m-1 shrink-0 cursor-pointer text-purple-400/60 hover:text-purple-300 transition-colors"
+                className="p-1 -m-1 shrink-0 cursor-pointer text-primary/60 hover:text-gold transition-colors"
               >
                 <X className="w-3 h-3" />
               </button>
@@ -226,7 +226,7 @@ export function PomodoroWidget() {
           </span>
           <span className="text-xs text-muted-foreground mt-2 font-medium">{currentMode.label}</span>
           {store.running && store.linkedTodoTitle && (
-            <span className="text-[10px] text-purple-400/70 mt-1 max-w-[140px] truncate text-center">
+            <span className="text-[10px] text-primary/70 mt-1 max-w-[140px] truncate text-center">
               {store.linkedTodoTitle}
             </span>
           )}
@@ -243,7 +243,7 @@ export function PomodoroWidget() {
             key={i}
             className={cn(
               "w-2 h-2 rounded-full transition-all duration-300",
-              i < (store.sessionCount % 4) ? "bg-purple-500 shadow-[0_0_6px_rgba(124,58,237,0.8)]" : "bg-[rgba(var(--overlay),0.1)]"
+              i < (store.sessionCount % 4) ? "bg-primary shadow-[0_0_6px_rgba(245,197,66,0.8)]" : "bg-[rgba(var(--overlay),0.1)]"
             )}
           />
         ))}
@@ -268,7 +268,7 @@ export function PomodoroWidget() {
             "w-16 h-16 rounded-full flex items-center justify-center transition-all cursor-pointer",
             store.running
               ? "bg-[rgba(var(--overlay),0.08)] hover:bg-[rgba(var(--overlay),0.12)] border border-[rgba(var(--overlay),0.1)]"
-              : "text-white shadow-xl"
+              : "text-primary-foreground shadow-xl"
           )}
           style={!store.running ? {
             backgroundColor: currentMode.ring,

@@ -43,18 +43,18 @@ export function WeekView({ currentDate, selectedDate, direction, onSelectDate, e
               className={cn(
                 "flex flex-col items-stretch p-2 rounded-xl border transition-all cursor-pointer min-h-[220px] text-left group",
                 isSelected
-                  ? "bg-purple-500/10 border-purple-500/30"
+                  ? "bg-primary/10 border-primary/30"
                   : "bg-[rgba(var(--overlay),0.02)] border-[rgba(var(--overlay),0.05)] hover:bg-[rgba(var(--overlay),0.05)]"
               )}
             >
               {/* Day header */}
               <div className="flex items-center justify-between mb-2">
-                <span className="text-[10px] uppercase tracking-wider text-muted-foreground/60 font-semibold">
+                <span className="text-[10px] font-mono uppercase tracking-wider text-muted-foreground/60 font-semibold">
                   {format(day, "EEE")}
                 </span>
                 <span className={cn(
                   "text-xs w-6 h-6 flex items-center justify-center rounded-full font-medium tabular-nums",
-                  _isToday ? "bg-purple-500 text-white" : "text-foreground"
+                  _isToday ? "bg-primary text-primary-foreground" : "text-foreground"
                 )}>
                   {format(day, "d")}
                 </span>

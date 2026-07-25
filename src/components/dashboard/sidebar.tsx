@@ -19,8 +19,8 @@ export function Sidebar() {
     <aside className="hidden md:flex flex-col w-60 h-full glass-strong border-r border-border/40 py-5 px-3">
       {/* Logo */}
       <Link href="/dashboard" className="flex items-center gap-3 px-3 mb-7 group">
-        <div className="w-9 h-9 rounded-xl brand-gradient flex items-center justify-center shrink-0 shadow-lg shadow-purple-900/30 transition-transform group-hover:scale-105">
-          <LayoutDashboard className="w-[18px] h-[18px] text-white" aria-hidden="true" />
+        <div className="w-9 h-9 rounded-xl brand-gradient flex items-center justify-center shrink-0 shadow-lg shadow-black/30 transition-transform group-hover:scale-105">
+          <LayoutDashboard className="w-[18px] h-[18px] text-primary-foreground" aria-hidden="true" />
         </div>
         <div className="leading-tight">
           <span className="font-semibold text-foreground tracking-tight">DayFlow</span>
@@ -32,7 +32,7 @@ export function Sidebar() {
       <nav className="flex-1 space-y-5 overflow-y-auto scrollbar-none" aria-label="Main navigation">
         {groups.map(group => (
           <div key={group} className="space-y-0.5">
-            <p className="px-3 mb-1.5 text-[10px] font-semibold uppercase tracking-[0.12em] text-muted-foreground/60">
+            <p className="px-3 mb-1.5 text-[10px] font-semibold font-mono uppercase tracking-[0.12em] text-muted-foreground/60">
               {GROUP_LABELS[group]}
             </p>
             {navItems.filter(i => i.group === group).map(({ href, label, icon: Icon }) => {
@@ -56,14 +56,14 @@ export function Sidebar() {
                     />
                   )}
                   <Icon
-                    className={cn("w-[18px] h-[18px] shrink-0 relative z-10 transition-colors", active && "text-purple-400")}
+                    className={cn("w-[18px] h-[18px] shrink-0 relative z-10 transition-colors", active && "text-gold")}
                     aria-hidden="true"
                   />
                   <span className="relative z-10">{label}</span>
                   {isTodos && todoBadgeCount > 0 && (
                     <span
                       className={cn(
-                        "relative z-10 ml-auto min-w-[18px] h-[18px] flex items-center justify-center rounded-full px-1 text-[10px] font-semibold leading-none text-white",
+                        "relative z-10 ml-auto min-w-[18px] h-[18px] flex items-center justify-center rounded-full px-1 text-[10px] font-semibold leading-none text-primary-foreground",
                         overdue > 0 ? "bg-red-500 shadow-[0_0_8px_rgba(239,68,68,0.5)]" : "bg-amber-500 shadow-[0_0_8px_rgba(245,158,11,0.4)]"
                       )}
                       title={overdue > 0 ? `${overdue} overdue, ${dueToday} due today` : `${dueToday} due today`}
@@ -74,13 +74,13 @@ export function Sidebar() {
                   {active && !isTodos && (
                     <motion.span
                       layoutId="sidebar-dot"
-                      className="ml-auto w-1.5 h-1.5 rounded-full bg-purple-400 relative z-10 shadow-[0_0_8px_rgba(167,139,250,0.8)]"
+                      className="ml-auto w-1.5 h-1.5 rounded-full bg-primary relative z-10 shadow-[0_0_8px_rgba(245,197,66,0.8)]"
                     />
                   )}
                   {active && isTodos && todoBadgeCount === 0 && (
                     <motion.span
                       layoutId="sidebar-dot"
-                      className="ml-auto w-1.5 h-1.5 rounded-full bg-purple-400 relative z-10 shadow-[0_0_8px_rgba(167,139,250,0.8)]"
+                      className="ml-auto w-1.5 h-1.5 rounded-full bg-primary relative z-10 shadow-[0_0_8px_rgba(245,197,66,0.8)]"
                     />
                   )}
                 </Link>

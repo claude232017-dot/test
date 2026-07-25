@@ -40,9 +40,9 @@ export function UserMenu({ name, email, initial }: UserMenuProps) {
       <DropdownMenu>
         <DropdownMenuTrigger
           aria-label="Account menu"
-          className="flex items-center gap-2 rounded-full p-0.5 pr-1 transition-colors hover:bg-[rgba(var(--overlay),0.05)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-purple-500/50 cursor-pointer"
+          className="flex items-center gap-2 rounded-full p-0.5 pr-1 transition-colors hover:bg-[rgba(var(--overlay),0.05)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/50 cursor-pointer"
         >
-          <span className="w-8 h-8 rounded-full bg-gradient-to-br from-purple-600 to-blue-600 flex items-center justify-center text-xs font-semibold text-white shrink-0">
+          <span className="w-8 h-8 rounded-full brand-gradient flex items-center justify-center text-xs font-semibold text-primary-foreground shrink-0">
             {initial}
           </span>
           <ChevronDown className="w-4 h-4 text-muted-foreground hidden sm:block" aria-hidden="true" />

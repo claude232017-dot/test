@@ -95,7 +95,7 @@ export function ExportDialog({ open, onClose }: ExportDialogProps) {
             {/* Header */}
             <div className="flex items-center justify-between px-5 pt-5 pb-3">
               <div className="flex items-center gap-2">
-                <Download className="w-4 h-4 text-purple-400" />
+                <Download className="w-4 h-4 text-gold" />
                 <h2 className="text-base font-semibold text-foreground">Export your data</h2>
               </div>
               <button
@@ -112,11 +112,11 @@ export function ExportDialog({ open, onClose }: ExportDialogProps) {
               <button
                 onClick={exportJSON}
                 disabled={busy !== null}
-                className="w-full flex items-center gap-3 p-3.5 rounded-xl border border-purple-500/25 bg-purple-500/10 hover:bg-purple-500/15 transition-colors cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed text-left"
+                className="w-full flex items-center gap-3 p-3.5 rounded-xl border border-primary/25 bg-primary/10 hover:bg-primary/15 transition-colors cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed text-left"
               >
                 {busy === "json"
-                  ? <Loader2 className="w-5 h-5 text-purple-400 animate-spin shrink-0" />
-                  : <FileJson className="w-5 h-5 text-purple-400 shrink-0" />}
+                  ? <Loader2 className="w-5 h-5 text-gold animate-spin shrink-0" />
+                  : <FileJson className="w-5 h-5 text-gold shrink-0" />}
                 <div>
                   <p className="text-sm font-medium text-foreground">Everything as JSON</p>
                   <p className="text-[11px] text-muted-foreground">All tables in one file — best for backups</p>
@@ -125,7 +125,7 @@ export function ExportDialog({ open, onClose }: ExportDialogProps) {
 
               {/* Per-table CSV */}
               <div>
-                <p className="text-[10px] font-semibold uppercase tracking-wider text-muted-foreground/60 mb-2">
+                <p className="text-[10px] font-semibold font-mono uppercase tracking-wider text-muted-foreground/60 mb-2">
                   Individual tables (CSV)
                 </p>
                 <div className="grid grid-cols-2 gap-2">

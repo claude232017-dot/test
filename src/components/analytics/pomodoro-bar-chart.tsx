@@ -34,8 +34,8 @@ export function PomodoroBarChart({ data }: Props) {
           {data.map((entry, i) => (
             <Cell
               key={i}
-              fill={entry.isToday ? "#06b6d4" : "rgba(6,182,212,0.4)"}
-              style={{ filter: entry.isToday ? "drop-shadow(0 0 6px rgba(6,182,212,0.5))" : "none" }}
+              fill={entry.isToday ? "hsl(var(--accent))" : "rgba(15,155,189,0.4)"}
+              style={{ filter: entry.isToday ? "drop-shadow(0 0 6px rgba(15,155,189,0.5))" : "none" }}
             />
           ))}
         </Bar>

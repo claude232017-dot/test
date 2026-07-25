@@ -37,10 +37,10 @@ interface StatCardProps {
 
 export function StatCard({ label, value, numericValue, icon: Icon, sub, trend, trendLabel, accent = "purple" }: StatCardProps) {
   const accentMap: Record<string, string> = {
-    purple: "text-purple-400 bg-purple-500/10",
+    purple: "text-gold bg-primary/10",
     cyan: "text-cyan-400 bg-cyan-500/10",
     green: "text-green-400 bg-green-500/10",
-    blue: "text-blue-400 bg-blue-500/10",
+    blue: "text-cyan-400 bg-cyan-500/10",
   }
 
   const counted = useCountUp(numericValue ?? 0)
@@ -57,7 +57,7 @@ export function StatCard({ label, value, numericValue, icon: Icon, sub, trend, t
       className="glass rounded-xl p-4 flex flex-col gap-3"
     >
       <div className="flex items-center justify-between">
-        <span className="text-xs text-muted-foreground font-medium uppercase tracking-wider">{label}</span>
+        <span className="text-xs text-muted-foreground font-medium font-mono uppercase tracking-wider">{label}</span>
         <div className={cn("w-8 h-8 rounded-lg flex items-center justify-center", accentMap[accent] ?? accentMap.purple)}>
           <Icon className="w-4 h-4" />
         </div>

@@ -16,7 +16,7 @@ const CustomTooltip = ({ active, payload, label }: any) => {
     <div className="glass rounded-xl p-3 text-xs space-y-1.5 shadow-xl">
       <p className="font-semibold text-foreground">{label}</p>
       <div className="flex items-center gap-2">
-        <div className="w-2 h-2 rounded-full bg-purple-500" />
+        <div className="w-2 h-2 rounded-full bg-primary" />
         <span className="text-muted-foreground">Logged:</span>
         <span className="text-foreground font-medium">{h > 0 ? `${h}h ` : ""}{m}m</span>
       </div>
@@ -39,12 +39,12 @@ export function ProductivityTrendChart({ data }: Props) {
       <AreaChart data={data} margin={{ top: 4, right: 4, left: -20, bottom: 0 }}>
         <defs>
           <linearGradient id="purpleGrad" x1="0" y1="0" x2="0" y2="1">
-            <stop offset="5%" stopColor="#7c3aed" stopOpacity={0.35} />
-            <stop offset="95%" stopColor="#7c3aed" stopOpacity={0} />
+            <stop offset="5%" stopColor="hsl(var(--primary))" stopOpacity={0.35} />
+            <stop offset="95%" stopColor="hsl(var(--primary))" stopOpacity={0} />
           </linearGradient>
           <linearGradient id="cyanGrad" x1="0" y1="0" x2="0" y2="1">
-            <stop offset="5%" stopColor="#06b6d4" stopOpacity={0.15} />
-            <stop offset="95%" stopColor="#06b6d4" stopOpacity={0} />
+            <stop offset="5%" stopColor="hsl(var(--accent))" stopOpacity={0.15} />
+            <stop offset="95%" stopColor="hsl(var(--accent))" stopOpacity={0} />
           </linearGradient>
         </defs>
         <CartesianGrid strokeDasharray="3 3" stroke="rgba(var(--overlay),0.04)" vertical={false} />
@@ -58,15 +58,15 @@ export function ProductivityTrendChart({ data }: Props) {
         <Tooltip content={<CustomTooltip />} cursor={{ stroke: "rgba(var(--overlay),0.1)" }} />
         <Area
           type="monotone" dataKey="minutes"
-          stroke="#7c3aed" strokeWidth={2}
+          stroke="hsl(var(--primary))" strokeWidth={2}
           fill="url(#purpleGrad)"
-          dot={false} activeDot={{ r: 4, fill: "#7c3aed" }}
+          dot={false} activeDot={{ r: 4, fill: "hsl(var(--primary))" }}
         />
         <Area
           type="monotone" dataKey="avg"
-          stroke="#06b6d4" strokeWidth={1.5} strokeDasharray="4 3"
+          stroke="hsl(var(--accent))" strokeWidth={1.5} strokeDasharray="4 3"
           fill="url(#cyanGrad)"
-          dot={false} activeDot={{ r: 3, fill: "#06b6d4" }}
+          dot={false} activeDot={{ r: 3, fill: "hsl(var(--accent))" }}
         />
       </AreaChart>
     </ResponsiveContainer>
