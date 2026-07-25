@@ -16,8 +16,8 @@ import { DayView } from "./day-view"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { cn } from "@/lib/utils"
+import { useSkinPalette } from "@/lib/skin-palettes"
 
-const EVENT_COLORS = ["#f5c542", "#0f9bbd", "#9085e9", "#0ca30c", "#e66767", "#c98500", "#37d67a"]
 
 type CalendarView = "month" | "week" | "day"
 
@@ -28,6 +28,7 @@ const VIEWS: { value: CalendarView; label: string }[] = [
 ]
 
 export function CalendarWidget() {
+  const EVENT_COLORS = useSkinPalette()
   const searchParams = useSearchParams()
   const [currentDate, setCurrentDate] = useState(() => {
     const monthParam = searchParams.get("month")

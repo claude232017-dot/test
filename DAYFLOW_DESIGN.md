@@ -186,7 +186,54 @@ the auth split-screen panel that sits permanently on the brand gradient, where
   `.light .glass-hover:hover` overrides so frosted panels read correctly on a
   light canvas (opaque whites instead of translucent lights).
 
-### 4.4 Semantic color vocabulary (use these names)
+### 4.4 Skins (`data-skin` on `<html>`)
+
+On top of dark/light, DayFlow ships **two skins**, switched independently:
+
+| Skin | `data-skin` | Look |
+|------|-------------|------|
+| **PRISM-X** | `"prism"` (default — applies with no attribute) | Command deck: near-black planes, neon-gold accent, flat 1px-hairline panels, mono UPPERCASE labels, 10px radius. |
+| **Classic** | `"classic"` | The original: purple→cyan brand gradient, frosted glassmorphism with noise, sans labels, 13.6px radius. |
+
+Skin × theme are orthogonal → **four valid combinations**, all defined in
+`globals.css`:
+- `.dark` / `.light` carry the PRISM-X tokens (no attribute needed).
+- `[data-skin="classic"].dark` / `.light` override them with the Classic tokens.
+- Every skin-specific *utility* follows the same pattern: PRISM-X is the bare
+  rule, Classic is a `[data-skin="classic"] .foo` override (panels, hovers,
+  brand gradients, blobs, body atmosphere, dropdown timing).
+
+**Non-color skin tokens** carry the rest of the identity so components stay
+skin-agnostic: `--radius`, `--label-font` + `--label-tracking` (mono vs sans),
+`--btn-primary-bg` / `--btn-primary-glow` / `--btn-primary-weight`,
+`--accent-edge`, `--chip-radius`.
+
+**Skin-aware helper classes** (prefer these over literals):
+`.deck-label` (console label), `.text-accent-strong` (AA-safe accent
+lettering), `.btn-primary`, `.hover-accent-edge`, `.chip-radius`,
+`.accent-dot-glow`.
+
+For the few places CSS tokens can't reach — SVG `stroke`, and shadow strings
+built as `` `${hex}60` `` — use the hooks in `src/lib/skin-palettes.ts`:
+`useSkinPalette()` (color-picker swatches) and `useSkinAccents()`
+(primary/success/accent/progress hexes).
+
+**State & UX**: `useSkinStore` (`src/stores/useSkinStore.ts`) persists to
+`localStorage["dayflow-skin"]`; an inline script in `app/layout.tsx` applies it
+before first paint to prevent a flash. Switching plays a ~700ms boot overlay
+(`skin-boot-overlay.tsx`) themed to the *destination* skin, swapping the
+attribute at the midpoint so the repaint is never visible; it collapses to an
+instant swap under `prefers-reduced-motion`. The control lives in the user menu
+(`skin-switcher.tsx`).
+
+**Known limitation:** habit/goal/event colors are **persisted hex on the row**,
+so existing items keep the color they were created with when you switch skins —
+only the *offered palette* is skin-aware. `ACTIVITY_CATEGORIES` is likewise a
+fixed categorical palette (stable category→color mapping matters more than skin
+match). The installed PWA icon and `theme_color` are static files and don't vary
+per skin.
+
+### 4.5 Semantic color vocabulary (use these names)
 `background, foreground, card, popover, primary, secondary, accent, muted,
 muted-foreground, destructive, success, warning, border, input, ring` — each
 with a matching Tailwind utility. Prefer these over literal colors; reach for

@@ -49,7 +49,7 @@ export function WeekView({ currentDate, selectedDate, direction, onSelectDate, e
             >
               {/* Day header */}
               <div className="flex items-center justify-between mb-2">
-                <span className="text-[10px] font-mono uppercase tracking-wider text-muted-foreground/60 font-semibold">
+                <span className="text-[10px] deck-label text-muted-foreground/60 font-semibold">
                   {format(day, "EEE")}
                 </span>
                 <span className={cn(

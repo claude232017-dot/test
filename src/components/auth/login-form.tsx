@@ -71,7 +71,7 @@ export function LoginForm() {
 
       <p className="text-center text-sm text-muted-foreground">
         Don&apos;t have an account?{" "}
-        <Link href="/signup" className="text-gold hover:text-gold transition-colors">
+        <Link href="/signup" className="text-accent-strong hover:text-accent-strong transition-colors">
           Sign up
         </Link>
       </p>

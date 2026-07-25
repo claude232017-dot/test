@@ -109,7 +109,7 @@ export function GoalsWidget() {
               <div className="pt-4 mt-4 border-t border-[rgba(var(--overlay),0.06)] space-y-3">
                 <div className="flex items-center gap-2">
                   <Trophy className="w-3.5 h-3.5 text-amber-400" />
-                  <p className="text-[10px] font-semibold font-mono uppercase tracking-wider text-muted-foreground/60">
+                  <p className="text-[10px] font-semibold deck-label text-muted-foreground/60">
                     Completed · {completed.length}
                   </p>
                 </div>

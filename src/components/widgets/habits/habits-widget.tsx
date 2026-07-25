@@ -11,12 +11,14 @@ import { HabitItem } from "./habit-item"
 import { SortableItem } from "@/components/ui/sortable-item"
 import { Button } from "@/components/ui/button"
 import { cn } from "@/lib/utils"
+import { useSkinPalette, useSkinAccents } from "@/lib/skin-palettes"
 
-const COLORS = ["#f5c542", "#0f9bbd", "#9085e9", "#0ca30c", "#e66767", "#c98500", "#37d67a", "#b9b8ae"]
 const WEEKDAY_CHIPS = ["S", "M", "T", "W", "T", "F", "S"] // index = getDay()
 const ALL_DAYS = [0, 1, 2, 3, 4, 5, 6]
 
 export function HabitsWidget() {
+  const COLORS = useSkinPalette()
+  const accents = useSkinAccents()
   const { habits, loading, today, createHabit, toggleHabitLog, deleteHabit, reorderHabits } = useHabits()
   const [showForm, setShowForm] = useState(false)
 
@@ -85,13 +87,13 @@ export function HabitsWidget() {
             </span>
             <span className={cn(
               "font-semibold tabular-nums",
-              pct === 100 ? "text-green-400" : pct >= 50 ? "text-gold" : "text-muted-foreground"
+              pct === 100 ? "text-green-400" : pct >= 50 ? "text-accent-strong" : "text-muted-foreground"
             )}>{pct}%</span>
           </div>
           <div className="w-full h-1.5 bg-[rgba(var(--overlay),0.05)] rounded-full overflow-hidden">
             <motion.div
               className="h-full rounded-full"
-              style={{ background: pct === 100 ? "#0ca30c" : "linear-gradient(90deg, #f5c542, #0f9bbd)" }}
+              style={{ background: pct === 100 ? accents.success : accents.progress }}
               initial={{ width: 0 }}
               animate={{ width: `${pct}%` }}
               transition={{ duration: 0.6, ease: "easeOut" }}

@@ -29,11 +29,11 @@ function WidgetCard({
   return (
     <motion.div variants={item} className={`glass glass-hover rounded-2xl p-4 md:p-5 flex flex-col gap-3 ${className ?? ""}`}>
       <div className="flex items-center justify-between shrink-0">
-        <h2 className="text-xs font-semibold text-muted-foreground font-mono uppercase tracking-wider">{title}</h2>
+        <h2 className="text-xs font-semibold text-muted-foreground deck-label">{title}</h2>
         <Link
           href={href}
           aria-label={`Open ${title}`}
-          className="text-xs text-gold hover:text-gold flex items-center gap-0.5 transition-colors"
+          className="text-xs text-accent-strong hover:text-accent-strong flex items-center gap-0.5 transition-colors"
         >
           Open <ArrowUpRight className="w-3.5 h-3.5" aria-hidden="true" />
         </Link>
@@ -47,7 +47,7 @@ function WidgetCard({
 
 function SectionLabel({ children }: { children: React.ReactNode }) {
   return (
-    <h2 className="text-[11px] font-semibold font-mono uppercase tracking-[0.14em] text-muted-foreground/70 px-1">
+    <h2 className="text-[11px] font-semibold deck-label text-muted-foreground/70 px-1">
       {children}
     </h2>
   )

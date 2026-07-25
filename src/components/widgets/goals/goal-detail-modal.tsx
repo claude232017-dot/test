@@ -9,9 +9,9 @@ import { progressPct } from "@/hooks/useGoals"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { cn } from "@/lib/utils"
+import { useSkinPalette } from "@/lib/skin-palettes"
 
 const MILESTONE_TICKS = [25, 50, 75]
-const COLORS = ["#f5c542", "#0f9bbd", "#9085e9", "#0ca30c", "#e66767", "#c98500", "#37d67a", "#b9b8ae"]
 
 interface GoalDetailModalProps {
   goal: Goal | null
@@ -30,6 +30,7 @@ function formatNumber(n: number): string {
 }
 
 export function GoalDetailModal({ goal, onClose, onIncrement, onUpdateProgress, onUpdate, onToggleComplete, onDelete }: GoalDetailModalProps) {
+  const COLORS = useSkinPalette()
   const [editing, setEditing] = useState(false)
   const [form, setForm] = useState({
     title: "", description: "", target_value: "", unit: "", deadline: "", color: COLORS[0],
@@ -204,7 +205,7 @@ export function GoalDetailModal({ goal, onClose, onIncrement, onUpdateProgress, 
                 ) : (
                   <button
                     onClick={() => { setProgressInput(String(goal.current_value)); setEditingProgress(true) }}
-                    className="text-2xl font-bold text-foreground tabular-nums hover:text-gold transition-colors cursor-pointer"
+                    className="text-2xl font-bold text-foreground tabular-nums hover:text-accent-strong transition-colors cursor-pointer"
                     title="Click to edit"
                   >
                     {formatNumber(goal.current_value)}
@@ -335,7 +336,7 @@ export function GoalDetailModal({ goal, onClose, onIncrement, onUpdateProgress, 
             <div className="px-5 pb-4 space-y-3">
               <div className="grid grid-cols-2 gap-2">
                 <div>
-                  <label className="text-[10px] font-mono uppercase tracking-wider text-muted-foreground/60 px-1 mb-1 block">Target</label>
+                  <label className="text-[10px] deck-label text-muted-foreground/60 px-1 mb-1 block">Target</label>
                   <Input
                     type="number"
                     value={form.target_value}
@@ -345,7 +346,7 @@ export function GoalDetailModal({ goal, onClose, onIncrement, onUpdateProgress, 
                   />
                 </div>
                 <div>
-                  <label className="text-[10px] font-mono uppercase tracking-wider text-muted-foreground/60 px-1 mb-1 block">Unit</label>
+                  <label className="text-[10px] deck-label text-muted-foreground/60 px-1 mb-1 block">Unit</label>
                   <Input
                     value={form.unit}
                     onChange={e => setForm(f => ({ ...f, unit: e.target.value }))}
@@ -355,7 +356,7 @@ export function GoalDetailModal({ goal, onClose, onIncrement, onUpdateProgress, 
                 </div>
               </div>
               <div>
-                <label className="text-[10px] font-mono uppercase tracking-wider text-muted-foreground/60 px-1 mb-1 block">Deadline</label>
+                <label className="text-[10px] deck-label text-muted-foreground/60 px-1 mb-1 block">Deadline</label>
                 <input
                   type="date"
                   value={form.deadline}
@@ -364,7 +365,7 @@ export function GoalDetailModal({ goal, onClose, onIncrement, onUpdateProgress, 
                 />
               </div>
               <div>
-                <label className="text-[10px] font-mono uppercase tracking-wider text-muted-foreground/60 px-1 mb-1 block">Color</label>
+                <label className="text-[10px] deck-label text-muted-foreground/60 px-1 mb-1 block">Color</label>
                 <div className="flex items-center gap-2 flex-wrap">
                   {COLORS.map(c => (
                     <button
@@ -431,7 +432,7 @@ function Stat({ label, value, tone, full }: { label: string; value: string; tone
       "rounded-lg bg-[rgba(var(--overlay),0.03)] border border-[rgba(var(--overlay),0.05)] px-3 py-2",
       full && "col-span-2"
     )}>
-      <p className="text-[10px] font-mono uppercase tracking-wider text-muted-foreground/60">{label}</p>
+      <p className="text-[10px] deck-label text-muted-foreground/60">{label}</p>
       <p className={cn(
         "text-sm font-semibold tabular-nums mt-0.5",
         tone === "warn" && "text-amber-400",

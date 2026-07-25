@@ -1,52 +1,87 @@
 @import "tailwindcss";
 
+/* ============================================================================
+   DayFlow supports two SKINS, switched via [data-skin] on <html>:
+     • "prism"   — PRISM-X command deck (DEFAULT; applies with no attribute)
+     • "classic" — the original glassmorphism look
+   Each skin is defined purely as tokens + utility overrides. Skin and
+   dark/light theme are independent, so all four combinations are valid.
+   ========================================================================== */
+
 @layer base {
   :root {
-    /* PRISM-X: tighter command-deck radius */
-    --radius: 0.625rem;
     --z-nav: 30;
     --z-drawer: 50;
     --z-overlay: 40;
     --z-toast: 100;
 
-    /* Raw PRISM-X accents (kept for atmosphere / non-token use) */
+    /* ── PRISM-X skin: shape + label typography (default) ── */
+    --radius: 0.625rem;
+    --label-font: var(--font-mono);
+    --label-tracking: 0.14em;
+
+    /* Raw accents */
     --gold: #f5c542;
     --cyan: #0f9bbd;
     --violet: #9085e9;
     --green: #0ca30c;
     --red: #e66767;
+
+    /* Primary button + interactive edge (PRISM-X: gold) */
+    --btn-primary-bg: linear-gradient(180deg, #f8d264, #f5c542);
+    --btn-primary-glow: 0 0 18px rgba(245, 197, 66, 0.25);
+    --btn-primary-weight: 800;
+    --accent-edge: rgba(245, 197, 66, 0.45);
+    --chip-radius: 5px;
   }
 
+  /* ── Classic skin: shape + label typography ── */
+  [data-skin="classic"] {
+    --radius: 0.85rem;
+    --label-font: var(--font-jakarta), system-ui, sans-serif;
+    --label-tracking: 0.1em;
+
+    --btn-primary-bg: linear-gradient(180deg, #8b5cf6, #7c3aed);
+    --btn-primary-glow: 0 10px 24px -8px rgba(124, 58, 237, 0.55);
+    --btn-primary-weight: 500;
+    --accent-edge: rgba(139, 92, 246, 0.5);
+    --chip-radius: 9999px;
+  }
+
+  /* ══════════════════ PRISM-X tokens (default skin) ══════════════════ */
   .dark {
     --overlay: 255, 255, 255;
-    --background: 240 20% 5%;          /* #0a0a0f near-black */
-    --foreground: 48 15% 94%;          /* #f2f1ec bone */
-    --card: 240 18% 9%;                /* #12121a plane */
+    --background: 240 20% 5%;
+    --foreground: 48 15% 94%;
+    --card: 240 18% 9%;
     --card-foreground: 48 15% 94%;
     --popover: 240 18% 9%;
     --popover-foreground: 48 15% 94%;
 
-    --primary: 45 89% 61%;             /* #f5c542 neon gold */
-    --primary-foreground: 43 65% 6%;   /* #1a1405 */
-    --secondary: 240 19% 11%;          /* #171722 */
+    --primary: 45 89% 61%;
+    --primary-foreground: 43 65% 6%;
+    --secondary: 240 19% 11%;
     --secondary-foreground: 48 15% 94%;
-    --accent: 192 85% 40%;             /* #0f9bbd cyan */
+    --accent: 192 85% 40%;
     --accent-foreground: 240 20% 5%;
-    /* gold that stays legible as TEXT in both themes (bright in dark) */
     --accent-dim: 45 89% 61%;
 
     --muted: 240 19% 11%;
-    --muted-foreground: 48 7% 66%;     /* ~#b0afa6, AA on near-black */
-    --destructive: 0 71% 65%;          /* #e66767 */
+    --muted-foreground: 48 7% 66%;
+    --destructive: 0 71% 65%;
     --destructive-foreground: 48 15% 94%;
-    --success: 120 87% 34%;            /* #0ca30c */
-    --warning: 45 89% 61%;             /* gold */
+    --success: 120 87% 34%;
+    --warning: 45 89% 61%;
 
-    /* Hairlines are overlay-driven at the component level (.08 / .14).
-       This opaque token approximates the base hairline for `border-border`. */
     --border: 240 12% 18%;
     --input: 240 12% 18%;
-    --ring: 45 89% 61%;                /* gold focus ring */
+    --ring: 45 89% 61%;
+
+    --glass-bg: rgba(255, 255, 255, 0.025);
+    --glass-sheen: rgba(255, 255, 255, 0.06);
+    --glass-border: rgba(255, 255, 255, 0.09);
+    --glass-border-strong: rgba(255, 255, 255, 0.14);
+    --glass-blur: 16px;
 
     --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.5);
     --shadow-md: 0 6px 20px -6px rgba(0, 0, 0, 0.6);
@@ -55,20 +90,19 @@
 
   .light {
     --overlay: 0, 0, 0;
-    --background: 48 14% 91%;          /* #ecebe4 bone */
-    --foreground: 240 12% 12%;         /* #1b1b22 ink */
-    --card: 48 20% 98%;                /* warm white plane */
+    --background: 48 14% 91%;
+    --foreground: 240 12% 12%;
+    --card: 48 20% 98%;
     --card-foreground: 240 12% 12%;
     --popover: 48 20% 99%;
     --popover-foreground: 240 12% 12%;
 
-    --primary: 45 89% 61%;             /* gold stays as fill/border/focus */
+    --primary: 45 89% 61%;
     --primary-foreground: 43 65% 6%;
     --secondary: 48 12% 86%;
     --secondary-foreground: 240 12% 12%;
     --accent: 192 85% 36%;
     --accent-foreground: 48 20% 98%;
-    /* darker gold (#c98500) so gold TEXT passes AA on the bone surface */
     --accent-dim: 40 100% 39%;
 
     --muted: 48 12% 87%;
@@ -82,9 +116,82 @@
     --input: 48 8% 82%;
     --ring: 40 100% 39%;
 
+    --glass-bg: rgba(255, 255, 255, 0.7);
+    --glass-sheen: rgba(255, 255, 255, 0.9);
+    --glass-border: rgba(0, 0, 0, 0.08);
+    --glass-border-strong: rgba(0, 0, 0, 0.12);
+    --glass-blur: 16px;
+
     --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.06);
     --shadow-md: 0 4px 14px -4px rgba(0, 0, 0, 0.12);
     --shadow-lg: 0 20px 50px -16px rgba(0, 0, 0, 0.18);
+  }
+
+  /* ══════════════════ Classic tokens (original look) ══════════════════ */
+  [data-skin="classic"].dark {
+    --overlay: 255, 255, 255;
+    --background: 240 28% 5%;
+    --foreground: 220 24% 97%;
+    --card: 236 24% 8%;
+    --card-foreground: 220 24% 97%;
+    --popover: 236 28% 7%;
+    --popover-foreground: 220 24% 97%;
+
+    --primary: 262 83% 63%;
+    --primary-foreground: 0 0% 100%;
+    --secondary: 235 20% 16%;
+    --secondary-foreground: 220 24% 97%;
+    --accent: 190 95% 50%;
+    --accent-foreground: 235 40% 8%;
+    --accent-dim: 262 83% 76%;
+
+    --muted: 235 18% 14%;
+    --muted-foreground: 230 13% 64%;
+    --destructive: 0 75% 61%;
+    --destructive-foreground: 0 0% 100%;
+    --success: 152 62% 47%;
+    --warning: 38 92% 55%;
+
+    --border: 235 16% 17%;
+    --input: 235 16% 17%;
+    --ring: 262 83% 63%;
+
+    --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.4);
+    --shadow-md: 0 6px 20px -6px rgba(0, 0, 0, 0.55);
+    --shadow-lg: 0 24px 60px -16px rgba(0, 0, 0, 0.65);
+  }
+
+  [data-skin="classic"].light {
+    --overlay: 0, 0, 0;
+    --background: 220 20% 97%;
+    --foreground: 235 25% 12%;
+    --card: 0 0% 100%;
+    --card-foreground: 235 25% 12%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 235 25% 12%;
+
+    --primary: 262 83% 58%;
+    --primary-foreground: 0 0% 100%;
+    --secondary: 230 18% 94%;
+    --secondary-foreground: 235 25% 12%;
+    --accent: 190 95% 42%;
+    --accent-foreground: 0 0% 100%;
+    --accent-dim: 262 83% 45%;
+
+    --muted: 230 16% 92%;
+    --muted-foreground: 230 10% 44%;
+    --destructive: 0 75% 55%;
+    --destructive-foreground: 0 0% 100%;
+    --success: 152 62% 40%;
+    --warning: 38 92% 48%;
+
+    --border: 230 14% 88%;
+    --input: 230 14% 88%;
+    --ring: 262 83% 58%;
+
+    --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.06);
+    --shadow-md: 0 4px 12px -4px rgba(0, 0, 0, 0.1);
+    --shadow-lg: 0 20px 50px -16px rgba(0, 0, 0, 0.15);
   }
 }
 
@@ -103,8 +210,6 @@
   --color-muted-foreground: hsl(var(--muted-foreground));
   --color-accent: hsl(var(--accent));
   --color-accent-foreground: hsl(var(--accent-foreground));
-  /* Gold text token — AA-safe per theme; use `text-gold` for gold lettering. */
-  --color-gold: hsl(var(--accent-dim));
   --color-destructive: hsl(var(--destructive));
   --color-destructive-foreground: hsl(var(--destructive-foreground));
   --color-success: hsl(var(--success));
@@ -137,10 +242,7 @@ body {
   background-attachment: fixed;
 }
 
-/* ── Command-deck grid horizon ───────────────────────────────────────────
-   A faint gold grid fading downward, plus a soft gold glow at the top edge.
-   The first (topmost) layer fades the grid into the background toward the
-   bottom of the viewport. */
+/* ── Atmosphere: PRISM-X gold grid horizon (default) ─────────────────── */
 .dark body {
   background-image:
     linear-gradient(180deg, transparent 30%, hsl(var(--background)) 88%),
@@ -159,7 +261,24 @@ body {
   background-size: 100% 100%, 100% 100%, 44px 44px, 44px 44px;
 }
 
-/* Visible, on-brand (gold) focus ring for keyboard users */
+/* ── Atmosphere: Classic ambient jewel gradients ─────────────────────── */
+[data-skin="classic"].dark body {
+  background-image:
+    radial-gradient(60rem 60rem at 12% -10%, hsl(262 83% 18% / 0.55), transparent 60%),
+    radial-gradient(50rem 50rem at 100% 0%, hsl(210 90% 20% / 0.4), transparent 55%),
+    radial-gradient(70rem 70rem at 50% 120%, hsl(190 90% 16% / 0.35), transparent 60%);
+  background-size: auto;
+}
+
+[data-skin="classic"].light body {
+  background-image:
+    radial-gradient(60rem 60rem at 12% -10%, hsl(262 83% 70% / 0.08), transparent 60%),
+    radial-gradient(50rem 50rem at 100% 0%, hsl(210 90% 70% / 0.06), transparent 55%),
+    radial-gradient(70rem 70rem at 50% 120%, hsl(190 90% 70% / 0.05), transparent 60%);
+  background-size: auto;
+}
+
+/* Focus ring — follows the active skin's ring token */
 :focus-visible {
   outline: 2px solid hsl(var(--ring));
   outline-offset: 2px;
@@ -169,16 +288,30 @@ body {
 /* Tabular numbers for data / timers */
 .tabular { font-variant-numeric: tabular-nums; }
 
-/* Mono uppercase console label — the PRISM-X signature tell. */
+/* Console label — mono+wide in PRISM-X, sans in Classic (via --label-font) */
 .deck-label {
-  font-family: var(--font-mono);
+  font-family: var(--label-font);
   text-transform: uppercase;
-  letter-spacing: 0.14em;
+  letter-spacing: var(--label-tracking);
   font-weight: 700;
 }
 
-/* Gold lettering that stays AA-legible in both themes. */
-.text-gold { color: hsl(var(--accent-dim)); }
+/* Accent lettering that stays AA-legible in every skin/theme combination. */
+.text-accent-strong { color: hsl(var(--accent-dim)); }
+
+/* Primary action surface — gold plate in PRISM-X, purple gradient in Classic. */
+.btn-primary {
+  background-image: var(--btn-primary-bg);
+  color: hsl(var(--primary-foreground));
+  font-weight: var(--btn-primary-weight);
+}
+.btn-primary:hover { box-shadow: var(--btn-primary-glow); }
+
+/* Hover edge for outline/secondary controls. */
+.hover-accent-edge:hover {
+  border-color: var(--accent-edge);
+  color: hsl(var(--accent-dim));
+}
 
 /* ── Scrollbars ──────────────────────────────────────────────────────── */
 ::-webkit-scrollbar { width: 5px; height: 5px; }
@@ -188,7 +321,7 @@ body {
 .scrollbar-none { scrollbar-width: none; }
 .scrollbar-none::-webkit-scrollbar { display: none; }
 
-/* ── Panel system (flat command planes; class names unchanged) ─────────── */
+/* ══════════════ Surface system — PRISM-X flat command planes ══════════ */
 .glass {
   position: relative;
   background: hsl(var(--card));
@@ -196,7 +329,6 @@ body {
   border-radius: var(--radius);
   box-shadow: var(--shadow-md);
 }
-/* Console-panel top hairline */
 .glass::before {
   content: "";
   position: absolute;
@@ -204,21 +336,21 @@ body {
   border-radius: inherit;
   border-top: 1px solid rgba(var(--overlay), 0.06);
   pointer-events: none;
+  background-image: none;
+  opacity: 1;
+  mix-blend-mode: normal;
 }
 @supports not (backdrop-filter: blur(1px)) {
   .glass, .glass-strong { background: hsl(var(--card)); }
 }
 
-/* Chrome: sidebar / topbar / drawer / modals / command palette */
 .glass-strong {
   background: hsl(var(--card));
   border: 1px solid rgba(var(--overlay), 0.14);
-  /* light blur only on sticky chrome, per PRISM-X */
   backdrop-filter: blur(8px);
   -webkit-backdrop-filter: blur(8px);
 }
 
-/* PRISM-X hover = gold edge + faint gold wash */
 .glass-hover { transition: background 160ms ease, border-color 160ms ease, box-shadow 160ms ease, transform 160ms ease; }
 .glass-hover:hover {
   background: rgba(245, 197, 66, 0.06);
@@ -231,7 +363,63 @@ body {
   box-shadow: 0 0 16px rgba(201, 133, 0, 0.14);
 }
 
-/* Gradient text + brand mark → gold */
+/* ══════════════ Surface system — Classic glassmorphism ════════════════ */
+[data-skin="classic"] .glass {
+  background:
+    linear-gradient(180deg, var(--glass-sheen), rgba(255, 255, 255, 0.01)),
+    var(--glass-bg);
+  border: 1px solid var(--glass-border);
+  backdrop-filter: blur(var(--glass-blur)) saturate(140%);
+  -webkit-backdrop-filter: blur(var(--glass-blur)) saturate(140%);
+  box-shadow: var(--shadow-md), inset 0 1px 0 rgba(255, 255, 255, 0.05);
+}
+/* Classic's signature noise texture */
+[data-skin="classic"] .glass::before {
+  border-top: 0;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.025'/%3E%3C/svg%3E");
+  background-size: 180px 180px;
+  opacity: 0.35;
+  mix-blend-mode: overlay;
+}
+@supports not (backdrop-filter: blur(1px)) {
+  [data-skin="classic"].dark .glass { background: hsl(236 24% 11%); }
+  [data-skin="classic"].light .glass { background: hsl(0 0% 98%); }
+}
+
+[data-skin="classic"] .glass-strong {
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.07), rgba(255, 255, 255, 0.02)),
+    rgba(12, 14, 24, 0.72);
+  border: 1px solid var(--glass-border-strong);
+  backdrop-filter: blur(22px) saturate(150%);
+  -webkit-backdrop-filter: blur(22px) saturate(150%);
+}
+[data-skin="classic"].light .glass-strong {
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.85), rgba(255, 255, 255, 0.7)),
+    rgba(245, 247, 250, 0.9);
+}
+[data-skin="classic"].light .glass {
+  box-shadow: var(--shadow-md), inset 0 1px 0 rgba(255, 255, 255, 0.5);
+}
+
+[data-skin="classic"] .glass-hover { transition: background 200ms ease, border-color 200ms ease, transform 200ms ease; }
+[data-skin="classic"] .glass-hover:hover {
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.09), rgba(255, 255, 255, 0.02)),
+    var(--glass-bg);
+  border-color: var(--glass-border-strong);
+  box-shadow: none;
+}
+[data-skin="classic"].light .glass-hover:hover {
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.95), rgba(255, 255, 255, 0.85)),
+    rgba(245, 247, 250, 0.95);
+  border-color: var(--glass-border-strong);
+  box-shadow: none;
+}
+
+/* ── Brand mark / gradient text ──────────────────────────────────────── */
 .text-gradient {
   background: linear-gradient(180deg, #f8d264, #f5c542);
   -webkit-background-clip: text;
@@ -246,12 +434,26 @@ body {
 }
 .brand-gradient { background-image: linear-gradient(180deg, #f8d264, #f5c542); }
 
-/* Glow effects (gold-forward) */
+[data-skin="classic"] .text-gradient,
+[data-skin="classic"].light .text-gradient {
+  background: linear-gradient(120deg, #a78bfa, #60a5fa 55%, #22d3ee);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+[data-skin="classic"] .brand-gradient {
+  background-image: linear-gradient(135deg, #7c3aed, #2563eb 55%, #06b6d4);
+}
+
+/* Glow effects */
 .glow-purple { box-shadow: 0 0 40px rgba(245, 197, 66, 0.22); }
 .glow-cyan   { box-shadow: 0 0 40px rgba(15, 155, 189, 0.2); }
 .glow-blue   { box-shadow: 0 0 40px rgba(144, 133, 233, 0.2); }
+[data-skin="classic"] .glow-purple { box-shadow: 0 0 40px rgba(124, 58, 237, 0.22); }
+[data-skin="classic"] .glow-cyan   { box-shadow: 0 0 40px rgba(6, 182, 212, 0.2); }
+[data-skin="classic"] .glow-blue   { box-shadow: 0 0 40px rgba(37, 99, 235, 0.2); }
 
-/* Ambient background blobs (gold/violet/cyan, dimmed) */
+/* Ambient background blobs */
 .bg-blob {
   position: fixed;
   border-radius: 9999px;
@@ -260,18 +462,22 @@ body {
   z-index: 0;
   opacity: 0.6;
 }
+.light .bg-blob { opacity: 0.25; }
+[data-skin="classic"] .bg-blob { opacity: 1; }
+[data-skin="classic"].light .bg-blob { opacity: 0.3; }
 
-.light .bg-blob {
-  opacity: 0.25;
-}
+/* Status chip */
+.chip-radius { border-radius: var(--chip-radius); }
 
-/* Status chip — mono, uppercase, 5px radius, tinted 1px border + ~8% fill */
+/* Glow behind small accent indicator dots (active nav, session pips). */
+.accent-dot-glow { box-shadow: 0 0 8px var(--accent-edge); }
+
 .status-chip {
-  font-family: var(--font-mono);
+  font-family: var(--label-font);
   text-transform: uppercase;
   letter-spacing: 0.1em;
   font-weight: 700;
-  border-radius: 5px;
+  border-radius: var(--chip-radius);
   border: 1px solid rgba(var(--overlay), 0.14);
   background: rgba(var(--overlay), 0.05);
 }
@@ -289,7 +495,7 @@ body {
   border: 0;
 }
 
-/* ── Motion (command-deck reads ~15% snappier) ─────────────────────────── */
+/* ── Motion ──────────────────────────────────────────────────────────── */
 @keyframes dropdown-in {
   from { opacity: 0; transform: scale(0.96) translateY(-4px); }
   to   { opacity: 1; transform: scale(1) translateY(0); }
@@ -299,6 +505,9 @@ body {
 }
 .dropdown-content[data-state="open"] {
   animation: dropdown-in 130ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+[data-skin="classic"] .dropdown-content[data-state="open"] {
+  animation-duration: 150ms;
 }
 
 /* Reduced motion */

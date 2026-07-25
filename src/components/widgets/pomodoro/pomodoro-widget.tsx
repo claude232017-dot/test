@@ -7,15 +7,23 @@ import { toast } from "sonner"
 import { usePomodoroStore } from "@/stores/usePomodoroStore"
 import { usePomodoroSessions } from "@/hooks/usePomodoroSessions"
 import { useDataStore } from "@/stores/useDataStore"
+import { useSkinAccents } from "@/lib/skin-palettes"
 import { cn } from "@/lib/utils"
 
 type Mode = "work" | "short" | "long"
 
-const MODES: { value: Mode; label: string; minutes: number; color: string; ring: string }[] = [
-  { value: "work", label: "Focus", minutes: 25, color: "text-gold", ring: "#f5c542" },
-  { value: "short", label: "Short Break", minutes: 5, color: "text-green-400", ring: "#0ca30c" },
-  { value: "long", label: "Long Break", minutes: 15, color: "text-cyan-400", ring: "#0f9bbd" },
-]
+type ModeDef = { value: Mode; label: string; minutes: number; color: string; ring: string }
+
+/** Ring colors are literal hex (SVG stroke + `${hex}60` glows) so they follow
+ *  the active skin rather than the token layer. */
+function useModes(): ModeDef[] {
+  const a = useSkinAccents()
+  return [
+    { value: "work", label: "Focus", minutes: 25, color: "text-accent-strong", ring: a.primary },
+    { value: "short", label: "Short Break", minutes: 5, color: "text-green-400", ring: a.success },
+    { value: "long", label: "Long Break", minutes: 15, color: "text-cyan-400", ring: a.accent },
+  ]
+}
 
 const R = 80
 const CIRCUMFERENCE = 2 * Math.PI * R
@@ -23,6 +31,7 @@ const CIRCUMFERENCE = 2 * Math.PI * R
 function pad(n: number) { return String(n).padStart(2, "0") }
 
 export function PomodoroWidget() {
+  const MODES = useModes()
   const store = usePomodoroStore()
   const { todayCount, logSession } = usePomodoroSessions()
   const todos = useDataStore(s => s.todos)
@@ -140,11 +149,11 @@ export function PomodoroWidget() {
         <div className="w-full relative" ref={pickerRef}>
           {store.linkedTodoId ? (
             <div className="flex items-center gap-2 px-3 py-2 rounded-lg bg-primary/10 border border-primary/20">
-              <Target className="w-3.5 h-3.5 text-gold shrink-0" />
-              <span className="text-xs text-gold truncate flex-1">{store.linkedTodoTitle}</span>
+              <Target className="w-3.5 h-3.5 text-accent-strong shrink-0" />
+              <span className="text-xs text-accent-strong truncate flex-1">{store.linkedTodoTitle}</span>
               <button
                 onClick={() => store.setLinkedTodo(null)}
-                className="p-1 -m-1 shrink-0 cursor-pointer text-primary/60 hover:text-gold transition-colors"
+                className="p-1 -m-1 shrink-0 cursor-pointer text-primary/60 hover:text-accent-strong transition-colors"
               >
                 <X className="w-3 h-3" />
               </button>
@@ -243,7 +252,7 @@ export function PomodoroWidget() {
             key={i}
             className={cn(
               "w-2 h-2 rounded-full transition-all duration-300",
-              i < (store.sessionCount % 4) ? "bg-primary shadow-[0_0_6px_rgba(245,197,66,0.8)]" : "bg-[rgba(var(--overlay),0.1)]"
+              i < (store.sessionCount % 4) ? "bg-primary accent-dot-glow" : "bg-[rgba(var(--overlay),0.1)]"
             )}
           />
         ))}

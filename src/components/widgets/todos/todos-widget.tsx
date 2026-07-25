@@ -81,7 +81,7 @@ export function TodosWidget() {
               {f.count > 0 && (
                 <span className={cn(
                   "text-[10px] min-w-[16px] h-4 px-1 rounded-full flex items-center justify-center font-semibold",
-                  filter === f.value ? "bg-primary/30 text-gold" : "bg-[rgba(var(--overlay),0.05)] text-muted-foreground"
+                  filter === f.value ? "bg-primary/30 text-accent-strong" : "bg-[rgba(var(--overlay),0.05)] text-muted-foreground"
                 )}>
                   {f.count}
                 </span>

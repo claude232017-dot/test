@@ -6,6 +6,7 @@ import { Trash2, Plus, Minus, Activity } from "lucide-react"
 import { useActivityLogs } from "@/hooks/useActivityLogs"
 import { useDashboardStore } from "@/stores/useDashboardStore"
 import { ACTIVITY_CATEGORIES } from "@/lib/activity-categories"
+import { useSkinAccents } from "@/lib/skin-palettes"
 import { cn } from "@/lib/utils"
 
 export { ACTIVITY_CATEGORIES }
@@ -41,6 +42,7 @@ function Stepper({ value, onChange, max }: { value: number; onChange: (v: number
 }
 
 export function ActivityWidget() {
+  const accents = useSkinAccents()
   const { selectedDate } = useDashboardStore()
   const { logs, loading, createLog, deleteLog, totalMinutes } = useActivityLogs(selectedDate)
   const [category, setCategory] = useState("Work")
@@ -69,7 +71,7 @@ export function ActivityWidget() {
       <div className="md:w-64 lg:w-80 shrink-0 flex flex-col gap-5 md:border-r md:border-[rgba(var(--overlay),0.05)] md:pr-5">
         {/* Category */}
         <div className="space-y-2.5">
-          <p className="text-[10px] font-mono uppercase tracking-widest font-medium text-muted-foreground/60">Category</p>
+          <p className="text-[10px] deck-label font-medium text-muted-foreground/60">Category</p>
           <div className="flex flex-wrap gap-1.5">
             {ACTIVITY_CATEGORIES.map(cat => (
               <button
@@ -90,7 +92,7 @@ export function ActivityWidget() {
 
         {/* Duration */}
         <div className="space-y-2.5">
-          <p className="text-[10px] font-mono uppercase tracking-widest font-medium text-muted-foreground/60">Duration</p>
+          <p className="text-[10px] deck-label font-medium text-muted-foreground/60">Duration</p>
           <div className="flex items-center gap-3">
             <div className="flex items-center gap-2">
               <Stepper value={hours} onChange={setHours} max={23} />
@@ -108,7 +110,7 @@ export function ActivityWidget() {
           onClick={handleAdd}
           disabled={hours * 60 + mins <= 0}
           className="w-full h-10 rounded-xl text-sm font-semibold text-primary-foreground transition-all cursor-pointer disabled:opacity-40 disabled:cursor-not-allowed"
-          style={{ backgroundColor: activeCat?.color ?? "#f5c542" }}
+          style={{ backgroundColor: activeCat?.color ?? accents.primary }}
         >
           Log {category}
         </button>

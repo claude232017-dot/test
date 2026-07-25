@@ -6,6 +6,7 @@ import { toast } from "sonner"
 import { ChevronDown, LogOut, Loader2, Download } from "lucide-react"
 import { createClient } from "@/lib/supabase/client"
 import { ExportDialog } from "./export-dialog"
+import { SkinSwitcher } from "./skin-switcher"
 import {
   DropdownMenu,
   DropdownMenuTrigger,
@@ -53,6 +54,8 @@ export function UserMenu({ name, email, initial }: UserMenuProps) {
             <p className="text-sm font-medium text-foreground truncate">{name}</p>
             <p className="text-xs text-muted-foreground truncate">{email}</p>
           </DropdownMenuLabel>
+          <DropdownMenuSeparator />
+          <SkinSwitcher />
           <DropdownMenuSeparator />
           <DropdownMenuItem onSelect={() => setExportOpen(true)}>
             <Download className="w-4 h-4" aria-hidden="true" />

@@ -119,7 +119,7 @@ export function MobileDrawer({ name, email, initial }: MobileDrawerProps) {
               <nav className="flex-1 space-y-5 overflow-y-auto scrollbar-none" aria-label="Main navigation">
                 {groups.map(group => (
                   <div key={group} className="space-y-0.5">
-                    <p className="px-3 mb-1.5 text-[10px] font-semibold font-mono uppercase tracking-[0.12em] text-muted-foreground/60">
+                    <p className="px-3 mb-1.5 text-[10px] font-semibold deck-label text-muted-foreground/60">
                       {GROUP_LABELS[group]}
                     </p>
                     {navItems.filter(i => i.group === group).map(({ href, label, icon: Icon }) => {
@@ -137,7 +137,7 @@ export function MobileDrawer({ name, email, initial }: MobileDrawerProps) {
                               : "text-muted-foreground hover:text-foreground hover:bg-[rgba(var(--overlay),0.05)] border border-transparent"
                           )}
                         >
-                          <Icon className={cn("w-[18px] h-[18px] shrink-0", active && "text-gold")} aria-hidden="true" />
+                          <Icon className={cn("w-[18px] h-[18px] shrink-0", active && "text-accent-strong")} aria-hidden="true" />
                           {label}
                           {isTodos && todoBadgeCount > 0 && (
                             <span
