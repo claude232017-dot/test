@@ -4,8 +4,8 @@ import { useState } from "react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { cn } from "@/lib/utils"
+import { useSkinPalette } from "@/lib/skin-palettes"
 
-const COLORS = ["#f5c542", "#0f9bbd", "#9085e9", "#0ca30c", "#e66767", "#c98500", "#37d67a", "#b9b8ae"]
 
 interface AddGoalFormProps {
   onCreate: (fields: {
@@ -20,6 +20,7 @@ interface AddGoalFormProps {
 }
 
 export function AddGoalForm({ onCreate, onCancel }: AddGoalFormProps) {
+  const COLORS = useSkinPalette()
   const [title, setTitle] = useState("")
   const [description, setDescription] = useState("")
   const [target, setTarget] = useState("")

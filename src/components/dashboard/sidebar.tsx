@@ -32,7 +32,7 @@ export function Sidebar() {
       <nav className="flex-1 space-y-5 overflow-y-auto scrollbar-none" aria-label="Main navigation">
         {groups.map(group => (
           <div key={group} className="space-y-0.5">
-            <p className="px-3 mb-1.5 text-[10px] font-semibold font-mono uppercase tracking-[0.12em] text-muted-foreground/60">
+            <p className="px-3 mb-1.5 text-[10px] font-semibold deck-label text-muted-foreground/60">
               {GROUP_LABELS[group]}
             </p>
             {navItems.filter(i => i.group === group).map(({ href, label, icon: Icon }) => {
@@ -56,7 +56,7 @@ export function Sidebar() {
                     />
                   )}
                   <Icon
-                    className={cn("w-[18px] h-[18px] shrink-0 relative z-10 transition-colors", active && "text-gold")}
+                    className={cn("w-[18px] h-[18px] shrink-0 relative z-10 transition-colors", active && "text-accent-strong")}
                     aria-hidden="true"
                   />
                   <span className="relative z-10">{label}</span>
@@ -74,13 +74,13 @@ export function Sidebar() {
                   {active && !isTodos && (
                     <motion.span
                       layoutId="sidebar-dot"
-                      className="ml-auto w-1.5 h-1.5 rounded-full bg-primary relative z-10 shadow-[0_0_8px_rgba(245,197,66,0.8)]"
+                      className="ml-auto w-1.5 h-1.5 rounded-full bg-primary relative z-10 accent-dot-glow"
                     />
                   )}
                   {active && isTodos && todoBadgeCount === 0 && (
                     <motion.span
                       layoutId="sidebar-dot"
-                      className="ml-auto w-1.5 h-1.5 rounded-full bg-primary relative z-10 shadow-[0_0_8px_rgba(245,197,66,0.8)]"
+                      className="ml-auto w-1.5 h-1.5 rounded-full bg-primary relative z-10 accent-dot-glow"
                     />
                   )}
                 </Link>

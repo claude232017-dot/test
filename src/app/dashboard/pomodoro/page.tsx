@@ -6,7 +6,7 @@ export default function PomodoroPage() {
     <div className="flex flex-col h-full gap-5">
       <div className="flex items-center gap-3">
         <div className="w-9 h-9 rounded-xl bg-primary/10 flex items-center justify-center shrink-0">
-          <Timer className="w-[18px] h-[18px] text-gold" />
+          <Timer className="w-[18px] h-[18px] text-accent-strong" />
         </div>
         <div>
           <h1 className="text-xl font-semibold text-foreground">Pomodoro</h1>

@@ -127,7 +127,7 @@ export function GoalCard({ goal, onIncrement, onUpdateProgress, onToggleComplete
           ) : (
             <button
               onClick={(e) => { e.stopPropagation(); setEditValue(String(goal.current_value)); setEditing(true) }}
-              className="font-semibold text-foreground tabular-nums hover:text-gold transition-colors cursor-pointer"
+              className="font-semibold text-foreground tabular-nums hover:text-accent-strong transition-colors cursor-pointer"
               title="Click to edit"
             >
               {goal.current_value}

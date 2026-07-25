@@ -25,7 +25,7 @@ function useCountUp(target: number, duration = 800) {
 }
 
 const ACCENTS: Record<string, { icon: string; glow: string }> = {
-  purple: { icon: "text-gold bg-primary/15", glow: "before:bg-primary/10" },
+  purple: { icon: "text-accent-strong bg-primary/15", glow: "before:bg-primary/10" },
   cyan: { icon: "text-cyan-400 bg-cyan-500/15", glow: "before:bg-cyan-500/10" },
   green: { icon: "text-green-400 bg-green-500/15", glow: "before:bg-green-500/10" },
   blue: { icon: "text-cyan-400 bg-cyan-500/15", glow: "before:bg-cyan-500/10" },

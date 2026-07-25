@@ -32,12 +32,12 @@ export function DayView({ currentDate, direction, events, onDelete }: DayViewPro
               ? "bg-primary/15 border-primary/30"
               : "bg-[rgba(var(--overlay),0.03)] border-[rgba(var(--overlay),0.08)]"
           )}>
-            <span className="text-[10px] font-mono uppercase tracking-wider text-muted-foreground font-semibold">
+            <span className="text-[10px] deck-label text-muted-foreground font-semibold">
               {format(currentDate, "EEE")}
             </span>
             <span className={cn(
               "text-xl font-bold tabular-nums",
-              isToday(currentDate) ? "text-gold" : "text-foreground"
+              isToday(currentDate) ? "text-accent-strong" : "text-foreground"
             )}>
               {format(currentDate, "d")}
             </span>

@@ -4,8 +4,13 @@ import { Toaster } from "sonner"
 import { Analytics } from "@vercel/analytics/next"
 import { SpeedInsights } from "@vercel/speed-insights/next"
 import { ThemeProvider } from "@/components/providers/theme-provider"
+import { SkinProvider } from "@/components/providers/skin-provider"
 import { ServiceWorkerRegister } from "@/components/providers/sw-register"
 import "./globals.css"
+
+// Runs before first paint so the stored skin is on <html> already — without it
+// the app would flash the default skin before hydration.
+const SKIN_NO_FLASH = `(function(){try{var s=localStorage.getItem("dayflow-skin");document.documentElement.setAttribute("data-skin",s==="classic"?"classic":"prism")}catch(e){document.documentElement.setAttribute("data-skin","prism")}})();`
 
 const jakarta = Plus_Jakarta_Sans({
   subsets: ["latin"],
@@ -40,20 +45,25 @@ export const viewport: Viewport = {
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en" className={`${jakarta.variable} h-full antialiased`} suppressHydrationWarning>
+      <head>
+        <script dangerouslySetInnerHTML={{ __html: SKIN_NO_FLASH }} />
+      </head>
       <body className="h-full relative">
         <ThemeProvider>
-          <div aria-hidden="true" className="pointer-events-none fixed inset-0 overflow-hidden">
-            <div className="bg-blob w-96 h-96 bg-primary/8 -top-32 -left-32" />
-            <div className="bg-blob w-80 h-80 bg-violet-600/6 top-1/2 -right-20" />
-            <div className="bg-blob w-64 h-64 bg-cyan-600/5 bottom-0 left-1/3" />
-          </div>
-          {children}
-          <Toaster
-            position="bottom-right"
-            toastOptions={{
-              className: "!bg-card !text-card-foreground !border-border",
-            }}
-          />
+          <SkinProvider>
+            <div aria-hidden="true" className="pointer-events-none fixed inset-0 overflow-hidden">
+              <div className="bg-blob w-96 h-96 bg-primary/8 -top-32 -left-32" />
+              <div className="bg-blob w-80 h-80 bg-violet-600/6 top-1/2 -right-20" />
+              <div className="bg-blob w-64 h-64 bg-cyan-600/5 bottom-0 left-1/3" />
+            </div>
+            {children}
+            <Toaster
+              position="bottom-right"
+              toastOptions={{
+                className: "!bg-card !text-card-foreground !border-border",
+              }}
+            />
+          </SkinProvider>
         </ThemeProvider>
         <ServiceWorkerRegister />
         <Analytics />

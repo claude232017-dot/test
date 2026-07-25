@@ -59,7 +59,7 @@ export function MonthView({ currentDate, selectedDate, direction, onSelectDate, 
               >
                 <span className={cn(
                   "text-xs w-6 h-6 flex items-center justify-center rounded-full font-medium",
-                  _isToday ? "bg-primary text-primary-foreground" : isSelected ? "text-gold" : "text-foreground"
+                  _isToday ? "bg-primary text-primary-foreground" : isSelected ? "text-accent-strong" : "text-foreground"
                 )}>
                   {format(day, "d")}
                 </span>

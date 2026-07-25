@@ -88,12 +88,12 @@ export function TodoItem({ todo, onToggle, onDelete, onFocus, focusMinutes }: To
       )}
 
       {isOverdue && (
-        <span className="text-[10px] shrink-0 px-1.5 py-0.5 rounded-md font-semibold font-mono uppercase tracking-wide text-red-400 bg-red-500/15 border border-red-500/30">
+        <span className="text-[10px] shrink-0 px-1.5 py-0.5 rounded-md font-semibold deck-label text-red-400 bg-red-500/15 border border-red-500/30">
           Overdue
         </span>
       )}
       {isDueToday && (
-        <span className="text-[10px] shrink-0 px-1.5 py-0.5 rounded-md font-semibold font-mono uppercase tracking-wide text-amber-400 bg-amber-500/15 border border-amber-500/30">
+        <span className="text-[10px] shrink-0 px-1.5 py-0.5 rounded-md font-semibold deck-label text-amber-400 bg-amber-500/15 border border-amber-500/30">
           Today
         </span>
       )}
@@ -119,7 +119,7 @@ export function TodoItem({ todo, onToggle, onDelete, onFocus, focusMinutes }: To
       {!todo.completed && onFocus && (
         <button
           onClick={() => onFocus(todo)}
-          className="opacity-50 group-hover:opacity-100 md:opacity-0 md:group-hover:opacity-100 text-muted-foreground hover:text-gold transition-all cursor-pointer p-2 -m-2 shrink-0"
+          className="opacity-50 group-hover:opacity-100 md:opacity-0 md:group-hover:opacity-100 text-muted-foreground hover:text-accent-strong transition-all cursor-pointer p-2 -m-2 shrink-0"
           aria-label="Focus on this task"
         >
           <Timer className="w-3.5 h-3.5" />
