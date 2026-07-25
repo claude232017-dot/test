@@ -1,16 +1,16 @@
 "use client"
 
 import { Check, Palette } from "lucide-react"
-import { useSkinStore, SKIN_META, type Skin } from "@/stores/useSkinStore"
+import { useSkinStore, SKIN_META, SKINS, type Skin } from "@/stores/useSkinStore"
 import { DropdownMenuItem, DropdownMenuLabel } from "@/components/ui/dropdown-menu"
 import { cn } from "@/lib/utils"
 
-const SKINS: Skin[] = ["prism", "classic"]
-
 /** Swatch previewing each skin's ground + accent, drawn in that skin's own
- *  colors (they must render regardless of which skin is currently active). */
-const SWATCH: Record<Skin, { bg: string; accent: string }> = {
+ *  colors (they must render regardless of which skin is currently active).
+ *  Studio shares PRISM-X's palette, so its swatch shows the framing instead. */
+const SWATCH: Record<Skin, { bg: string; accent: string; framed?: boolean }> = {
   prism: { bg: "#0a0a0f", accent: "#f5c542" },
+  studio: { bg: "#0a0a0f", accent: "#f5c542", framed: true },
   classic: { bg: "#12101f", accent: "#8b5cf6" },
 }
 
@@ -39,11 +39,15 @@ export function SkinSwitcher() {
           >
             <span
               aria-hidden="true"
-              className="w-5 h-5 rounded-md shrink-0 grid place-items-center border border-[rgba(var(--overlay),0.15)]"
+              className={cn(
+                "w-5 h-5 rounded-md shrink-0 grid place-items-center border border-[rgba(var(--overlay),0.15)]",
+                // Studio's tell is its mounted-specimen inner frame
+                SWATCH[value].framed && "ring-1 ring-inset ring-[rgba(255,255,255,0.18)]"
+              )}
               style={{ backgroundColor: SWATCH[value].bg }}
             >
               <span
-                className="w-2 h-2 rounded-full"
+                className={cn("rounded-full", SWATCH[value].framed ? "w-1.5 h-1.5" : "w-2 h-2")}
                 style={{ backgroundColor: SWATCH[value].accent }}
               />
             </span>

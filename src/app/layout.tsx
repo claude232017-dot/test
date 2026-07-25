@@ -10,7 +10,7 @@ import "./globals.css"
 
 // Runs before first paint so the stored skin is on <html> already — without it
 // the app would flash the default skin before hydration.
-const SKIN_NO_FLASH = `(function(){try{var s=localStorage.getItem("dayflow-skin");document.documentElement.setAttribute("data-skin",s==="classic"?"classic":"prism")}catch(e){document.documentElement.setAttribute("data-skin","prism")}})();`
+const SKIN_NO_FLASH = `(function(){try{var s=localStorage.getItem("dayflow-skin");var v=(s==="classic"||s==="studio"||s==="prism")?s:"prism";document.documentElement.setAttribute("data-skin",v)}catch(e){document.documentElement.setAttribute("data-skin","prism")}})();`
 
 const jakarta = Plus_Jakarta_Sans({
   subsets: ["latin"],

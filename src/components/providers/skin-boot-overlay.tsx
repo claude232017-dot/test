@@ -20,6 +20,15 @@ const BOOT_THEME: Record<Skin, {
     label: "Initializing command deck",
     mono: true,
   },
+  studio: {
+    bg: "#0a0a0f",
+    fg: "#f2f1ec",
+    dim: "#b0afa6",
+    accent: "#f5c542",
+    bar: "linear-gradient(90deg, #f8d264, #f5c542)",
+    label: "Mounting spec sheet",
+    mono: true,
+  },
   classic: {
     bg: "#0b0a14",
     fg: "#f5f6fb",
@@ -55,7 +64,7 @@ export function SkinBootOverlay() {
           aria-live="polite"
         >
           {/* PRISM-X gets its signature grid horizon behind the boot text */}
-          {target === "prism" && (
+          {target !== "classic" && (
             <div
               aria-hidden="true"
               className="absolute inset-0 pointer-events-none"
@@ -77,23 +86,23 @@ export function SkinBootOverlay() {
             transition={{ duration: 0.25, ease: "easeOut" }}
             className="relative w-12 h-12 flex items-center justify-center shrink-0"
             style={{
-              borderRadius: target === "prism" ? 10 : 14,
+              borderRadius: target === "classic" ? 14 : target === "studio" ? 12 : 10,
               backgroundImage: t.bar,
               boxShadow: `0 0 26px ${t.accent}55`,
             }}
           >
             <svg width="24" height="24" viewBox="0 0 512 512" fill="none" aria-hidden="true">
-              <g fill={target === "prism" ? "#1a1405" : "#ffffff"}>
+              <g fill={target === "classic" ? "#ffffff" : "#1a1405"}>
                 <rect x="150" y="296" width="44" height="86" rx="10" opacity="0.5" />
                 <rect x="234" y="244" width="44" height="138" rx="10" opacity="0.75" />
                 <rect x="318" y="170" width="44" height="212" rx="10" />
               </g>
               <path
                 d="M156 286 L256 234 L356 160"
-                stroke={target === "prism" ? "#1a1405" : "#ffffff"}
+                stroke={target === "classic" ? "#ffffff" : "#1a1405"}
                 strokeWidth="22" strokeLinecap="round" strokeLinejoin="round" fill="none"
               />
-              <circle cx="356" cy="160" r="20" fill={target === "prism" ? "#1a1405" : "#ffffff"} />
+              <circle cx="356" cy="160" r="20" fill={target === "classic" ? "#ffffff" : "#1a1405"} />
             </svg>
           </motion.div>
 
