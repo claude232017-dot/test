@@ -1,13 +1,20 @@
 import { create } from "zustand"
 
-export type Skin = "prism" | "classic"
+export type Skin = "prism" | "studio" | "classic"
 
 export const SKIN_STORAGE_KEY = "dayflow-skin"
 export const DEFAULT_SKIN: Skin = "prism"
 
+export const SKINS: Skin[] = ["prism", "studio", "classic"]
+
 export const SKIN_META: Record<Skin, { label: string; tagline: string }> = {
   prism: { label: "PRISM-X", tagline: "Command deck" },
+  studio: { label: "Studio", tagline: "Spec sheet" },
   classic: { label: "Classic", tagline: "Original glass" },
+}
+
+export function isSkin(value: unknown): value is Skin {
+  return value === "prism" || value === "studio" || value === "classic"
 }
 
 /** Total boot-sequence duration; the skin swaps at the midpoint, behind the overlay. */
@@ -45,7 +52,7 @@ export const useSkinStore = create<SkinState>((set, get) => ({
   hydrate: () => {
     if (typeof document === "undefined") return
     const attr = document.documentElement.getAttribute("data-skin")
-    set({ skin: attr === "classic" ? "classic" : "prism" })
+    set({ skin: isSkin(attr) ? attr : DEFAULT_SKIN })
   },
 
   setSkin: (skin) => {

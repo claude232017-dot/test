@@ -188,16 +188,20 @@ the auth split-screen panel that sits permanently on the brand gradient, where
 
 ### 4.4 Skins (`data-skin` on `<html>`)
 
-On top of dark/light, DayFlow ships **two skins**, switched independently:
+On top of dark/light, DayFlow ships **three skins**, switched independently:
 
 | Skin | `data-skin` | Look |
 |------|-------------|------|
 | **PRISM-X** | `"prism"` (default — applies with no attribute) | Command deck: near-black planes, neon-gold accent, flat 1px-hairline panels, mono UPPERCASE labels, 10px radius. |
+| **Studio** | `"studio"` | Spec sheet: **PRISM-X's palette**, but a mounted-specimen treatment — panels gain a second hairline inset 4px from the edge, labels track wider (`0.2em`), numerals go tabular globally, headings tighten to `-0.02em`, chips sharpen to 4px, and the grid horizon sits more present. |
 | **Classic** | `"classic"` | The original: purple→cyan brand gradient, frosted glassmorphism with noise, sans labels, 13.6px radius. |
 
-Skin × theme are orthogonal → **four valid combinations**, all defined in
+Skin × theme are orthogonal → **six valid combinations**, all defined in
 `globals.css`:
 - `.dark` / `.light` carry the PRISM-X tokens (no attribute needed).
+- `[data-skin="studio"]` overrides *only* shape/typography — it deliberately
+  redefines **no color token**, so it inherits the PRISM-X palette for free.
+  Its identity lives entirely in framing and type.
 - `[data-skin="classic"].dark` / `.light` override them with the Classic tokens.
 - Every skin-specific *utility* follows the same pattern: PRISM-X is the bare
   rule, Classic is a `[data-skin="classic"] .foo` override (panels, hovers,
