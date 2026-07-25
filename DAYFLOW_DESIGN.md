@@ -192,7 +192,7 @@ On top of dark/light, DayFlow ships **three skins**, switched independently:
 
 | Skin | `data-skin` | Look |
 |------|-------------|------|
-| **PRISM-X** | `"prism"` (default — applies with no attribute) | Command deck: near-black planes, neon-gold accent, flat 1px-hairline panels, mono UPPERCASE labels, 10px radius. |
+| **PRISM-X** | `"prism"` — **hidden from the UI** | Command deck: near-black planes, neon-gold accent, flat 1px-hairline panels, mono UPPERCASE labels, 10px radius. Still fully renderable (it is the no-attribute default the others build on), but withheld from the switcher because Studio is the refined version of the same palette. Re-add it to `SELECTABLE_SKINS` in `useSkinStore.ts` to bring it back — nothing else changes. |
 | **Studio** | `"studio"` | Spec sheet: **PRISM-X's palette**, but a mounted-specimen treatment — panels gain a second hairline inset 4px from the edge, labels track wider (`0.2em`), numerals go tabular globally, headings tighten to `-0.02em`, chips sharpen to 4px, and the grid horizon sits more present. |
 | **Classic** | `"classic"` | The original: purple→cyan brand gradient, frosted glassmorphism with noise, sans labels, 13.6px radius. |
 

@@ -3,18 +3,30 @@ import { create } from "zustand"
 export type Skin = "prism" | "studio" | "classic"
 
 export const SKIN_STORAGE_KEY = "dayflow-skin"
-export const DEFAULT_SKIN: Skin = "prism"
+export const DEFAULT_SKIN: Skin = "studio"
 
+/** Every skin the token layer can render. */
 export const SKINS: Skin[] = ["prism", "studio", "classic"]
+
+/**
+ * Skins offered in the UI. "prism" is intentionally withheld — Studio is the
+ * refined version of the same palette, so the bare command deck is hidden
+ * rather than deleted. Re-add it here to bring it back; nothing else changes.
+ */
+export const SELECTABLE_SKINS: Skin[] = ["studio", "classic"]
+
+/** Map a stored/legacy value onto a skin the UI can actually offer. */
+export function normalizeSkin(value: unknown): Skin {
+  if (value === "classic") return "classic"
+  // "prism" is hidden — anyone still on it lands on its refined successor.
+  if (value === "studio" || value === "prism") return "studio"
+  return DEFAULT_SKIN
+}
 
 export const SKIN_META: Record<Skin, { label: string; tagline: string }> = {
   prism: { label: "PRISM-X", tagline: "Command deck" },
   studio: { label: "Studio", tagline: "Spec sheet" },
   classic: { label: "Classic", tagline: "Original glass" },
-}
-
-export function isSkin(value: unknown): value is Skin {
-  return value === "prism" || value === "studio" || value === "classic"
 }
 
 /** Total boot-sequence duration; the skin swaps at the midpoint, behind the overlay. */
@@ -48,11 +60,19 @@ export const useSkinStore = create<SkinState>((set, get) => ({
   booting: false,
   bootTarget: DEFAULT_SKIN,
 
-  // Sync React state with whatever the inline script already put on <html>.
+  // Sync React state with whatever the inline script already put on <html>,
+  // migrating anyone still stored on a hidden skin.
   hydrate: () => {
     if (typeof document === "undefined") return
     const attr = document.documentElement.getAttribute("data-skin")
-    set({ skin: isSkin(attr) ? attr : DEFAULT_SKIN })
+    const skin = normalizeSkin(attr)
+    set({ skin })
+    if (attr !== skin) applySkin(skin)
+    else {
+      try {
+        if (localStorage.getItem(SKIN_STORAGE_KEY) !== skin) applySkin(skin)
+      } catch { /* private mode */ }
+    }
   },
 
   setSkin: (skin) => {
