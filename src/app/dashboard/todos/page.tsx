@@ -5,8 +5,8 @@ export default function TodosPage() {
   return (
     <div className="flex flex-col h-full gap-5">
       <div className="flex items-center gap-3">
-        <div className="w-9 h-9 rounded-xl bg-blue-500/10 flex items-center justify-center shrink-0">
-          <CheckSquare className="w-[18px] h-[18px] text-blue-400" />
+        <div className="w-9 h-9 rounded-xl bg-cyan-500/10 flex items-center justify-center shrink-0">
+          <CheckSquare className="w-[18px] h-[18px] text-cyan-400" />
         </div>
         <div>
           <h1 className="text-xl font-semibold text-foreground">Todos</h1>

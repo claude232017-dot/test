@@ -113,8 +113,8 @@ export function InstallPrompt() {
           aria-label="Install DayFlow"
         >
           <div className="flex items-start gap-3">
-            <div className="w-10 h-10 rounded-xl brand-gradient flex items-center justify-center shrink-0 shadow-lg shadow-purple-900/30">
-              <Download className="w-5 h-5 text-white" aria-hidden="true" />
+            <div className="w-10 h-10 rounded-xl brand-gradient flex items-center justify-center shrink-0 shadow-lg shadow-black/30">
+              <Download className="w-5 h-5 text-primary-foreground" aria-hidden="true" />
             </div>
 
             <div className="flex-1 min-w-0">

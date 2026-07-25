@@ -62,7 +62,7 @@ export function HabitItem({ habit, today, onToggle, onDelete }: HabitItemProps) 
           className={cn(
             "w-11 h-11 sm:w-8 sm:h-8 rounded-full border-2 flex items-center justify-center shrink-0 transition-all duration-200 cursor-pointer",
             isDoneToday
-              ? "border-transparent text-white shadow-lg"
+              ? "border-transparent text-primary-foreground shadow-lg"
               : "border-[rgba(var(--overlay),0.2)] hover:border-current text-transparent"
           )}
           style={

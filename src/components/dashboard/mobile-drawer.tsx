@@ -98,8 +98,8 @@ export function MobileDrawer({ name, email, initial }: MobileDrawerProps) {
               {/* Header */}
               <div className="flex items-center justify-between px-2 mb-6">
                 <div className="flex items-center gap-3">
-                  <div className="w-9 h-9 rounded-xl brand-gradient flex items-center justify-center shrink-0 shadow-lg shadow-purple-900/30">
-                    <LayoutDashboard className="w-[18px] h-[18px] text-white" aria-hidden="true" />
+                  <div className="w-9 h-9 rounded-xl brand-gradient flex items-center justify-center shrink-0 shadow-lg shadow-black/30">
+                    <LayoutDashboard className="w-[18px] h-[18px] text-primary-foreground" aria-hidden="true" />
                   </div>
                   <div className="leading-tight">
                     <span className="font-semibold text-foreground tracking-tight">DayFlow</span>
@@ -119,7 +119,7 @@ export function MobileDrawer({ name, email, initial }: MobileDrawerProps) {
               <nav className="flex-1 space-y-5 overflow-y-auto scrollbar-none" aria-label="Main navigation">
                 {groups.map(group => (
                   <div key={group} className="space-y-0.5">
-                    <p className="px-3 mb-1.5 text-[10px] font-semibold uppercase tracking-[0.12em] text-muted-foreground/60">
+                    <p className="px-3 mb-1.5 text-[10px] font-semibold font-mono uppercase tracking-[0.12em] text-muted-foreground/60">
                       {GROUP_LABELS[group]}
                     </p>
                     {navItems.filter(i => i.group === group).map(({ href, label, icon: Icon }) => {
@@ -137,19 +137,19 @@ export function MobileDrawer({ name, email, initial }: MobileDrawerProps) {
                               : "text-muted-foreground hover:text-foreground hover:bg-[rgba(var(--overlay),0.05)] border border-transparent"
                           )}
                         >
-                          <Icon className={cn("w-[18px] h-[18px] shrink-0", active && "text-purple-400")} aria-hidden="true" />
+                          <Icon className={cn("w-[18px] h-[18px] shrink-0", active && "text-gold")} aria-hidden="true" />
                           {label}
                           {isTodos && todoBadgeCount > 0 && (
                             <span
                               className={cn(
-                                "ml-auto min-w-[18px] h-[18px] flex items-center justify-center rounded-full px-1 text-[10px] font-semibold leading-none text-white",
+                                "ml-auto min-w-[18px] h-[18px] flex items-center justify-center rounded-full px-1 text-[10px] font-semibold leading-none text-primary-foreground",
                                 overdue > 0 ? "bg-red-500" : "bg-amber-500"
                               )}
                             >
                               {todoBadgeCount}
                             </span>
                           )}
-                          {active && !(isTodos && todoBadgeCount > 0) && <span className="ml-auto w-1.5 h-1.5 rounded-full bg-purple-400" aria-hidden="true" />}
+                          {active && !(isTodos && todoBadgeCount > 0) && <span className="ml-auto w-1.5 h-1.5 rounded-full bg-primary" aria-hidden="true" />}
                         </Link>
                       )
                     })}
@@ -165,7 +165,7 @@ export function MobileDrawer({ name, email, initial }: MobileDrawerProps) {
               {/* User footer */}
               <div className="mt-4 pt-4 border-t border-border/40">
                 <div className="flex items-center gap-3 px-2 mb-2">
-                  <span className="w-9 h-9 rounded-full brand-gradient flex items-center justify-center text-xs font-semibold text-white shrink-0">
+                  <span className="w-9 h-9 rounded-full brand-gradient flex items-center justify-center text-xs font-semibold text-primary-foreground shrink-0">
                     {initial}
                   </span>
                   <div className="min-w-0">

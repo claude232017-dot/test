@@ -54,12 +54,12 @@ export function MonthView({ currentDate, selectedDate, direction, onSelectDate, 
                 onClick={() => onSelectDate(day)}
                 className={cn(
                   "relative flex flex-col items-center p-1 rounded-lg transition-all cursor-pointer min-h-[44px] group",
-                  isSelected ? "bg-purple-500/20 border border-purple-500/30" : "hover:bg-[rgba(var(--overlay),0.05)] border border-transparent"
+                  isSelected ? "bg-primary/20 border border-primary/30" : "hover:bg-[rgba(var(--overlay),0.05)] border border-transparent"
                 )}
               >
                 <span className={cn(
                   "text-xs w-6 h-6 flex items-center justify-center rounded-full font-medium",
-                  _isToday ? "bg-purple-500 text-white" : isSelected ? "text-purple-300" : "text-foreground"
+                  _isToday ? "bg-primary text-primary-foreground" : isSelected ? "text-gold" : "text-foreground"
                 )}>
                   {format(day, "d")}
                 </span>

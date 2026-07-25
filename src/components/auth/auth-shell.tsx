@@ -22,7 +22,7 @@ export function AuthShell({
         <div className="absolute inset-0 bg-black/20" aria-hidden="true" />
         <div
           aria-hidden="true"
-          className="absolute -top-24 -right-24 w-96 h-96 rounded-full bg-white/10 blur-3xl"
+          className="absolute -top-24 -right-24 w-96 h-96 rounded-full bg-black/10 blur-3xl"
         />
         <div
           aria-hidden="true"
@@ -30,37 +30,37 @@ export function AuthShell({
         />
 
         <div className="relative flex items-center gap-3">
-          <div className="w-11 h-11 rounded-2xl bg-white/15 backdrop-blur flex items-center justify-center">
-            <LayoutDashboard className="w-6 h-6 text-white" aria-hidden="true" />
+          <div className="w-11 h-11 rounded-2xl bg-black/15 backdrop-blur flex items-center justify-center">
+            <LayoutDashboard className="w-6 h-6 text-primary-foreground" aria-hidden="true" />
           </div>
-          <span className="text-xl font-semibold text-white tracking-tight">DayFlow</span>
+          <span className="text-xl font-semibold text-primary-foreground tracking-tight">DayFlow</span>
         </div>
 
         <div className="relative space-y-8">
           <div>
-            <h2 className="text-3xl font-semibold text-white leading-tight">
+            <h2 className="text-3xl font-semibold text-primary-foreground leading-tight">
               Your personal<br />productivity OS.
             </h2>
-            <p className="text-white/70 mt-3 max-w-sm">
+            <p className="text-primary-foreground/70 mt-3 max-w-sm">
               One dashboard for your notes, tasks, habits, focus and insights — designed to keep you in flow.
             </p>
           </div>
           <ul className="space-y-4">
             {FEATURES.map(({ icon: Icon, title, desc }) => (
               <li key={title} className="flex items-start gap-3">
-                <div className="w-9 h-9 rounded-xl bg-white/15 backdrop-blur flex items-center justify-center shrink-0">
-                  <Icon className="w-[18px] h-[18px] text-white" aria-hidden="true" />
+                <div className="w-9 h-9 rounded-xl bg-black/15 backdrop-blur flex items-center justify-center shrink-0">
+                  <Icon className="w-[18px] h-[18px] text-primary-foreground" aria-hidden="true" />
                 </div>
                 <div>
-                  <p className="text-sm font-medium text-white">{title}</p>
-                  <p className="text-sm text-white/65">{desc}</p>
+                  <p className="text-sm font-medium text-primary-foreground">{title}</p>
+                  <p className="text-sm text-primary-foreground/65">{desc}</p>
                 </div>
               </li>
             ))}
           </ul>
         </div>
 
-        <p className="relative text-xs text-white/50">© {new Date().getFullYear()} DayFlow. Built for focus.</p>
+        <p className="relative text-xs text-primary-foreground/50">© {new Date().getFullYear()} DayFlow. Built for focus.</p>
       </aside>
 
       {/* Form panel */}
@@ -69,7 +69,7 @@ export function AuthShell({
           aria-hidden="true"
           className="lg:hidden fixed inset-0 overflow-hidden pointer-events-none"
         >
-          <div className="absolute -top-40 -left-40 w-96 h-96 bg-purple-600/15 rounded-full blur-3xl" />
+          <div className="absolute -top-40 -left-40 w-96 h-96 bg-primary/15 rounded-full blur-3xl" />
           <div className="absolute -bottom-40 -right-40 w-96 h-96 bg-cyan-600/15 rounded-full blur-3xl" />
         </div>
 
@@ -77,7 +77,7 @@ export function AuthShell({
           {/* Mobile brand mark */}
           <div className="lg:hidden flex items-center gap-2.5 mb-8 justify-center">
             <div className="w-9 h-9 rounded-xl brand-gradient flex items-center justify-center">
-              <LayoutDashboard className="w-5 h-5 text-white" aria-hidden="true" />
+              <LayoutDashboard className="w-5 h-5 text-primary-foreground" aria-hidden="true" />
             </div>
             <span className="text-lg font-semibold text-foreground tracking-tight">DayFlow</span>
           </div>

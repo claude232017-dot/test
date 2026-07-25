@@ -28,7 +28,7 @@ export const metadata: Metadata = {
 }
 
 export const viewport: Viewport = {
-  themeColor: "#7c3aed",
+  themeColor: "#0a0a0f",
   width: "device-width",
   initialScale: 1,
   // Required for env(safe-area-inset-*) to report real values on notched
@@ -43,8 +43,8 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       <body className="h-full relative">
         <ThemeProvider>
           <div aria-hidden="true" className="pointer-events-none fixed inset-0 overflow-hidden">
-            <div className="bg-blob w-96 h-96 bg-purple-600/8 -top-32 -left-32" />
-            <div className="bg-blob w-80 h-80 bg-blue-600/6 top-1/2 -right-20" />
+            <div className="bg-blob w-96 h-96 bg-primary/8 -top-32 -left-32" />
+            <div className="bg-blob w-80 h-80 bg-violet-600/6 top-1/2 -right-20" />
             <div className="bg-blob w-64 h-64 bg-cyan-600/5 bottom-0 left-1/3" />
           </div>
           {children}

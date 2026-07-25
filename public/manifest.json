@@ -4,8 +4,8 @@
   "description": "Your personal productivity dashboard — notes, todos, habits, calendar, pomodoro, and analytics.",
   "start_url": "/dashboard",
   "display": "standalone",
-  "background_color": "#080c18",
-  "theme_color": "#7c3aed",
+  "background_color": "#0a0a0f",
+  "theme_color": "#0a0a0f",
   "orientation": "portrait-primary",
   "icons": [
     {

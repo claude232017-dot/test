@@ -3,18 +3,19 @@ import { cva, type VariantProps } from "class-variance-authority"
 import { cn } from "@/lib/utils"
 
 const badgeVariants = cva(
-  "inline-flex items-center rounded-full border px-2.5 py-0.5 text-xs font-semibold transition-colors",
+  // PRISM-X status chip: mono, uppercase, 5px radius, 1px tinted border + ~8% fill
+  "inline-flex items-center rounded-[5px] border px-2 py-0.5 text-[10px] font-mono font-bold font-mono uppercase tracking-wider transition-colors",
   {
     variants: {
       variant: {
-        default: "border-transparent bg-[#7c3aed]/20 text-purple-300",
-        secondary: "border-transparent bg-secondary text-secondary-foreground",
-        destructive: "border-transparent bg-red-500/20 text-red-300",
+        default: "border-primary/30 bg-primary/10 text-gold",
+        secondary: "border-[rgba(var(--overlay),0.14)] bg-secondary text-secondary-foreground",
+        destructive: "border-red-500/30 bg-red-500/10 text-red-400",
         outline: "border-[rgba(var(--overlay),0.2)] text-foreground",
-        high: "border-transparent bg-red-500/20 text-red-300",
-        medium: "border-transparent bg-yellow-500/20 text-yellow-300",
-        low: "border-transparent bg-green-500/20 text-green-300",
-        cyan: "border-transparent bg-cyan-500/20 text-cyan-300",
+        high: "border-red-500/30 bg-red-500/10 text-red-400",
+        medium: "border-primary/30 bg-primary/10 text-gold",
+        low: "border-green-500/30 bg-green-500/10 text-green-400",
+        cyan: "border-cyan-500/30 bg-cyan-500/10 text-cyan-400",
       },
     },
     defaultVariants: {

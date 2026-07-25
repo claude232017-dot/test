@@ -51,7 +51,7 @@ export function useCalendarEvents(currentDate: Date) {
     if (!userId) { toast.error("You must be signed in to create an event"); return }
     const { data, error } = await supabase
       .from("calendar_events")
-      .insert({ ...fields, color: fields.color ?? "#7c3aed", user_id: userId })
+      .insert({ ...fields, color: fields.color ?? "#f5c542", user_id: userId })
       .select()
       .single()
     if (error) { toast.error("Failed to create event"); return }

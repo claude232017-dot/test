@@ -59,12 +59,12 @@ export function GoalCard({ goal, onIncrement, onUpdateProgress, onToggleComplete
           onClick={(e) => { e.stopPropagation(); onToggleComplete(goal.id) }}
           className={cn(
             "w-5 h-5 rounded-md border-2 transition-all duration-200 flex items-center justify-center shrink-0 mt-0.5 cursor-pointer",
-            goal.completed ? "border-transparent" : "border-[rgba(var(--overlay),0.2)] hover:border-purple-400"
+            goal.completed ? "border-transparent" : "border-[rgba(var(--overlay),0.2)] hover:border-primary"
           )}
           style={goal.completed ? { backgroundColor: goal.color } : undefined}
           aria-label={goal.completed ? "Mark incomplete" : "Mark complete"}
         >
-          {goal.completed && <Check className="w-3 h-3 text-white" strokeWidth={3} />}
+          {goal.completed && <Check className="w-3 h-3 text-primary-foreground" strokeWidth={3} />}
         </button>
 
         <div className="flex-1 min-w-0">
@@ -122,12 +122,12 @@ export function GoalCard({ goal, onIncrement, onUpdateProgress, onToggleComplete
               onClick={(e) => e.stopPropagation()}
               onKeyDown={e => { e.stopPropagation(); if (e.key === "Enter") commitEdit(); if (e.key === "Escape") { setEditing(false); setEditValue(String(goal.current_value)) } }}
               autoFocus
-              className="w-20 sm:w-16 h-7 sm:h-6 px-1.5 rounded bg-[rgba(var(--overlay),0.06)] border border-[rgba(var(--overlay),0.12)] text-foreground text-base sm:text-xs tabular-nums focus:outline-none focus:border-purple-500/50"
+              className="w-20 sm:w-16 h-7 sm:h-6 px-1.5 rounded bg-[rgba(var(--overlay),0.06)] border border-[rgba(var(--overlay),0.12)] text-foreground text-base sm:text-xs tabular-nums focus:outline-none focus:border-primary/50"
             />
           ) : (
             <button
               onClick={(e) => { e.stopPropagation(); setEditValue(String(goal.current_value)); setEditing(true) }}
-              className="font-semibold text-foreground tabular-nums hover:text-purple-400 transition-colors cursor-pointer"
+              className="font-semibold text-foreground tabular-nums hover:text-gold transition-colors cursor-pointer"
               title="Click to edit"
             >
               {goal.current_value}
@@ -151,7 +151,7 @@ export function GoalCard({ goal, onIncrement, onUpdateProgress, onToggleComplete
           {!goal.completed && (
             <button
               onClick={(e) => { e.stopPropagation(); onIncrement(goal.id, 1) }}
-              className="flex items-center justify-center w-9 h-9 sm:w-7 sm:h-7 rounded-full text-white shadow-md cursor-pointer transition-transform hover:scale-105 active:scale-95"
+              className="flex items-center justify-center w-9 h-9 sm:w-7 sm:h-7 rounded-full text-primary-foreground shadow-md cursor-pointer transition-transform hover:scale-105 active:scale-95"
               style={{ backgroundColor: goal.color }}
               aria-label="Increment progress"
             >

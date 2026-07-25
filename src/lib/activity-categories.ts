@@ -1,11 +1,12 @@
 // Activity categories — shared by the activity widget, analytics charts, and
 // the data store. Kept dependency-free so any module can import it without
 // pulling in React components (avoids circular imports with the store).
+// PRISM-X palette: gold / cyan / violet / green / red steps.
 export const ACTIVITY_CATEGORIES = [
-  { name: "Work", color: "#7c3aed", bg: "bg-purple-500/20 text-purple-300" },
-  { name: "Study", color: "#2563eb", bg: "bg-blue-500/20 text-blue-300" },
-  { name: "Exercise", color: "#16a34a", bg: "bg-green-500/20 text-green-300" },
-  { name: "Reading", color: "#06b6d4", bg: "bg-cyan-500/20 text-cyan-300" },
-  { name: "Leisure", color: "#d97706", bg: "bg-yellow-500/20 text-yellow-300" },
-  { name: "Sleep", color: "#6366f1", bg: "bg-indigo-500/20 text-indigo-300" },
+  { name: "Work", color: "#c98500", bg: "bg-primary/15 text-gold" },
+  { name: "Study", color: "#0f9bbd", bg: "bg-cyan-500/15 text-cyan-400" },
+  { name: "Exercise", color: "#0ca30c", bg: "bg-green-500/15 text-green-400" },
+  { name: "Reading", color: "#9085e9", bg: "bg-violet-500/15 text-violet-400" },
+  { name: "Leisure", color: "#e66767", bg: "bg-red-500/15 text-red-400" },
+  { name: "Sleep", color: "#37d67a", bg: "bg-emerald-500/15 text-emerald-400" },
 ] as const

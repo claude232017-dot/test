@@ -56,10 +56,10 @@ export function TodoItem({ todo, onToggle, onDelete, onFocus, focusMinutes }: To
       >
         <div className={cn(
           "w-5 h-5 rounded-md border-2 transition-all duration-200 flex items-center justify-center",
-          todo.completed ? "bg-purple-500 border-purple-500" : "border-[rgba(var(--overlay),0.2)] hover:border-purple-400"
+          todo.completed ? "bg-primary border-primary" : "border-[rgba(var(--overlay),0.2)] hover:border-primary"
         )}>
           {todo.completed && (
-            <svg className="w-2.5 h-2.5 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={3}>
+            <svg className="w-2.5 h-2.5 text-primary-foreground" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={3}>
               <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
             </svg>
           )}
@@ -73,7 +73,7 @@ export function TodoItem({ todo, onToggle, onDelete, onFocus, focusMinutes }: To
         <span className="truncate">{todo.title}</span>
         {todo.recurrence && todo.recurrence !== "none" && (
           <Repeat
-            className="w-3 h-3 shrink-0 text-purple-400/70"
+            className="w-3 h-3 shrink-0 text-primary/70"
             aria-label={`Repeats ${todo.recurrence}`}
           />
         )}
@@ -81,19 +81,19 @@ export function TodoItem({ todo, onToggle, onDelete, onFocus, focusMinutes }: To
 
       {/* Focus time badge */}
       {focusMinutes != null && focusMinutes > 0 && (
-        <span className="flex items-center gap-0.5 text-[10px] text-purple-400/70 shrink-0">
+        <span className="flex items-center gap-0.5 text-[10px] text-primary/70 shrink-0">
           <Timer className="w-2.5 h-2.5" />
           {focusMinutes}m
         </span>
       )}
 
       {isOverdue && (
-        <span className="text-[10px] shrink-0 px-1.5 py-0.5 rounded-md font-semibold uppercase tracking-wide text-red-400 bg-red-500/15 border border-red-500/30">
+        <span className="text-[10px] shrink-0 px-1.5 py-0.5 rounded-md font-semibold font-mono uppercase tracking-wide text-red-400 bg-red-500/15 border border-red-500/30">
           Overdue
         </span>
       )}
       {isDueToday && (
-        <span className="text-[10px] shrink-0 px-1.5 py-0.5 rounded-md font-semibold uppercase tracking-wide text-amber-400 bg-amber-500/15 border border-amber-500/30">
+        <span className="text-[10px] shrink-0 px-1.5 py-0.5 rounded-md font-semibold font-mono uppercase tracking-wide text-amber-400 bg-amber-500/15 border border-amber-500/30">
           Today
         </span>
       )}
@@ -119,7 +119,7 @@ export function TodoItem({ todo, onToggle, onDelete, onFocus, focusMinutes }: To
       {!todo.completed && onFocus && (
         <button
           onClick={() => onFocus(todo)}
-          className="opacity-50 group-hover:opacity-100 md:opacity-0 md:group-hover:opacity-100 text-muted-foreground hover:text-purple-400 transition-all cursor-pointer p-2 -m-2 shrink-0"
+          className="opacity-50 group-hover:opacity-100 md:opacity-0 md:group-hover:opacity-100 text-muted-foreground hover:text-gold transition-all cursor-pointer p-2 -m-2 shrink-0"
           aria-label="Focus on this task"
         >
           <Timer className="w-3.5 h-3.5" />

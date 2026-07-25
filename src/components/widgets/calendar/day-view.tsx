@@ -29,15 +29,15 @@ export function DayView({ currentDate, direction, events, onDelete }: DayViewPro
           <div className={cn(
             "flex flex-col items-center justify-center w-14 h-14 rounded-xl border shrink-0",
             isToday(currentDate)
-              ? "bg-purple-500/15 border-purple-500/30"
+              ? "bg-primary/15 border-primary/30"
               : "bg-[rgba(var(--overlay),0.03)] border-[rgba(var(--overlay),0.08)]"
           )}>
-            <span className="text-[10px] uppercase tracking-wider text-muted-foreground font-semibold">
+            <span className="text-[10px] font-mono uppercase tracking-wider text-muted-foreground font-semibold">
               {format(currentDate, "EEE")}
             </span>
             <span className={cn(
               "text-xl font-bold tabular-nums",
-              isToday(currentDate) ? "text-purple-300" : "text-foreground"
+              isToday(currentDate) ? "text-gold" : "text-foreground"
             )}>
               {format(currentDate, "d")}
             </span>

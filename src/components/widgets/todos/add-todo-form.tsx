@@ -78,7 +78,7 @@ export function AddTodoForm({ onAdd }: AddTodoFormProps) {
           type="date"
           value={dueDate}
           onChange={e => setDueDate(e.target.value)}
-          className="sm:ml-auto text-base sm:text-xs bg-[rgba(var(--overlay),0.05)] border border-[rgba(var(--overlay),0.1)] rounded-lg px-2.5 py-1.5 text-muted-foreground focus:outline-none focus:border-purple-500/50 min-h-[32px] w-full sm:w-auto"
+          className="sm:ml-auto text-base sm:text-xs bg-[rgba(var(--overlay),0.05)] border border-[rgba(var(--overlay),0.1)] rounded-lg px-2.5 py-1.5 text-muted-foreground focus:outline-none focus:border-primary/50 min-h-[32px] w-full sm:w-auto"
         />
       </div>
 
@@ -97,7 +97,7 @@ export function AddTodoForm({ onAdd }: AddTodoFormProps) {
               className={cn(
                 "px-2.5 py-1.5 rounded-lg text-xs border transition-all cursor-pointer min-h-[32px]",
                 recurrence === r.value
-                  ? "text-purple-300 border-purple-500/30 bg-purple-500/10"
+                  ? "text-gold border-primary/30 bg-primary/10"
                   : "text-muted-foreground border-[rgba(var(--overlay),0.1)] bg-transparent hover:border-[rgba(var(--overlay),0.2)]"
               )}
             >
