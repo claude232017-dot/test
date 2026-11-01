@@ -4,6 +4,7 @@ import { motion, type Variants } from "framer-motion"
 import Link from "next/link"
 import { ArrowUpRight } from "lucide-react"
 import { OverviewStats } from "@/components/dashboard/overview-stats"
+import { OverviewHighlights } from "@/components/dashboard/overview-highlights"
 import { NotesWidget } from "@/components/widgets/notes/notes-widget"
 import { TodosWidget } from "@/components/widgets/todos/todos-widget"
 import { ActivityWidget } from "@/components/widgets/activity/activity-widget"
@@ -73,6 +74,11 @@ export default function DashboardPage() {
       {/* KPI strip */}
       <ErrorBoundary>
         <OverviewStats />
+      </ErrorBoundary>
+
+      {/* Highlights — richer cards with trend where a comparison exists */}
+      <ErrorBoundary>
+        <OverviewHighlights />
       </ErrorBoundary>
 
       {/* Workspace */}
