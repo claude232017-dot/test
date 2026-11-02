@@ -1,23 +1,24 @@
 import { create } from "zustand"
 
-export type Skin = "prism" | "studio" | "classic"
+export type Skin = "prism" | "studio" | "classic" | "glass"
 
 export const SKIN_STORAGE_KEY = "dayflow-skin"
 export const DEFAULT_SKIN: Skin = "studio"
 
 /** Every skin the token layer can render. */
-export const SKINS: Skin[] = ["prism", "studio", "classic"]
+export const SKINS: Skin[] = ["prism", "studio", "classic", "glass"]
 
 /**
  * Skins offered in the UI. "prism" is intentionally withheld — Studio is the
  * refined version of the same palette, so the bare command deck is hidden
  * rather than deleted. Re-add it here to bring it back; nothing else changes.
  */
-export const SELECTABLE_SKINS: Skin[] = ["studio", "classic"]
+export const SELECTABLE_SKINS: Skin[] = ["studio", "classic", "glass"]
 
 /** Map a stored/legacy value onto a skin the UI can actually offer. */
 export function normalizeSkin(value: unknown): Skin {
   if (value === "classic") return "classic"
+  if (value === "glass") return "glass"
   // "prism" is hidden — anyone still on it lands on its refined successor.
   if (value === "studio" || value === "prism") return "studio"
   return DEFAULT_SKIN
@@ -27,6 +28,7 @@ export const SKIN_META: Record<Skin, { label: string; tagline: string }> = {
   prism: { label: "PRISM-X", tagline: "Command deck" },
   studio: { label: "Studio", tagline: "Spec sheet" },
   classic: { label: "Classic", tagline: "Original glass" },
+  glass: { label: "Glass", tagline: "Frosted premium" },
 }
 
 /** Total boot-sequence duration; the skin swaps at the midpoint, behind the overlay. */

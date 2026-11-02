@@ -14,6 +14,7 @@ const PALETTES = {
   // Studio shares PRISM-X's palette — it differs in treatment, not color.
   studio: PRISM_SWATCHES,
   classic: ["#7c3aed", "#2563eb", "#06b6d4", "#16a34a", "#d97706", "#dc2626", "#db2777", "#6366f1"],
+  glass: ["#2dd4bf", "#3b82f6", "#a78bfa", "#34d399", "#fb7185", "#fbbf24", "#38bdf8", "#94a3b8"],
 } as const
 
 export function useSkinPalette(): readonly string[] {
@@ -31,6 +32,7 @@ const ACCENTS = {
   prism:   PRISM_ACCENTS,
   studio:  PRISM_ACCENTS,
   classic: { primary: "#7c3aed", success: "#16a34a", accent: "#2563eb", progress: "linear-gradient(90deg, #7c3aed, #06b6d4)" },
+  glass:   { primary: "#2dd4bf", success: "#34d399", accent: "#3b82f6", progress: "linear-gradient(90deg, #2dd4bf, #3b82f6)" },
 } as const
 
 export function useSkinAccents() {

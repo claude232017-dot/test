@@ -29,6 +29,15 @@ const BOOT_THEME: Record<Skin, {
     label: "Mounting spec sheet",
     mono: true,
   },
+  glass: {
+    bg: "#070b14",
+    fg: "#f1f5f9",
+    dim: "#94a3b8",
+    accent: "#2dd4bf",
+    bar: "linear-gradient(90deg, #2dd4bf, #3b82f6)",
+    label: "Polishing the glass",
+    mono: false,
+  },
   classic: {
     bg: "#0b0a14",
     fg: "#f5f6fb",
@@ -49,6 +58,8 @@ export function SkinBootOverlay() {
   if (!mounted) return null
 
   const t = BOOT_THEME[target]
+  // Ink for the mark: dark on the light gold/teal plates, white on Classic purple.
+  const ink = target === "classic" ? "#ffffff" : target === "glass" ? "#07101a" : "#1a1405"
 
   return createPortal(
     <AnimatePresence>
@@ -64,7 +75,7 @@ export function SkinBootOverlay() {
           aria-live="polite"
         >
           {/* PRISM-X gets its signature grid horizon behind the boot text */}
-          {target !== "classic" && (
+          {(target === "prism" || target === "studio") && (
             <div
               aria-hidden="true"
               className="absolute inset-0 pointer-events-none"
@@ -79,6 +90,20 @@ export function SkinBootOverlay() {
             />
           )}
 
+          {/* Glass gets soft luminous orbs instead of a grid */}
+          {target === "glass" && (
+            <div
+              aria-hidden="true"
+              className="absolute inset-0 pointer-events-none"
+              style={{
+                backgroundImage:
+                  "radial-gradient(40rem 32rem at 12% 0%, rgba(45,212,191,0.22), transparent 62%)," +
+                  "radial-gradient(36rem 30rem at 92% 8%, rgba(59,130,246,0.22), transparent 60%)," +
+                  "radial-gradient(44rem 34rem at 50% 110%, rgba(99,102,241,0.16), transparent 62%)",
+              }}
+            />
+          )}
+
           {/* Brand mark */}
           <motion.div
             initial={{ scale: 0.9, opacity: 0 }}
@@ -86,23 +111,23 @@ export function SkinBootOverlay() {
             transition={{ duration: 0.25, ease: "easeOut" }}
             className="relative w-12 h-12 flex items-center justify-center shrink-0"
             style={{
-              borderRadius: target === "classic" ? 14 : target === "studio" ? 12 : 10,
+              borderRadius: target === "classic" ? 14 : target === "glass" ? 16 : target === "studio" ? 12 : 10,
               backgroundImage: t.bar,
               boxShadow: `0 0 26px ${t.accent}55`,
             }}
           >
             <svg width="24" height="24" viewBox="0 0 512 512" fill="none" aria-hidden="true">
-              <g fill={target === "classic" ? "#ffffff" : "#1a1405"}>
+              <g fill={ink}>
                 <rect x="150" y="296" width="44" height="86" rx="10" opacity="0.5" />
                 <rect x="234" y="244" width="44" height="138" rx="10" opacity="0.75" />
                 <rect x="318" y="170" width="44" height="212" rx="10" />
               </g>
               <path
                 d="M156 286 L256 234 L356 160"
-                stroke={target === "classic" ? "#ffffff" : "#1a1405"}
+                stroke={ink}
                 strokeWidth="22" strokeLinecap="round" strokeLinejoin="round" fill="none"
               />
-              <circle cx="356" cy="160" r="20" fill={target === "classic" ? "#ffffff" : "#1a1405"} />
+              <circle cx="356" cy="160" r="20" fill={ink} />
             </svg>
           </motion.div>
 

@@ -188,15 +188,16 @@ the auth split-screen panel that sits permanently on the brand gradient, where
 
 ### 4.4 Skins (`data-skin` on `<html>`)
 
-On top of dark/light, DayFlow ships **three skins**, switched independently:
+On top of dark/light, DayFlow ships **four skins** (three offered in the UI, one hidden), switched independently:
 
 | Skin | `data-skin` | Look |
 |------|-------------|------|
 | **PRISM-X** | `"prism"` — **hidden from the UI** | Command deck: near-black planes, neon-gold accent, flat 1px-hairline panels, mono UPPERCASE labels, 10px radius. Still fully renderable (it is the no-attribute default the others build on), but withheld from the switcher because Studio is the refined version of the same palette. Re-add it to `SELECTABLE_SKINS` in `useSkinStore.ts` to bring it back — nothing else changes. |
 | **Studio** | `"studio"` | Spec sheet: **PRISM-X's palette**, but a mounted-specimen treatment — panels gain a second hairline inset 4px from the edge, labels track wider (`0.2em`), numerals go tabular globally, headings tighten to `-0.02em`, chips sharpen to 4px, and the grid horizon sits more present. |
 | **Classic** | `"classic"` | The original: purple→cyan brand gradient, frosted glassmorphism with noise, sans labels, 13.6px radius. |
+| **Glass** | `"glass"` | Modern premium frosted glass, extrapolated from the supplied `StatsCard` snippet (`glass-card`, `rounded-2xl`, `white/60` secondary text, gradient icon tiles). Ink-navy ground with a mesh of luminous **teal + blue** light behind translucent, 22px-blurred cards with a bright specular top edge; 18px radius, sans labels, pill chips, teal→blue gradient primary button. Accent hue is a design choice (the snippet specified none): teal-blue, deliberately distinct from Studio's gold and Classic's purple. |
 
-Skin × theme are orthogonal → **six valid combinations**, all defined in
+Skin × theme are orthogonal → **eight valid combinations** (four skins × two themes), all defined in
 `globals.css`:
 - `.dark` / `.light` carry the PRISM-X tokens (no attribute needed).
 - `[data-skin="studio"]` overrides *only* shape/typography — it deliberately
@@ -211,6 +212,10 @@ Skin × theme are orthogonal → **six valid combinations**, all defined in
 skin-agnostic: `--radius`, `--label-font` + `--label-tracking` (mono vs sans),
 `--btn-primary-bg` / `--btn-primary-glow` / `--btn-primary-weight`,
 `--accent-edge`, `--chip-radius`.
+
+**Never hand-write `-webkit-backdrop-filter`.** Write only the unprefixed `backdrop-filter:`; the build adds the Safari prefix itself. Writing both made the CSS optimizer merge them into the *prefixed form only*, which Chromium ignores — so on Chrome/Edge/Android no blur applied anywhere (sidebar, topbar, Classic, Glass) while Safari looked fine. After any change to blur rules, check the compiled CSS contains an unprefixed `backdrop-filter`.
+
+**Contrast is measured, not assumed.** Accent *lettering* uses `--accent-dim`, which in light themes is a deliberately darker variant of the accent (the bright accent is fill/border/focus only). Light Studio uses `40 100% 27%` — the earlier `#c98500` measured only ~3:1 and fails AA for body text. All text/background pairs for every skin × theme were measured on the real composited surface (including blur and the mesh gradient) at >= 4.5:1, with one near-miss: Classic dark `destructive` text at 4.48.
 
 **Hover convention:** hover states are *neutral* — an `--overlay`-driven tint and a stronger hairline (`.glass-hover`, `.hover-edge`), plus a brightness nudge on `.btn-primary`. No accent-colored glow, border, or text on hover. Because `--overlay` flips white↔black per theme, one rule serves light and dark; do **not** add a separate `.light` hover copy. A hover tint must be layered *over* the solid card color (`linear-gradient(...), hsl(var(--card))`) — replacing `background` with a bare translucent color makes the card see-through.
 

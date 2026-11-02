@@ -25,7 +25,7 @@ export function StatsCard({ title, value, change, icon: Icon, gradient }: StatsC
           <p className="text-sm text-muted-foreground truncate">{title}</p>
           <h2 className="text-2xl font-bold text-foreground tabular">{value}</h2>
           {change !== undefined && (
-            <p className={cn("flex items-center gap-1 text-sm", down ? "text-red-400" : "text-emerald-400")}>
+            <p className={cn("flex items-center gap-1 text-sm", down ? "text-destructive" : "text-success")}>
               <TrendIcon size={16} aria-hidden="true" /> {change}%
             </p>
           )}

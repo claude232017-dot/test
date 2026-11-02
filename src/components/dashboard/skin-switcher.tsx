@@ -12,6 +12,7 @@ const SWATCH: Record<Skin, { bg: string; accent: string; framed?: boolean }> = {
   prism: { bg: "#0a0a0f", accent: "#f5c542" },
   studio: { bg: "#0a0a0f", accent: "#f5c542", framed: true },
   classic: { bg: "#12101f", accent: "#8b5cf6" },
+  glass: { bg: "#0a1220", accent: "linear-gradient(135deg, #2dd4bf, #3b82f6)" },
 }
 
 export function SkinSwitcher() {
@@ -44,11 +45,11 @@ export function SkinSwitcher() {
                 // Studio's tell is its mounted-specimen inner frame
                 SWATCH[value].framed && "ring-1 ring-inset ring-[rgba(255,255,255,0.18)]"
               )}
-              style={{ backgroundColor: SWATCH[value].bg }}
+              style={{ background: SWATCH[value].bg }}
             >
               <span
                 className={cn("rounded-full", SWATCH[value].framed ? "w-1.5 h-1.5" : "w-2 h-2")}
-                style={{ backgroundColor: SWATCH[value].accent }}
+                style={{ background: SWATCH[value].accent }}
               />
             </span>
             <span className="flex-1 min-w-0 leading-tight">
