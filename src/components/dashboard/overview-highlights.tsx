@@ -46,19 +46,19 @@ export function OverviewHighlights() {
         value={fmtHrs(stats.focusMinutesThisWeek)}
         change={weekOverWeek(stats.focusMinutesThisWeek, stats.focusMinutesLastWeek)}
         icon={Clock}
-        gradient="from-primary to-accent"
+        gradient="tile-a"
       />
       <StatsCard
         title="Active goals"
         value={activeGoals}
         icon={Trophy}
-        gradient="from-accent to-primary"
+        gradient="tile-b"
       />
       <StatsCard
         title="Open tasks"
         value={openTasks}
         icon={CheckSquare}
-        gradient="from-primary to-primary/60"
+        gradient="tile-c"
       />
     </div>
   )

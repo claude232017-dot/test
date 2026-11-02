@@ -10,7 +10,8 @@ interface StatsCardProps {
   /** Percentage change vs. the previous period. Omit when there is nothing to compare against. */
   change?: number
   icon: LucideIcon
-  /** Tailwind gradient classes for the icon tile, e.g. "from-primary to-accent". */
+  /** Icon-tile gradient: a skin tile class (tile-a / tile-b / tile-c, which follow the
+   *  active skin) or Tailwind stops like "from-primary to-accent". */
   gradient: string
 }
 

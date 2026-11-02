@@ -6,7 +6,6 @@ import { Trash2, Plus, Minus, Activity } from "lucide-react"
 import { useActivityLogs } from "@/hooks/useActivityLogs"
 import { useDashboardStore } from "@/stores/useDashboardStore"
 import { ACTIVITY_CATEGORIES } from "@/lib/activity-categories"
-import { useSkinAccents } from "@/lib/skin-palettes"
 import { cn } from "@/lib/utils"
 
 export { ACTIVITY_CATEGORIES }
@@ -42,14 +41,12 @@ function Stepper({ value, onChange, max }: { value: number; onChange: (v: number
 }
 
 export function ActivityWidget() {
-  const accents = useSkinAccents()
   const { selectedDate } = useDashboardStore()
   const { logs, loading, createLog, deleteLog, totalMinutes } = useActivityLogs(selectedDate)
   const [category, setCategory] = useState("Work")
   const [hours, setHours] = useState(0)
   const [mins, setMins] = useState(0)
 
-  const activeCat = ACTIVITY_CATEGORIES.find(c => c.name === category)
 
   async function handleAdd() {
     const total = hours * 60 + mins
@@ -109,8 +106,7 @@ export function ActivityWidget() {
         <button
           onClick={handleAdd}
           disabled={hours * 60 + mins <= 0}
-          className="w-full h-10 rounded-xl text-sm font-semibold text-primary-foreground transition-all cursor-pointer disabled:opacity-40 disabled:cursor-not-allowed"
-          style={{ backgroundColor: activeCat?.color ?? accents.primary }}
+          className="btn-primary w-full h-10 rounded-xl text-sm transition-all cursor-pointer disabled:opacity-40 disabled:cursor-not-allowed"
         >
           Log {category}
         </button>

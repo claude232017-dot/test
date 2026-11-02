@@ -222,7 +222,11 @@ skin-agnostic: `--radius`, `--label-font` + `--label-tracking` (mono vs sans),
 **Skin-aware helper classes** (prefer these over literals):
 `.deck-label` (console label), `.text-accent-strong` (AA-safe accent
 lettering), `.btn-primary`, `.hover-edge`, `.chip-radius`,
-`.accent-dot-glow`.
+`.accent-dot-glow`, `.tile-a` / `.tile-b` / `.tile-c` (StatsCard icon-tile gradients).
+
+**Primary action buttons use `.btn-primary` (or `<Button>`), never an inline fill.** The Activity "Log" button once took its color from the selected category, so under Glass it rendered muddy amber next to teal everywhere else. Colors the *user* picks and saves (goal, habit, event) are data and stay as chosen; everything that is an action follows the skin.
+
+**Gradients stay inside one hue family per skin** (`--tile-a/b/c`). Blending the primary and the accent — gold + cyan in Studio — passes through a gray-olive midpoint (measured saturation ~0.2 vs 0.7–0.9 for the analogous gradients). Icon ink on every tile is measured >= 3:1 over the icon's footprint.
 
 For the few places CSS tokens can't reach — SVG `stroke`, and shadow strings
 built as `` `${hex}60` `` — use the hooks in `src/lib/skin-palettes.ts`:
