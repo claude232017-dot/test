@@ -56,7 +56,7 @@ export function TodoItem({ todo, onToggle, onDelete, onFocus, focusMinutes }: To
       >
         <div className={cn(
           "w-5 h-5 rounded-md border-2 transition-all duration-200 flex items-center justify-center",
-          todo.completed ? "bg-primary border-primary" : "border-[rgba(var(--overlay),0.2)] hover:border-primary"
+          todo.completed ? "bg-primary border-primary" : "border-[rgba(var(--overlay),0.2)] hover:border-[rgba(var(--overlay),0.5)]"
         )}>
           {todo.completed && (
             <svg className="w-2.5 h-2.5 text-primary-foreground" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={3}>
@@ -119,7 +119,7 @@ export function TodoItem({ todo, onToggle, onDelete, onFocus, focusMinutes }: To
       {!todo.completed && onFocus && (
         <button
           onClick={() => onFocus(todo)}
-          className="opacity-50 group-hover:opacity-100 md:opacity-0 md:group-hover:opacity-100 text-muted-foreground hover:text-accent-strong transition-all cursor-pointer p-2 -m-2 shrink-0"
+          className="opacity-50 group-hover:opacity-100 md:opacity-0 md:group-hover:opacity-100 text-muted-foreground hover:text-foreground transition-all cursor-pointer p-2 -m-2 shrink-0"
           aria-label="Focus on this task"
         >
           <Timer className="w-3.5 h-3.5" />

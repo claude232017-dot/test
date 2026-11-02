@@ -29,7 +29,6 @@
 
     /* Primary button + interactive edge (PRISM-X: gold) */
     --btn-primary-bg: linear-gradient(180deg, #f8d264, #f5c542);
-    --btn-primary-glow: 0 0 18px rgba(245, 197, 66, 0.25);
     --btn-primary-weight: 800;
     --accent-edge: rgba(245, 197, 66, 0.45);
     --chip-radius: 5px;
@@ -51,7 +50,6 @@
     --label-tracking: 0.1em;
 
     --btn-primary-bg: linear-gradient(180deg, #8b5cf6, #7c3aed);
-    --btn-primary-glow: 0 10px 24px -8px rgba(124, 58, 237, 0.55);
     --btn-primary-weight: 500;
     --accent-edge: rgba(139, 92, 246, 0.5);
     --chip-radius: 9999px;
@@ -314,12 +312,11 @@ body {
   color: hsl(var(--primary-foreground));
   font-weight: var(--btn-primary-weight);
 }
-.btn-primary:hover { box-shadow: var(--btn-primary-glow); }
+.btn-primary:hover { filter: brightness(1.07); }
 
-/* Hover edge for outline/secondary controls. */
-.hover-accent-edge:hover {
-  border-color: var(--accent-edge);
-  color: hsl(var(--accent-dim));
+/* Hover edge for outline/secondary controls — neutral in every skin/theme. */
+.hover-edge:hover {
+  border-color: rgba(var(--overlay), 0.3);
 }
 
 /* ── Scrollbars ──────────────────────────────────────────────────────── */
@@ -360,16 +357,16 @@ body {
   -webkit-backdrop-filter: blur(8px);
 }
 
-.glass-hover { transition: background 160ms ease, border-color 160ms ease, box-shadow 160ms ease, transform 160ms ease; }
+.glass-hover { transition: background 160ms ease, border-color 160ms ease, transform 160ms ease; }
+/* Neutral hover. Driven by --overlay (white in dark, black in light), so one
+   rule is correct in both themes — there is deliberately no .light copy.
+   The tint is layered OVER the solid card color; replacing `background` with a
+   bare translucent color would make the card see-through on hover. */
 .glass-hover:hover {
-  background: rgba(245, 197, 66, 0.06);
-  border-color: rgba(245, 197, 66, 0.45);
-  box-shadow: 0 0 18px rgba(245, 197, 66, 0.18);
-}
-.light .glass-hover:hover {
-  background: rgba(201, 133, 0, 0.06);
-  border-color: rgba(201, 133, 0, 0.5);
-  box-shadow: 0 0 16px rgba(201, 133, 0, 0.14);
+  background:
+    linear-gradient(rgba(var(--overlay), 0.04), rgba(var(--overlay), 0.04)),
+    hsl(var(--card));
+  border-color: rgba(var(--overlay), 0.22);
 }
 
 /* ══════════════ Surface system — Studio mounted specimens ═════════════

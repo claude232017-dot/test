@@ -59,7 +59,7 @@ export function GoalCard({ goal, onIncrement, onUpdateProgress, onToggleComplete
           onClick={(e) => { e.stopPropagation(); onToggleComplete(goal.id) }}
           className={cn(
             "w-5 h-5 rounded-md border-2 transition-all duration-200 flex items-center justify-center shrink-0 mt-0.5 cursor-pointer",
-            goal.completed ? "border-transparent" : "border-[rgba(var(--overlay),0.2)] hover:border-primary"
+            goal.completed ? "border-transparent" : "border-[rgba(var(--overlay),0.2)] hover:border-[rgba(var(--overlay),0.5)]"
           )}
           style={goal.completed ? { backgroundColor: goal.color } : undefined}
           aria-label={goal.completed ? "Mark incomplete" : "Mark complete"}
@@ -127,7 +127,7 @@ export function GoalCard({ goal, onIncrement, onUpdateProgress, onToggleComplete
           ) : (
             <button
               onClick={(e) => { e.stopPropagation(); setEditValue(String(goal.current_value)); setEditing(true) }}
-              className="font-semibold text-foreground tabular-nums hover:text-accent-strong transition-colors cursor-pointer"
+              className="font-semibold text-foreground tabular-nums hover:underline underline-offset-4 transition-colors cursor-pointer"
               title="Click to edit"
             >
               {goal.current_value}

@@ -212,9 +212,11 @@ skin-agnostic: `--radius`, `--label-font` + `--label-tracking` (mono vs sans),
 `--btn-primary-bg` / `--btn-primary-glow` / `--btn-primary-weight`,
 `--accent-edge`, `--chip-radius`.
 
+**Hover convention:** hover states are *neutral* — an `--overlay`-driven tint and a stronger hairline (`.glass-hover`, `.hover-edge`), plus a brightness nudge on `.btn-primary`. No accent-colored glow, border, or text on hover. Because `--overlay` flips white↔black per theme, one rule serves light and dark; do **not** add a separate `.light` hover copy. A hover tint must be layered *over* the solid card color (`linear-gradient(...), hsl(var(--card))`) — replacing `background` with a bare translucent color makes the card see-through.
+
 **Skin-aware helper classes** (prefer these over literals):
 `.deck-label` (console label), `.text-accent-strong` (AA-safe accent
-lettering), `.btn-primary`, `.hover-accent-edge`, `.chip-radius`,
+lettering), `.btn-primary`, `.hover-edge`, `.chip-radius`,
 `.accent-dot-glow`.
 
 For the few places CSS tokens can't reach — SVG `stroke`, and shadow strings

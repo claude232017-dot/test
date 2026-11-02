@@ -205,7 +205,7 @@ export function GoalDetailModal({ goal, onClose, onIncrement, onUpdateProgress, 
                 ) : (
                   <button
                     onClick={() => { setProgressInput(String(goal.current_value)); setEditingProgress(true) }}
-                    className="text-2xl font-bold text-foreground tabular-nums hover:text-accent-strong transition-colors cursor-pointer"
+                    className="text-2xl font-bold text-foreground tabular-nums hover:underline underline-offset-4 transition-colors cursor-pointer"
                     title="Click to edit"
                   >
                     {formatNumber(goal.current_value)}
